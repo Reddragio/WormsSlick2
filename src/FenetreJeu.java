@@ -24,6 +24,8 @@ public class FenetreJeu extends BasicGame{
     protected int hauteur_draw_texture;
     protected int largeur_draw_texture;
     protected int[][] terrain_alea_texture;//Map de valeurs aléatoires servant à dessiner les textures aléatoirement
+    protected Music themeWorms;
+    protected boolean themeWormsActivation;
 
     public FenetreJeu(int s,int x,int y) {
         super("Worms Fighter Z - Slick Version");
@@ -75,6 +77,9 @@ public class FenetreJeu extends BasicGame{
                 terrain_alea_texture[i][j] = (int)(Math.random()*5);
             }
         }
+
+        themeWorms = new Music("music/worms-theme-song.ogg");
+        themeWormsActivation = false;
     }
 
     public void render(GameContainer container, Graphics g) throws SlickException {
@@ -197,6 +202,16 @@ public class FenetreJeu extends BasicGame{
                         }
                         wor.set_vitesse_y(5);
                     }
+            }
+        }
+        if (Input.KEY_M == key){
+            if(!themeWormsActivation){
+                themeWorms.loop();
+                themeWormsActivation = true;
+            }
+            else{
+                themeWorms.stop();
+                themeWormsActivation = false;
             }
         }
     }

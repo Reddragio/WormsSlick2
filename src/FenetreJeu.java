@@ -287,10 +287,6 @@ public class FenetreJeu extends BasicGame{
         block_bd_x = limiteSuperieurX(block_bd_x);
         int block_bd_y = (ye + rayon)/blockSize;
         block_bd_y = limiteSuperieurY(block_bd_y);
-        System.out.println(block_hg_x);
-        System.out.println(block_hg_y);
-        System.out.println(block_bd_x);
-        System.out.println(block_bd_y);
 
         double demi_block = blockSize/2.0;
         for(int i=block_hg_y;i<=block_bd_y;i++){

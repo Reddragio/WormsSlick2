@@ -30,7 +30,7 @@ public class Worms {
     protected org.newdawn.slick.Image skinLeft;
     protected org.newdawn.slick.Image skinRight;
 
-    protected int compteurTest;
+    //protected int compteurTest;
 
     public Worms(int t, String n,int[][] terrain,int blockSize,boolean[] changementPrint,int x,int y) throws SlickException { //t=0 ou 1, pour savoir quelle équipe
         if(t==0) couleur=org.newdawn.slick.Color.blue;
@@ -53,7 +53,7 @@ public class Worms {
         //générateur aléatoire position
         skinLeft = new org.newdawn.slick.Image("images/skin_worms_left.png");
         skinRight = new org.newdawn.slick.Image("images/skin_worms_right.png");
-        compteurTest = 0;
+        //compteurTest = 0;
     }
 
     public void modifierVie(int hp){
@@ -92,13 +92,13 @@ public class Worms {
         else{
             Block BlocBasWorms = blockEquivalent(tempx,tempy);
             int yGrilleBasWorms = BlocBasWorms.y;
-            compteurTest++;
-            System.out.println(compteurTest);
-            System.out.println("Worms x="+BlocBasWorms.x+" y="+BlocBasWorms.y);
+            //compteurTest++;
+            //System.out.println(compteurTest);
+            //System.out.println("Worms x="+BlocBasWorms.x+" y="+BlocBasWorms.y);
             boolean sameYforAll = true;
             int max_diff = 1;
             for(Block bContact:BlockEnContact){
-                System.out.println("Contact x="+bContact.x+" y="+bContact.y);
+                //System.out.println("Contact x="+bContact.x+" y="+bContact.y);
                 if(bContact.y < yGrilleBasWorms - climbAbility +1){
                     sameYforAll = false;
                 }
@@ -309,6 +309,14 @@ public class Worms {
 
     public void set_vitesse_y(double speed){
         vitesse_y = speed;
+    }
+
+    public void set_x(int x){
+        this.x = x;
+    }
+
+    public void set_y(int y){
+        this.y = y;
     }
 
     public int get_orientation(){

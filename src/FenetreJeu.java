@@ -29,6 +29,11 @@ public class FenetreJeu extends BasicGame{
     protected Music themeWorms;
     protected boolean themeWormsActivation;
 
+    //Experimental:
+    protected int rayonExplosion;
+    protected boolean visualiserExplosion;
+    protected Input input;
+
     public FenetreJeu(int s,int x,int y) {
         super("Worms Fighter Z - Slick Version");
         blockSize=s;
@@ -84,6 +89,11 @@ public class FenetreJeu extends BasicGame{
 
         themeWorms = new Music("music/worms-theme-song.ogg");
         themeWormsActivation = false;
+
+        //Experimental:
+        rayonExplosion = 40;
+        visualiserExplosion = false;
+        input = container.getInput();
     }
 
     public void render(GameContainer container, Graphics g) throws SlickException {
@@ -122,6 +132,11 @@ public class FenetreJeu extends BasicGame{
 
         for(Worms wor: joueurs){
             wor.draw(g);
+        }
+
+        if(visualiserExplosion){
+            g.setColor(Color.red);
+            g.drawOval((float)(input.getMouseX()-rayonExplosion),(float)(input.getMouseY()-rayonExplosion),(float)(2*rayonExplosion),(float)(2*rayonExplosion));
         }
     }
 
@@ -242,9 +257,24 @@ public class FenetreJeu extends BasicGame{
     }*/
 
     public void mousePressed(int button, int x, int y){
-        System.out.println(button);
-        System.out.println(x+" "+y);
-        experimentalExplosion(x,y,40);
+        if(button == 0){
+            experimentalExplosion(x,y,rayonExplosion);
+        }
+        else if(button==1){
+            joueurs[0].set_x(x);
+            joueurs[0].set_y(y);
+        }
+        else if(button==2){
+            visualiserExplosion = !visualiserExplosion;
+        }
+    }
+
+    public void mouseWheelMoved(int change){
+        //System.out.println(change);
+        rayonExplosion += (change/120)*5;
+        if(rayonExplosion <= 10){
+            rayonExplosion = 10;
+        }
     }
 
     public void genererTerrain(int x, int y){

@@ -154,7 +154,7 @@ public class Worms {
 
             //Gestion des collisions (rebond à l'image de la reflexion en optique)
             for(Block bContact:BlockEnContact){
-                if((bContact.y == yGrilleBasWorms || bContact.y == yGrilleHautWorms)&& one_change_y){
+                if((bContact.y == yGrilleBasWorms || bContact.y == yGrilleHautWorms)&& bContact.x != xGrilleGaucheWorms && bContact.x != xGrilleDroiteWorms && one_change_y){
                     vitesse_x = (int)(vitesse_x/2.0);
                     vitesse_y = -(int)(vitesse_y/1.25);
                     one_change_y = false;

@@ -7,6 +7,8 @@ public class FenetreJeu extends BasicGame{
     protected int blockSize;
     protected int hauteur;
     protected int largeur;
+    protected int hauteurBlock;
+    protected int largeurBlock;
     protected Timer mt;
     protected int vitesseDep; //Cette variable correspond à l'intervalle entre deux entrées claviers pour déplacer
     //le Worms. On peut donc l'associer en quelque sorte à la vitesse de déplacement.
@@ -35,8 +37,10 @@ public class FenetreJeu extends BasicGame{
     }
 
     public void init(GameContainer container) throws SlickException {
-        hauteur = (terrain.length)*blockSize;
-        largeur = (terrain[0].length)*blockSize;
+        hauteurBlock = terrain.length;
+        hauteur = hauteurBlock*blockSize;
+        largeurBlock = terrain[0].length;
+        largeur = largeurBlock*blockSize;
 
         vitesseDep = 10;
         antiRepeatTime = 0;
@@ -61,11 +65,11 @@ public class FenetreJeu extends BasicGame{
         sky = new BigImage("images/Mountain_Background.png");
 
         ground = new Image[5];
-        ground[0] = new Image("images/texture_sol50.png");
-        ground[1] = new Image("images/texture_sol51.png");
-        ground[2] = new Image("images/texture_sol52.png");
-        ground[3] = new Image("images/texture_sol53.png");
-        ground[4] = new Image("images/texture_sol54.png");
+        ground[0] = new Image("images/texture_sol50_pixel.png");
+        ground[1] = new Image("images/texture_sol51_pixel.png");
+        ground[2] = new Image("images/texture_sol52_pixel.png");
+        ground[3] = new Image("images/texture_sol53_pixel.png");
+        ground[4] = new Image("images/texture_sol54_pixel.png");
 
         texture_size = ground[0].getWidth();
         hauteur_draw_texture = hauteur/texture_size;
@@ -237,6 +241,12 @@ public class FenetreJeu extends BasicGame{
     public void keyReleased(KeyEvent e) {
     }*/
 
+    public void mousePressed(int button, int x, int y){
+        System.out.println(button);
+        System.out.println(x+" "+y);
+        experimentalExplosion(x,y,40);
+    }
+
     public void genererTerrain(int x, int y){
         int[][] t=new int[y][x];
         int p=(int) y/2;
@@ -263,6 +273,58 @@ public class FenetreJeu extends BasicGame{
             }
         }
         terrain=t;
+    }
+
+    public void experimentalExplosion(int xe,int ye,int rayon){
+        //Penser vérifier xe, ye dans les clous
+        //Coin en haut à gauche du rectangle:
+        int block_hg_x = (xe - rayon)/blockSize;
+        block_hg_x = limiteInferieur(block_hg_x);
+        int block_hg_y = (ye - rayon)/blockSize;
+        block_hg_y = limiteInferieur(block_hg_y);
+        //Coin en bas à droite du rectangle:
+        int block_bd_x = (xe + rayon)/blockSize;
+        block_bd_x = limiteSuperieurX(block_bd_x);
+        int block_bd_y = (ye + rayon)/blockSize;
+        block_bd_y = limiteSuperieurY(block_bd_y);
+        System.out.println(block_hg_x);
+        System.out.println(block_hg_y);
+        System.out.println(block_bd_x);
+        System.out.println(block_bd_y);
+
+        double demi_block = blockSize/2.0;
+        for(int i=block_hg_y;i<=block_bd_y;i++){
+            for(int j=block_hg_x;j<=block_bd_x;j++){
+                if(distance(xe,ye,j*blockSize+demi_block,i*blockSize+demi_block)<=rayon){
+                    terrain[i][j] = 0;
+                }
+            }
+        }
+    }
+
+    public int limiteInferieur(int k){
+        if(k<0){
+            k = 0;
+        }
+        return k;
+    }
+
+    public int limiteSuperieurX(int k){
+        if(k>=largeurBlock){
+            k = largeurBlock-1;
+        }
+        return k;
+    }
+
+    public int limiteSuperieurY(int k){
+        if(k>=hauteurBlock){
+            k = hauteurBlock-1;
+        }
+        return k;
+    }
+
+    public double distance(double x1,double y1,double x2,double y2){
+        return Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
     }
 
 }

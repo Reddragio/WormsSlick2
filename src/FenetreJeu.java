@@ -328,10 +328,10 @@ public class FenetreJeu extends BasicGame{
             }
         }
         for(int i=0;i<t[0].length;i++){
- +            t[t.length-1][i]=2;
- +            t[t.length-2][i]=2;
- +            t[t.length-3][i]=2;
- +        }
+             t[t.length-1][i]=2;
+             t[t.length-2][i]=2;
+             t[t.length-3][i]=2;
+         }
         terrain=t;
     }
 
@@ -354,10 +354,10 @@ public class FenetreJeu extends BasicGame{
         for(int i=block_hg_y;i<=block_bd_y;i++){
             for(int j=block_hg_x;j<=block_bd_x;j++){
                 if(distance(xe,ye,j*blockSize+demi_block,i*blockSize+demi_block)<=rayon){
-                    if(!antiExplosion){
+                    if(!antiExplosion&&terrain[i][j]!=2){
                         terrain[i][j] = 0;
                     }
-                    else{
+                    else if(terrain[i][j]!=2){
                         terrain[i][j] = 1;
                     }
                 }

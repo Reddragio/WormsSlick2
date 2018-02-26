@@ -57,39 +57,37 @@ public class Worms {
     }
 
     public void modifierVie(int hp){
+		//Ajoute/eleve des points de vie au Worms
         life+=hp;
     }
 
     public void deplacer(int direction){
-        //direction=0 pour aller à gauche, 1 pour aller à droite
-        //int[] actualCaseLeft = new int[2];
-        //actualCaseLeft = blockEquivalent(x,y);
-        //int[] actualCaseRight = new int[2];
-        //actualCaseRight = blockEquivalent(x+hitBoxLargeur,y);
-        //4 lignes inutiles en fin de compte ...
+		//Deplace le Worms à gauche ou à droite
         int tempx = x;
         int tempy = y;
         if(direction==0){
-            tempx -= 1;
+            tempx -= 1;//Si on va à gauche
         }
         else if(direction==1){
-            tempx += 1;
+            tempx += 1;//Si on va à droite
         }
-        orientation = direction;
+        orientation = direction;//On garde l'orientation en mémoire, pour afficher le Worms dans la bonne direction ainsi que
+        //pour sauter dans la bonne direction
 
+		//Début du moteur physique !
         boolean mouvPossible = true;
         ArrayList<Block> BlockEnContact = getContactBlock(tempx,tempy);
         for(Block bContact:BlockEnContact){
-            if(isIntraversable(bContact)){
-                mouvPossible = false;
+            if(isIntraversable(bContact)){//Si le Worms est en contact avec un bloc ...
+                mouvPossible = false;//alors le mouvement est impossible
             }
         }
-        if(mouvPossible){
+        if(mouvPossible){//Si mouvement possible, alors on met à jour les coordonnées RÉELLES du Worms
             x = tempx;
             y = tempy;
             changementPrint[0] = true;
         }
-        else{
+        else{//Si le mouvement est impossible, on regarde si le Worms n'a pas tenté d'escalader un block
             Block BlocBasWorms = blockEquivalent(tempx,tempy);
             int yGrilleBasWorms = BlocBasWorms.y;
             //compteurTest++;
@@ -97,9 +95,10 @@ public class Worms {
             //System.out.println("Worms x="+BlocBasWorms.x+" y="+BlocBasWorms.y);
             boolean sameYforAll = true;
             int max_diff = 1;
+            //La boucle suivante sert à regarder si tous les blocs en contact sont escaladables
+            //(sachant que la capacité d'escalade du Worms est défini par la variable ClimbAbility)
             for(Block bContact:BlockEnContact){
-                //System.out.println("Contact x="+bContact.x+" y="+bContact.y);
-                if(bContact.y < yGrilleBasWorms - climbAbility +1){
+                if(bContact.y < yGrilleBasWorms - climbAbility +1){//detecte un bloc non escaladable
                     sameYforAll = false;
                 }
                 else{
@@ -109,16 +108,21 @@ public class Worms {
                     }
                 }
             }
-            if(sameYforAll){
-                tempy -= (int)(blockSize*max_diff);
+            if(sameYforAll){//Si tous les blocs sont escaladables, alors on escalade !
+                tempy -= (int)(blockSize*max_diff);//Pour se faire, on diminue la coordonnée y
                 ArrayList<Block> BlockEnContact2 = getContactBlock(tempx,tempy);
                 boolean mouvPossible2 = true;
+                
+                //Ce qui suit est une boucle de sécurité
+                //Elle vérifie que l'escalade ne met pas le Worms à cheval sur des blocks,
+                //ce qui serait physiquement impossible
                 for(Block bContact:BlockEnContact2){
                     if(isIntraversable(bContact)){
                         mouvPossible2 = false;
                     }
                 }
-                if(mouvPossible2){
+                if(mouvPossible2){//Si tout va bien, alors on met à jour les coordonnées RÉELLES du Worms
+					//Le Worms vient d'escalader un block !
                     x = tempx;
                     y = tempy;
                     changementPrint[0] = true;
@@ -146,6 +150,7 @@ public class Worms {
             if(surLeSol = true){
                 acceleration -= g;
             }*/
+            //Calcul du déplacement
             vitesse_x += acceleration_x * facteurEchelle;
             vitesse_y += acceleration_y * facteurEchelle;
             vitesse_x = limite(vitesse_x);
@@ -153,8 +158,11 @@ public class Worms {
             xtemp += (int)vitesse_x;
             ytemp += (int)vitesse_y;
 
+			//Une fois le déplacement calculé, il faut vérifier que le mouvement est possible
+			//et appliquer les éventuels rebonds sur les parois
             ArrayList<Block> BlockEnContact = getContactBlock(xtemp,ytemp);
-
+			
+			//On cherche sur la grille des blocs les coordonnées du haut, du bas, de la gauche et de la droite du Worms
             Block BlocBasWorms = blockEquivalent(xtemp,ytemp);
             int yGrilleBasWorms = BlocBasWorms.y;
             Block BlocHautWorms = blockEquivalent(xtemp,ytemp-hitBoxHauteur+1);
@@ -171,6 +179,7 @@ public class Worms {
             //Gestion des collisions (rebond à l'image de la reflexion en optique)
             for(Block bContact:BlockEnContact){
                 if((bContact.y == yGrilleBasWorms || bContact.y == yGrilleHautWorms)&& bContact.x != xGrilleGaucheWorms && bContact.x != xGrilleDroiteWorms && one_change_y){
+					//Contact avec une paroi horizontale
                     vitesse_x = (int)(vitesse_x/2.0);
                     vitesse_y = -(int)(vitesse_y/1.25);
                     one_change_y = false;
@@ -182,6 +191,7 @@ public class Worms {
                     }
                 }
                 else if((bContact.x == xGrilleGaucheWorms || bContact.x == xGrilleDroiteWorms)&& bContact.y != yGrilleBasWorms && bContact.y != yGrilleHautWorms && one_change_x){
+                    //Contact avec une paroi verticale
                     vitesse_x = -(int)(vitesse_x/1.25);
                     vitesse_y = (int)(vitesse_y/2.0);
                     one_change_x = false;
@@ -204,7 +214,8 @@ public class Worms {
                 ytemp = yGrilleBasWorms*blockSize-1;
                 vitesse_y = 0;
             }*/
-
+			
+			//On verifie que la physique n'a pas donné un résultat absurde:
             ArrayList<Block> BlockEnContact2 = getContactBlock(xtemp,ytemp);
             boolean mouvPossible = true;
             for(Block bContact:BlockEnContact2){
@@ -213,7 +224,7 @@ public class Worms {
                 }
             }
 
-            if((ytemp != y || xtemp != x)&&mouvPossible){
+            if((ytemp != y || xtemp != x)&&mouvPossible){//Si tout va bien, alors on met à jour les coordonnées RÉELLES du Worms
                 y = ytemp;
                 x = xtemp;
                 changementPrint[0] = true;
@@ -221,18 +232,21 @@ public class Worms {
     }
 
     public boolean getMovingState(){
+		//Indique si le Worms est en phase de déplacement ou non
         return isMoving;
     }
 
     public void setMovingState(boolean etat){
+		//Permet de définir si le Worms est en phase de déplacement ou non
         isMoving = etat;
     }
 
     public void draw(org.newdawn.slick.Graphics g){
+		//Dessine le Worms à l'écran
+        
         //g.setColor(couleur);
         //g.fillRect(x,y-hitBoxHauteur+1,hitBoxLargeur,hitBoxHauteur);
-
-        if(orientation==0){
+		if(orientation==0){
             skinLeft.draw(x,y-hitBoxHauteur+1);
         }
         else{
@@ -248,6 +262,10 @@ public class Worms {
     }
 
     public Block blockEquivalent(int xd,int yd){
+		//Permet de savoir dans quel case se trouve un point donnée
+		//Cette classe est fondamental pour la physique:
+		//Elle permet de déplacer le Worms sur la grille réelle bien que la physique se base
+		//sur la grille des blocks
         int XD = xd/blockSize;
         int YD = yd/blockSize;
         Block equiv = new Block(XD,YD,terrain[YD][XD]);
@@ -255,6 +273,7 @@ public class Worms {
     }
 
     public boolean isIntraversable(Block bloki){
+		//Indique si un bloc est intraversable ou non
         boolean intraversable = false;
         for(int blocz:blocIntraversables){
             if(terrain[bloki.y][bloki.x] == blocz){
@@ -265,6 +284,9 @@ public class Worms {
     }
 
     public ArrayList<Block> getContactBlock(int tempx,int tempy){
+		//Fonction fondamental pour la physique
+		//--> Renvoit la liste de tous les blocks actuellement en contact
+		//avec le Worms
         ArrayList<Block> templist = new ArrayList<Block>();
         for(int i=tempx;i<=tempx+hitBoxLargeur-1;i+=hitBoxLargeur-1){
             for(int j=tempy-hitBoxHauteur+1;j<=tempy;j+=blockSize){
@@ -294,6 +316,11 @@ public class Worms {
     }
 
     public double limite(double speed){
+		//La fonction qui fache :) ...
+		//Dans son implementation actuelle, le moteur physique est
+		//incapable d'assurer une physique correcte avec des vitesses
+		//superieurs à la taille des blocs. C'est pourquoi la vitesse
+		//doit imperativement être limitée selon cette contrainte
         if(speed > blockSize){
             speed = blockSize;
         }
@@ -304,22 +331,29 @@ public class Worms {
     }
 
     public void set_vitesse_x(double speed){
+		//Définit la vitesse selon les x
         vitesse_x = speed;
     }
 
     public void set_vitesse_y(double speed){
+		//Définit la vitesse selon les y
         vitesse_y = speed;
     }
 
     public void set_x(int x){
+		//Permet de définir la coordonnée x
+		//A n'utiliser que pour la phase d'experimentation
         this.x = x;
     }
 
     public void set_y(int y){
+		//Permet de définir la coordonnée y
         this.y = y;
     }
 
     public int get_orientation(){
+		//Retourne l'orientation du Worms
+		// 0 = Gauche et 1 = droite
         return orientation;
     }
 }

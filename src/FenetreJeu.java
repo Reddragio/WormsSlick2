@@ -307,6 +307,11 @@ public class FenetreJeu extends BasicGame{
                 }
             }
         }
+        for(int i=0;i<t[0].length;i++){
+            t[t.length-1][i]=2;
+            t[t.length-2][i]=2;
+            t[t.length-3][i]=2;
+        }
         terrain=t;
     }
 

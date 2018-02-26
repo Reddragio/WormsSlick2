@@ -231,12 +231,12 @@ public class FenetreJeu extends BasicGame{
                     } else if (Input.KEY_RIGHT == key) {
                         isMovingRight = true;
                     } else if (Input.KEY_ENTER == key) {
-                        if (wor.get_orientation() == 0) {
+                        /*if (wor.get_orientation() == 0) {
                             wor.set_vitesse_x(-5);
                         } else {
                             wor.set_vitesse_x(5);
-                        }
-                        wor.set_vitesse_y(5);
+                        }*/
+                        wor.set_vitesse_y(-40);
                     }
             }
         }

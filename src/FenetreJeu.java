@@ -43,6 +43,8 @@ public class FenetreJeu extends BasicGame{
     }
 
     public void init(GameContainer container) throws SlickException {
+		//Initialisation du jeu
+		//S'execute juste après le constructeur
         hauteurBlock = terrain.length;
         hauteur = hauteurBlock*blockSize;
         largeurBlock = terrain[0].length;
@@ -99,6 +101,9 @@ public class FenetreJeu extends BasicGame{
     }
 
     public void render(GameContainer container, Graphics g) throws SlickException {
+		//Rendu graphique du jeu !
+		//S'execute un maximum de fois par secondes, afin de maximiser les fps
+		
         changementPrint[0] = false;
 
         sky.draw(0,0);
@@ -143,6 +148,11 @@ public class FenetreJeu extends BasicGame{
     }
 
     public void update(GameContainer container, int delta) throws SlickException {
+		//Met à jour la logique du jeu !
+		//la boucle s'execute à la meme fréquence que la boucle render
+		//Ce qui explique qu'à l'heure actuelle le jeu soit plus ou moins rapide
+		//selon l'ordi
+		
         for(Worms wor: joueurs){
             wor.applyForces();
         }
@@ -161,6 +171,9 @@ public class FenetreJeu extends BasicGame{
     }
 
     public static void main(String[] args) throws SlickException {
+		//Main
+		//A deplacer dans une classe apart à l'avenir
+		
         int tailleBloc = 5;
         int blocLargeur = 300; // imperativement des multiples de 10, pour que le dessin des textures se fasse sans bug
         int blocHauteur = 200;
@@ -209,6 +222,8 @@ public class FenetreJeu extends BasicGame{
     }*/
 
     public void keyPressed(int key, char c){
+		//Traitement des entrées claviers (appuis spécifiquement)
+		
         for(Worms wor: joueurs) {
             if (wor.getMovingState()) {
                 if (Input.KEY_LEFT == key) {
@@ -242,6 +257,8 @@ public class FenetreJeu extends BasicGame{
 
     // méthode exécutée à chaque fois qu’une touche est relâchée
     public void keyReleased(int key, char c) {
+		//Traitement des entrées claviers (relachements de touches spécifiquement)
+		
         if (Input.KEY_ESCAPE == key) {
             container.exit();
         }
@@ -262,20 +279,23 @@ public class FenetreJeu extends BasicGame{
     }*/
 
     public void mousePressed(int button, int x, int y){
-        if(button == 0){
+		//Traitement de la souris
+		
+        if(button == 0){//Clik gauche
             experimentalExplosion(x,y,rayonExplosion);
         }
-        else if(button==1){
+        else if(button==1){//Clik droit
             joueurs[0].set_x(x);
             joueurs[0].set_y(y);
         }
-        else if(button==2){
+        else if(button==2){//Clik molette
             visualiserExplosion = !visualiserExplosion;
         }
     }
 
     public void mouseWheelMoved(int change){
-        //System.out.println(change);
+        //Gestion de la rotation de la molette
+        
         rayonExplosion += (change/120)*5;
         if(rayonExplosion <= 10){
             rayonExplosion = 10;
@@ -307,15 +327,12 @@ public class FenetreJeu extends BasicGame{
                 }
             }
         }
-        for(int i=0;i<t[0].length;i++){
-            t[t.length-1][i]=2;
-            t[t.length-2][i]=2;
-            t[t.length-3][i]=2;
-        }
         terrain=t;
     }
 
     public void experimentalExplosion(int xe,int ye,int rayon){
+		//Explosion !!!!!!
+		
         //Penser vérifier xe, ye dans les clous
         //Coin en haut à gauche du rectangle:
         int block_hg_x = (xe - rayon)/blockSize;

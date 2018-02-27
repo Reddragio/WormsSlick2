@@ -19,13 +19,12 @@ public class FenetreJeu extends BasicGame{
     protected boolean isMovingRight;
     protected long tempEcoule;
     protected long lastTempEcoule;
-    protected Image[] ground;
     protected BigImage sky;
+    protected BigImage big_ground;
     protected Image water;
     protected int texture_size;
     protected int hauteur_draw_texture;
     protected int largeur_draw_texture;
-    protected int[][] terrain_alea_texture;//Map de valeurs aléatoires servant à dessiner les textures aléatoirement
     protected Music themeWorms;
     protected boolean themeWormsActivation;
 
@@ -71,24 +70,7 @@ public class FenetreJeu extends BasicGame{
         lastTempEcoule = 0;
 
         sky = new BigImage("images/Mountain_Background.png");
-
-        ground = new Image[5];
-        ground[0] = new Image("images/texture_sol50_pixel.png");
-        ground[1] = new Image("images/texture_sol51_pixel.png");
-        ground[2] = new Image("images/texture_sol52_pixel.png");
-        ground[3] = new Image("images/texture_sol53_pixel.png");
-        ground[4] = new Image("images/texture_sol54_pixel.png");
-
-        texture_size = ground[0].getWidth();
-        hauteur_draw_texture = hauteur/texture_size;
-        largeur_draw_texture = largeur/texture_size;
-
-        terrain_alea_texture = new int[hauteur_draw_texture][largeur_draw_texture];
-        for(int i=0;i<hauteur_draw_texture;i++){
-            for(int j=0;j<largeur_draw_texture;j++){
-                terrain_alea_texture[i][j] = (int)(Math.random()*5);
-            }
-        }
+        big_ground = new BigImage("images/big_ground.png");
 
         themeWorms = new Music("music/worms-theme-song.ogg");
         themeWormsActivation = false;
@@ -108,18 +90,26 @@ public class FenetreJeu extends BasicGame{
 
         sky.draw(0,0);
 
-        int block_in_texture = texture_size/blockSize;
-        for(int k=0;k<hauteur_draw_texture;k++){
-            for(int m=0;m<largeur_draw_texture;m++){
-                for(int i=0;i<block_in_texture;i++){
-                    for(int j=0;j<block_in_texture;j++){
-                        if(terrain[k*block_in_texture+i][m*block_in_texture+j]==1){
-                            ground[terrain_alea_texture[k][m]].draw(m*texture_size+j*blockSize,k*texture_size+i*blockSize,m*texture_size+(j+1)*blockSize,k*texture_size+(i+1)*blockSize,j*blockSize,i*blockSize,(j+1)*blockSize,(i+1)*blockSize);
-                        }
+        int iFirst = 0,jFirst = 0,iLast = 0,jLast = 0;
+        boolean first = true;
+        for(int i=0;i<hauteurBlock;i++){
+            for(int j=0;j<largeurBlock;j++){
+                if(terrain[i][j]==1){
+                    if(first){
+                        first = false;
+                        iFirst = i;
+                        jFirst = j;
                     }
+                    iLast = i;
+                    jLast = j;
+                }
+                if((terrain[i][j]!=1 || j == largeurBlock-1)&&!first){
+                    big_ground.draw(jFirst*blockSize,iFirst*blockSize,(jLast+1)*blockSize,(iLast+1)*blockSize,jFirst*blockSize,iFirst*blockSize,(jLast+1)*blockSize,(iLast+1)*blockSize);
+                    first = true;
                 }
             }
         }
+
         for(int i=0;i<terrain.length;i++){
             for(int j=0;j<terrain[0].length;j++){
                 /*if(terrain[i][j]==0){
@@ -179,7 +169,7 @@ public class FenetreJeu extends BasicGame{
         int blocHauteur = 200;
         AppGameContainer app = new AppGameContainer(new FenetreJeu(tailleBloc,blocLargeur,blocHauteur));
         app.setDisplayMode(blocLargeur*tailleBloc, blocHauteur*tailleBloc, false); // Mode fenêtré
-        //app.setVSync(false);
+        app.setVSync(false);
         //app.setTargetFrameRate(120);
         app.start();
     }

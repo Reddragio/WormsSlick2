@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 public class MoteurPhysique {
+    //Moteur physique du jeu
     protected final static double realBlockSize = 0.0125;
     protected final static double realPixelSize = 0.0025;
     protected final static double facteurEchelle = 0.05;

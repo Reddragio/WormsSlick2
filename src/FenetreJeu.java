@@ -225,7 +225,7 @@ public class FenetreJeu extends BasicGame{
                         } else {
                             wor.set_vitesse_x(5);
                         }*/
-                        wor.set_vitesse_y(-40000);
+                        wor.set_vitesse_y(-360);
                     }
             }
         }

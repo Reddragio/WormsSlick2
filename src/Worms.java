@@ -40,7 +40,7 @@ public class Worms {
         this.x = x;
         this.y = y;
         physic = new MoteurPhysique(terrain,blockSize,hitBoxHauteur,hitBoxLargeur,blocIntraversables,masse,x,y);
-        Force forceGravite = new Force(0,9.81);
+        Force forceGravite = new Force(0,g/200);
         physic.addForce(forceGravite);
         orientation = 1;
         skinLeft = new org.newdawn.slick.Image("images/skin_worms_left.png");
@@ -183,6 +183,6 @@ public class Worms {
     public void onFloorUpdate(){
         if(physic.getContactBlock(x,y+1).isEmpty()) isOnFloor=false;
         else isOnFloor=true;
-        System.out.println(physic.getContactBlock(x,y+1));
+        //System.out.println(physic.getContactBlock(x,y+1));
     }
 }

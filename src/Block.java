@@ -8,4 +8,13 @@ public class Block {
         this.y = y;
         this.valeur = valeur;
     }
+
+    @Override
+    public String toString() {
+        return "Block{" +
+                "x=" + x +
+                ", y=" + y +
+                ", valeur=" + valeur +
+                '}';
+    }
 }

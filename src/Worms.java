@@ -51,6 +51,7 @@ public class Worms {
         physic.applyForces(delta);
         x = physic.getPixelCoordX();
         y = physic.getPixelCoordY();
+        onFloorUpdate();
     }
 
     public void modifierVie(int hp){
@@ -178,5 +179,10 @@ public class Worms {
 		//Retourne l'orientation du Worms
 		// 0 = Gauche et 1 = droite
         return orientation;
+    }
+    public void onFloorUpdate(){
+        if(physic.getContactBlock(x,y+1).isEmpty()) isOnFloor=false;
+        else isOnFloor=true;
+        System.out.println(physic.getContactBlock(x,y+1));
     }
 }

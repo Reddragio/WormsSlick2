@@ -219,13 +219,13 @@ public class FenetreJeu extends BasicGame{
                         isMovingLeft = true;
                     } else if (Input.KEY_RIGHT == key) {
                         isMovingRight = true;
-                    } else if (Input.KEY_ENTER == key) {
+                    } else if (Input.KEY_ENTER == key && wor.isOnFloor) {
                         /*if (wor.get_orientation() == 0) {
                             wor.set_vitesse_x(-5);
                         } else {
                             wor.set_vitesse_x(5);
                         }*/
-                        wor.set_vitesse_y(-40);
+                        wor.set_vitesse_y(-40000);
                     }
             }
         }

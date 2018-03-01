@@ -12,6 +12,7 @@ public class Worms {
     protected int terrain[][];
     protected int blockSize;
     protected boolean isMoving; //Servira à savoir si un Worms est dans sa phase de déplacement
+    protected boolean isOnFloor; //Pour savoir si un worm est au sol ou non
     protected boolean[] changementPrint;
     protected int orientation;
     protected MoteurPhysique physic;

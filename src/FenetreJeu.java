@@ -33,6 +33,7 @@ public class FenetreJeu extends BasicGame{
     protected boolean visualiserExplosion;
     protected Input input;
     protected boolean antiExplosion;//Permet de mettre des blocs au lieu d'en détruire
+    protected final static int blocIndestructibles[] = {2,3};
 
     public FenetreJeu(int s,int x,int y) {
         super("Worms Fighter Z - Slick Version");
@@ -377,14 +378,23 @@ public class FenetreJeu extends BasicGame{
         block_bd_y = limiteSuperieurY(block_bd_y);
 
         double demi_block = blockSize/2.0;
+        boolean destructible;
         for(int i=block_hg_y;i<=block_bd_y;i++){
             for(int j=block_hg_x;j<=block_bd_x;j++){
                 if(distance(xe,ye,j*blockSize+demi_block,i*blockSize+demi_block)<=rayon){
-                    if(!antiExplosion&&terrain[i][j]!=2){
-                        terrain[i][j] = 0;
+                    destructible = true;
+                    for(int strong :blocIndestructibles){
+                        if(terrain[i][j]==strong){
+                            destructible = false;
+                        }
                     }
-                    else if(terrain[i][j]!=2){
-                        terrain[i][j] = 1;
+                    if(destructible){
+                        if(!antiExplosion){
+                            terrain[i][j] = 0;
+                        }
+                        else{
+                            terrain[i][j] = 1;
+                        }
                     }
                 }
             }

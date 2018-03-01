@@ -130,15 +130,9 @@ public class MoteurPhysique {
         }
 
         //On verifie que la physique n'a pas donné un résultat absurde:
-        ArrayList<Block> BlockEnContact2 = getContactBlock(xPixel,yPixel);
-        boolean mouvPossible = true;
-        for(Block bContact:BlockEnContact2){
-            if(isIntraversable(bContact)){
-                mouvPossible = false;
-            }
-        }
+        BlockEnContact = getContactBlock(xPixel,yPixel);
 
-        if(mouvPossible){//Si tout va bien, alors on met à jour les coordonnées RÉELLES de l'objet
+        if(BlockEnContact.isEmpty()){//Si tout va bien, alors on met à jour les coordonnées RÉELLES de l'objet
             if(speedLimitation || physicCorrection){
                 x = convertPixelToReal(xPixel);
                 y = convertPixelToReal(yPixel);
@@ -174,7 +168,7 @@ public class MoteurPhysique {
 
     public ArrayList<Block> getContactBlock(int tempx,int tempy){
         //Fonction fondamental pour la physique
-        //--> Renvoit la liste de tous les blocks actuellement en contact
+        //--> Renvoit la liste de tous les blocks actuellement superposés
         //avec l'objet
         ArrayList<Block> templist = new ArrayList<Block>();
         for(int i=tempx;i<=tempx+hitBoxLargeur-1;i+=hitBoxLargeur-1){

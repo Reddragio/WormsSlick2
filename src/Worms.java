@@ -72,15 +72,10 @@ public class Worms {
         orientation = direction;//On garde l'orientation en mémoire, pour afficher le Worms dans la bonne direction ainsi que
         //pour sauter dans la bonne direction
 
-		//Début du moteur physique !
-        boolean mouvPossible = true;
+		//Début de la gestion de la physique !
         ArrayList<Block> BlockEnContact = physic.getContactBlock(tempx,tempy);
-        for(Block bContact:BlockEnContact){
-            if(physic.isIntraversable(bContact)){//Si le Worms est en contact avec un bloc ...
-                mouvPossible = false;//alors le mouvement est impossible
-            }
-        }
-        if(mouvPossible){//Si mouvement possible, alors on met à jour les coordonnées RÉELLES du Worms
+
+        if(BlockEnContact.isEmpty()){//Si mouvement possible, alors on met à jour les coordonnées RÉELLES du Worms
             x = tempx;
             y = tempy;
             physic.setX(x);
@@ -109,18 +104,12 @@ public class Worms {
             }
             if(sameYforAll){//Si tous les blocs sont escaladables, alors on escalade !
                 tempy -= (int)(blockSize*max_diff);//Pour se faire, on diminue la coordonnée y
-                ArrayList<Block> BlockEnContact2 = physic.getContactBlock(tempx,tempy);
-                boolean mouvPossible2 = true;
-                
-                //Ce qui suit est une boucle de sécurité
+
+                //Ce qui suit est une sécurité
                 //Elle vérifie que l'escalade ne met pas le Worms à cheval sur des blocks,
                 //ce qui serait physiquement impossible
-                for(Block bContact:BlockEnContact2){
-                    if(physic.isIntraversable(bContact)){
-                        mouvPossible2 = false;
-                    }
-                }
-                if(mouvPossible2){//Si tout va bien, alors on met à jour les coordonnées RÉELLES du Worms
+                BlockEnContact = physic.getContactBlock(tempx,tempy);
+                if(BlockEnContact.isEmpty()){//Si tout va bien, alors on met à jour les coordonnées RÉELLES du Worms
 					//Le Worms vient d'escalader un block !
                     x = tempx;
                     y = tempy;

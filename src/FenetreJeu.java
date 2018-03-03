@@ -38,7 +38,11 @@ public class FenetreJeu extends BasicGame{
     public FenetreJeu(int s,int x,int y) {
         super("Worms Fighter Z - Slick Version");
         blockSize=s;
-        genererTerrain(x,y,1);
+        GestionTerrain monde=new GestionTerrain();
+        monde.genererTerrain(x,y,1);
+        monde.genererFaille();
+        terrain=monde.getTerrainInitial();
+
     }
 
     public void init(GameContainer container) throws SlickException {
@@ -297,70 +301,7 @@ public class FenetreJeu extends BasicGame{
         }
     }
 
-    public void genererTerrain(int x, int y,int type){
-        int[][] t=new int[y][x];
-        if(type == 1){
-            //Generation classique
-            int p=(int) y/2;
-            int r=0; //modification denivelé
-            double montagnes=2.2; //coefficient montagnes
-            double plaine=2.5; //coefficient plaines
-            int oldp=p;
-            for(int i=0;i<t[0].length;i++){
-                if((Math.random()*montagnes)>1&&p!=oldp){
-                    r=(p-oldp)+(int)(Math.random()*2-1);
-                }
-                else{
-                    r=(int)((Math.random()*plaine-Math.random()*plaine));
-                }
-                oldp=p;
-                if(p>y-24) p-=Math.abs(r);
-                if(p<24) p+=Math.abs(r);
-                else p+=r;
-                if(p<t.length && p>0){
-                    t[p][i]=1;
-                    for(int j=p;j<t.length;j++){
-                        t[j][i]=1;
-                    }
-                }
-            }
-            for(int i=0;i<t[0].length;i++){
-                t[t.length-1][i]=2;
-                t[t.length-2][i]=2;
-                t[t.length-3][i]=2;
-            }
-        }
-        else if(type >=2){
-            if(type == 2){
-                //map plate
-                for(int i=y/2;i<y;i++){
-                    for(int j=0;j<x;j++){
-                        t[i][j] = 1;
-                    }
-                }
-            }
-            else if(type == 3){
-                //map escalier
-                for(int i=y/2;i<y;i++){
-                    for(int j=i;j<x;j++){
-                        t[y-1-i][j] = 1;
-                    }
-                }
-            }
-        }
-        //Ajout de bloc intraversables invisibles sur les bords de la map
-        for(int i=0;i<y;i+=y-1){
-            for(int j=0;j<x;j++){
-                t[i][j] = 3;
-            }
-        }
-        for(int j=0;j<x;j+=x-1){
-            for(int i=0;i<y;i++){
-                t[i][j] = 3;
-            }
-        }
-        terrain=t;
-    }
+
 
     public void experimentalExplosion(int xe,int ye,int rayon){
 		//Explosion !!!!!!

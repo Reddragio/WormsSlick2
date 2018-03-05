@@ -86,10 +86,10 @@ public class GestionTerrain {
 
     public void genererFaille(){
         int epaisseur=7; //l'épaisseur de la faille
-        int asperites=4; //irrégularités dans la faille
+        int asperites=3; //irrégularités dans la faille
         int epMini=7; //épaisseur minimum de la faille
         int epMaxi=17; //épaisseur maximum de la faille
-        int entree=5; //taille de l'embouchure de la faille
+        int entree=3; //taille de l'embouchure de la faille
         int lastx=50;
         int lasty=50;
         int[] plusbas=pointLePlusBas();
@@ -100,11 +100,11 @@ public class GestionTerrain {
         boolean sens; //Pour savoir si la faille sera vers la gauche ou la droite: 0= gauche, 1= droite
         if(xInit<terrainInitial[0].length/2) sens=true;
         else sens=false;
-        for(int I=-epaisseur;I<epaisseur;I++){
-            for(int J=-epaisseur;J<epaisseur;J++){
+        for(int I=-epaisseur-entree;I<epaisseur+entree;I++){
+            for(int J=-epaisseur-entree;J<epaisseur+entree;J++){
                 if(xInit+J>0 && xInit+J<terrainInitial[0].length&& yInit+I>0 && yInit+I<terrainInitial.length){
-                    if(Math.abs(J)+Math.abs(I)<epaisseur+entree){
-                        terrainInitial[yInit+I][xInit+J]=0;
+                    if(Math.sqrt(I*I+J*J)<epaisseur+entree){
+                        terrainInitial[yInit+I-epaisseur][xInit+J]=0;
                     }
                 }
             }
@@ -135,8 +135,10 @@ public class GestionTerrain {
             lastx=(int) (lastx-epaisseur/2);
             for(int k=0;k<epaisseur;k++){
                 for(int l=0;l<epaisseur/2;l++){
-                    terrainInitial[lasty+l][lastx+k-l]=0;
-                    terrainInitial[lasty+l][lastx-k+l]=0;
+                    if(lasty+l<terrainInitial.length&&lastx +k-1<terrainInitial[0].length) {
+                        terrainInitial[lasty + l][lastx + k - l] = 0;
+                        terrainInitial[lasty + l][lastx - k + l] = 0;
+                    }
                 }
             }
         }

@@ -27,6 +27,8 @@ public class FenetreJeu extends BasicGame{
     protected int largeur_draw_texture;
     protected Music themeWorms;
     protected boolean themeWormsActivation;
+    protected int stackedEnter;
+    protected long lastTime;
 
     //Experimental:
     protected int rayonExplosion;
@@ -42,6 +44,7 @@ public class FenetreJeu extends BasicGame{
         monde.genererTerrain(x,y,1);
         monde.genererFaille();
         terrain=monde.getTerrainInitial();
+        stackedEnter=0;
 
     }
 
@@ -224,13 +227,34 @@ public class FenetreJeu extends BasicGame{
                         isMovingLeft = true;
                     } else if (Input.KEY_RIGHT == key) {
                         isMovingRight = true;
-                    } else if (Input.KEY_ENTER == key && wor.isOnFloor) {
+                    } else if (Input.KEY_ENTER == key) {
                         /*if (wor.get_orientation() == 0) {
                             wor.set_vitesse_x(-5);
                         } else {
                             wor.set_vitesse_x(5);
                         }*/
-                        wor.set_vitesse_y(-360);
+                        if(wor.isOnFloor)
+                            stackedEnter=0;
+
+                        if(stackedEnter==0  && wor.isOnFloor) {
+                            wor.set_vitesse_y(-300);
+                            if(wor.get_orientation()==0)
+                                wor.set_vitesse_x(-100);
+                            if(wor.get_orientation()==1)
+                                wor.set_vitesse_x(100);
+                            lastTime=System.currentTimeMillis();
+                        }
+                    stackedEnter++;
+
+                        if(stackedEnter>1 && System.currentTimeMillis()-lastTime<180){
+                            System.out.println("saut");
+                            wor.set_vitesse_y(-500);
+                            if(wor.get_orientation()==0)
+                                wor.set_vitesse_x(50);
+                            if(wor.get_orientation()==1)
+                                wor.set_vitesse_x(-50);
+                            stackedEnter=0;
+                        }
                     }
             }
         }

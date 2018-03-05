@@ -11,6 +11,7 @@ public class Menu extends JFrame implements ActionListener {
     private JTextField textChoixNom2;
     private JButton Jouer;
     private JComboBox couleurWorms1;
+    private JLabel photo1;
 
 
     public Menu(){
@@ -64,14 +65,18 @@ public class Menu extends JFrame implements ActionListener {
         textChoixNom13 = new JTextField();
         textChoixNom13.setBounds(80,310,90,30);
 
-        JLabel photo1 = new JLabel(new ImageIcon("./images/skin_worms_left.png"));
-        photo1.setBounds(60,350,40,80);
 
-        String[] Couleurs = {"Rouge", "Vert", "Bleu", "Noir", "Marron", "Rose", "Blanc"};
+
+        String[] Couleurs = {"Rouge", "Vert", "Bleu", "Noir", "Blanc"};
         couleurWorms1 = new JComboBox(Couleurs);
         couleurWorms1.setSelectedIndex(0);
         couleurWorms1.addActionListener(this);
         couleurWorms1.setBounds(60,450,90,40);
+
+        photo1 = new JLabel();
+        photo1.setBounds(60,350,80,160);
+        updateLabel(Couleurs[couleurWorms1.getSelectedIndex()]);
+
 
         Main.add(couleurWorms1);
         Main.add(Worms1);
@@ -100,10 +105,15 @@ public class Menu extends JFrame implements ActionListener {
         }
         if(e.getSource() == couleurWorms1){
             String CouleurChoisie1 = (String)couleurWorms1.getSelectedItem();
-
+            updateLabel(CouleurChoisie1);
         }
     }
     public static void main (String[] args){
         Menu menu = new Menu();
+    }
+
+    protected void updateLabel(String Couleur) {
+        ImageIcon icon = new ImageIcon("images/Worm" + Couleur + "HD.png");
+        photo1.setIcon(icon);
     }
 }

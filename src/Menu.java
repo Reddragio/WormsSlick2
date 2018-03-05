@@ -18,15 +18,17 @@ public class Menu extends JFrame implements ActionListener {
         this.setTitle("Menu Worms");
         this.setLayout(null);
         this.setResizable(false);
-        this.setSize(500,700);
+        this.setSize(500,800);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Main Panel
-        JPanel Main = new JPanel();
-        Main.setBounds(0,0,500,700);
+        JLabel Main = new JLabel();
+        Main.setBounds(0,0,500,800);
         Main.setLayout(null);
-        //A terme ce serai mieux une image en background
         Main.setBackground(Color.white);
+        Main.setIcon(new ImageIcon("./images/backgroundMenu.png"));
+
+
 
         //Logo
         ImageIcon LogoW = new ImageIcon("./images/logo.png");
@@ -37,7 +39,7 @@ public class Menu extends JFrame implements ActionListener {
         //BoutonJouer
         ImageIcon BoutonJouer = new ImageIcon("./images/Jouer.png");
         Jouer = new JButton(BoutonJouer);
-        Jouer.setBounds(50,550,400,100);
+        Jouer.setBounds(50,650,400,100);
         Jouer.setBorderPainted(false);
         Jouer.addActionListener(this);
         Main.add(Jouer);
@@ -71,7 +73,7 @@ public class Menu extends JFrame implements ActionListener {
         couleurWorms1 = new JComboBox(Couleurs);
         couleurWorms1.setSelectedIndex(0);
         couleurWorms1.addActionListener(this);
-        couleurWorms1.setBounds(60,450,90,40);
+        couleurWorms1.setBounds(60,550,90,40);
 
         photo1 = new JLabel();
         photo1.setBounds(60,350,80,160);

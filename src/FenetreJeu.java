@@ -247,14 +247,14 @@ public class FenetreJeu extends BasicGame{
                     stackedEnter++;
 
                         if(stackedEnter>1 && System.currentTimeMillis()-lastTime<180){
-                            System.out.println("saut");
-                            wor.set_vitesse_y(-500);
+                            wor.set_vitesse_y(-450);
                             if(wor.get_orientation()==0)
-                                wor.set_vitesse_x(50);
+                                wor.set_vitesse_x(70);
                             if(wor.get_orientation()==1)
-                                wor.set_vitesse_x(-50);
+                                wor.set_vitesse_x(-70);
                             stackedEnter=0;
                         }
+                        wor.onFloorUpdate();
                     }
             }
         }
@@ -291,6 +291,7 @@ public class FenetreJeu extends BasicGame{
             isMovingRight = false;
         }
     }
+
 
 
 

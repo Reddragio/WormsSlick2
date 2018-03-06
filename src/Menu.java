@@ -15,6 +15,12 @@ public class Menu extends JFrame implements ActionListener {
     private JComboBox couleurWorms1;
     private JLabel photo1;
 
+    private JTextField textChoixNom21;
+    private JTextField textChoixNom22;
+    private JTextField textChoixNom23;
+    private JComboBox couleurWorms2;
+    private JLabel photo2;
+
     public Menu(){
         this.setTitle("Menu Worms");
         this.setLayout(null);
@@ -79,7 +85,41 @@ public class Menu extends JFrame implements ActionListener {
 
         photo1 = new JLabel();
         photo1.setBounds(60,350,80,160);
-        updateLabel(Couleurs[couleurWorms1.getSelectedIndex()]);
+        updateLabel(Couleurs[couleurWorms1.getSelectedIndex()],1);
+
+//Pour l'équipe 2
+        JLabel Worms2 = new JLabel();
+        Worms2.setText("Equipe 2 :");
+        Worms2.setBounds(300,180,60,40);
+
+        JLabel Nom21 = new JLabel();
+        Nom21.setText("Nom n°1 :");
+        Nom21.setBounds(300,230,60,30);
+        JLabel Nom22 = new JLabel();
+        Nom22.setText("Nom n°2 :");
+        Nom22.setBounds(300,270,60,30);
+        JLabel Nom23 = new JLabel();
+        Nom23.setText("Nom n°3 :");
+        Nom23.setBounds(300,310,60,30);
+
+
+        ArrayList<String> tab2 = nomWorm(3);
+        System.out.println(tab2);
+        textChoixNom21 = new JTextField(tab2.get(0));
+        textChoixNom21.setBounds(360,230,90,30);
+        textChoixNom22 = new JTextField(tab2.get(1));
+        textChoixNom22.setBounds(360,270,90,30);
+        textChoixNom23 = new JTextField(tab2.get(2));
+        textChoixNom23.setBounds(360,310,90,30);
+
+        couleurWorms2 = new JComboBox(Couleurs);
+        couleurWorms2.setSelectedIndex(0);
+        couleurWorms2.addActionListener(this);
+        couleurWorms2.setBounds(340,550,90,40);
+
+        photo2 = new JLabel();
+        photo2.setBounds(340,350,80,160);
+        updateLabel(Couleurs[couleurWorms2.getSelectedIndex()],2);
 
 
         Main.add(couleurWorms1);
@@ -92,8 +132,15 @@ public class Menu extends JFrame implements ActionListener {
         Main.add(textChoixNom13);
         Main.add(photo1);
 
-
-
+        Main.add(couleurWorms2);
+        Main.add(Worms2);
+        Main.add(Nom21);
+        Main.add(Nom22);
+        Main.add(Nom23);
+        Main.add(textChoixNom21);
+        Main.add(textChoixNom22);
+        Main.add(textChoixNom23);
+        Main.add(photo2);
 
         //Affichage
         this.setContentPane(Main);
@@ -119,7 +166,12 @@ public class Menu extends JFrame implements ActionListener {
         }
         if(e.getSource() == couleurWorms1){
             String CouleurChoisie1 = (String)couleurWorms1.getSelectedItem();
-            updateLabel(CouleurChoisie1);
+            updateLabel(CouleurChoisie1,1);
+        }
+
+        if(e.getSource() == couleurWorms2){
+            String CouleurChoisie2 = (String)couleurWorms2.getSelectedItem();
+            updateLabel(CouleurChoisie2,2);
         }
     }
 
@@ -138,9 +190,13 @@ public class Menu extends JFrame implements ActionListener {
         Menu menu = new Menu();
     }
 
-    public void updateLabel(String Couleur) {
+    public void updateLabel(String Couleur, int worms) {
         ImageIcon icon = new ImageIcon("images/Worm" + Couleur + "HD.png");
-        photo1.setIcon(icon);
+        if(worms==1) {
+            photo1.setIcon(icon);
+        }else {
+            photo2.setIcon(icon);
+        }
     }
 
     public ArrayList<String> nomWorm( int nb){

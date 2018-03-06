@@ -11,7 +11,6 @@ public class Worms {
     protected int y;
     protected int terrain[][];
     protected int blockSize;
-    protected boolean isMoving; //Servira à savoir si un Worms est dans sa phase de déplacement
     protected boolean isOnFloor; //Pour savoir si un worm est au sol ou non
     protected boolean[] changementPrint;
     protected int orientation;
@@ -25,6 +24,14 @@ public class Worms {
     protected final static int climbAbility = 2; //Nombre de bloc que le Worms est capable d'escalader
     protected org.newdawn.slick.Image skinLeft;
     protected org.newdawn.slick.Image skinRight;
+    protected Weapon armeActuelle;
+    protected double angleVisee;//Entre 0 et 180°
+    protected double pasVisee;
+
+    //Booléens servant à enchainer les phases de jeu
+    protected boolean isMoving; //Servira à savoir si un Worms est dans sa phase de déplacement
+    protected boolean isAiming; //est en train de viser
+
 
     //protected int compteurTest;
 
@@ -43,6 +50,8 @@ public class Worms {
         Force forceGravite = new Force(0,g/200);
         physic.addForce(forceGravite);
         orientation = 1;
+        pasVisee = 0.5;
+        angleVisee = 0;
         skinLeft = new org.newdawn.slick.Image("images/skin_worms_left.png");
         skinRight = new org.newdawn.slick.Image("images/skin_worms_right.png");
     }
@@ -131,6 +140,15 @@ public class Worms {
         isMoving = etat;
     }
 
+    public boolean getAimingState() {
+        return isAiming;
+    }
+
+    public void setAimingState(boolean etat){
+        //Permet de définir si le Worms est en phase de déplacement ou non
+        isAiming = etat;
+    }
+
     public void draw(org.newdawn.slick.Graphics g){
 		//Dessine le Worms à l'écran
         
@@ -169,9 +187,46 @@ public class Worms {
 		// 0 = Gauche et 1 = droite
         return orientation;
     }
+
     public void onFloorUpdate(){
         if(physic.getContactBlock(x,y+1).isEmpty()) isOnFloor=false;
         else isOnFloor=true;
         //System.out.println(physic.getContactBlock(x,y+1));
+    }
+
+    public void drawVisee(){
+        armeActuelle.drawVisee(angleVisee);
+    }
+
+    public void initVisee(){
+        angleVisee = 0;
+        updateViseeOrientation();
+    }
+
+    public void updateViseeOrientation(){
+        armeActuelle.init(x,y,hitBoxLargeur,hitBoxHauteur,orientation);
+    }
+
+    public void augmenterAngle(){
+        angleVisee -= pasVisee;
+        if(angleVisee<=-90){
+            angleVisee = -89;
+        }
+    }
+
+    public void diminuerAngle(){
+        angleVisee += pasVisee;
+        if(angleVisee>=90){
+            angleVisee = 89;
+        }
+
+    }
+
+    public void setWeapon(Weapon armeTemp){
+        armeActuelle = armeTemp;
+    }
+
+    public void setOrientation(int orientation) {
+        this.orientation = orientation;
     }
 }

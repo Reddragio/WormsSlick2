@@ -17,6 +17,8 @@ public class FenetreJeu extends BasicGame{
     protected boolean[] changementPrint; //Permet de rafraichir l'écran uniquement si il y a eu un changement
     protected boolean isMovingLeft;
     protected boolean isMovingRight;
+    protected boolean augmentationAngleVisee;
+    protected boolean diminutionAngleVisee;
     protected long tempEcoule;
     protected long lastTempEcoule;
     protected BigImage sky;
@@ -34,6 +36,7 @@ public class FenetreJeu extends BasicGame{
     protected Input input;
     protected boolean antiExplosion;//Permet de mettre des blocs au lieu d'en détruire
     protected final static int blocIndestructibles[] = {2,3};
+    protected boolean experimentalVisee;
 
     public FenetreJeu(int s,int x,int y) {
         super("Worms Fighter Z - Slick Version");
@@ -66,10 +69,13 @@ public class FenetreJeu extends BasicGame{
         joueurs = new Worms[1];
         joueurs[0] = new Worms(1,"Popaul",terrain,blockSize,changementPrint,500,100);
         joueurs[0].setMovingState(true);
+        joueurs[0].setWeapon(new Grenade());
 
         this.container = container;
         isMovingLeft = false;
         isMovingRight = false;
+        augmentationAngleVisee = false;
+        diminutionAngleVisee = false;
         tempEcoule = 0;
         lastTempEcoule = 0;
 
@@ -84,6 +90,7 @@ public class FenetreJeu extends BasicGame{
         visualiserExplosion = false;
         input = container.getInput();
         antiExplosion = false;
+        experimentalVisee = false;
     }
 
     public void render(GameContainer container, Graphics g) throws SlickException {
@@ -133,6 +140,9 @@ public class FenetreJeu extends BasicGame{
 
         for(Worms wor: joueurs){
             wor.draw(g);
+            if(wor.getAimingState()){
+                wor.drawVisee();
+            }
         }
 
         if(visualiserExplosion){
@@ -159,6 +169,13 @@ public class FenetreJeu extends BasicGame{
                 }
                 else if(isMovingRight){
                     wor.deplacer(1);
+                }
+
+                if(augmentationAngleVisee){
+                    wor.augmenterAngle();
+                }
+                else if(diminutionAngleVisee){
+                    wor.diminuerAngle();
                 }
             }
         }
@@ -233,6 +250,21 @@ public class FenetreJeu extends BasicGame{
                         wor.set_vitesse_y(-360);
                     }
             }
+            if(wor.getAimingState()){
+                if (Input.KEY_UP == key) {
+                    augmentationAngleVisee = true;
+                }
+                else if(Input.KEY_DOWN == key){
+                    diminutionAngleVisee = true;
+                }
+                else if (Input.KEY_LEFT == key) {
+                    wor.setOrientation(0);
+                    wor.updateViseeOrientation();
+                } else if (Input.KEY_RIGHT == key) {
+                    wor.setOrientation(1);
+                    wor.updateViseeOrientation();
+                }
+            }
         }
         if (Input.KEY_M == key){
             if(!themeWormsActivation){
@@ -246,6 +278,18 @@ public class FenetreJeu extends BasicGame{
         }
         else if(Input.KEY_B == key){
             antiExplosion = !antiExplosion;
+        }
+        else if(Input.KEY_V == key){
+            experimentalVisee = !experimentalVisee;
+            if(experimentalVisee){
+                joueurs[0].setMovingState(false);
+                joueurs[0].setAimingState(true);
+                joueurs[0].initVisee();
+            }
+            else{
+                joueurs[0].setMovingState(true);
+                joueurs[0].setAimingState(false);
+            }
         }
         /*else if(Input.KEY_T == key){
             joueurs[0].set_y(50);
@@ -265,6 +309,12 @@ public class FenetreJeu extends BasicGame{
             isMovingLeft = false;
         } else if (Input.KEY_RIGHT == key) {
             isMovingRight = false;
+        }
+        else if (Input.KEY_UP == key) {
+            augmentationAngleVisee = false;
+        }
+        else if(Input.KEY_DOWN == key){
+            diminutionAngleVisee = false;
         }
     }
 

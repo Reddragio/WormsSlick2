@@ -50,6 +50,14 @@ public class Menu extends JFrame implements ActionListener {
         Jouer.addActionListener(this);
         Main.add(Jouer);
 
+        //Array List Couleur
+        ArrayList<String> colorWormsList = new ArrayList<String>();
+        colorWormsList.add("Rouge");
+        colorWormsList.add("Noir");
+        colorWormsList.add("Blanc");
+        colorWormsList.add("Vert");
+        colorWormsList.add("Bleu");
+
         //Pour l'équipe 1
         JLabel Worms1 = new JLabel();
         Worms1.setText("Equipe 1 :");
@@ -75,19 +83,19 @@ public class Menu extends JFrame implements ActionListener {
         textChoixNom13 = new JTextField(tab.get(2));
         textChoixNom13.setBounds(80,310,90,30);
 
-
-
-        String[] Couleurs = {"Rouge", "Vert", "Bleu", "Noir", "Blanc"};
-        couleurWorms1 = new JComboBox(Couleurs);
+        couleurWorms1 = new JComboBox(colorWormsList.toArray());
         couleurWorms1.setSelectedIndex(0);
         couleurWorms1.addActionListener(this);
         couleurWorms1.setBounds(60,550,90,40);
 
         photo1 = new JLabel();
         photo1.setBounds(60,350,80,160);
-        updateLabel(Couleurs[couleurWorms1.getSelectedIndex()],1);
+        updateLabel(colorWormsList.get(couleurWorms1.getSelectedIndex()),1);
 
 //Pour l'équipe 2 worms
+        ArrayList<String> tab2 = nomWorm(3);
+        System.out.println(tab2);
+
         JLabel Worms2 = new JLabel();
         Worms2.setText("Equipe 2 :");
         Worms2.setBounds(300,180,60,40);
@@ -102,9 +110,6 @@ public class Menu extends JFrame implements ActionListener {
         Nom23.setText("Nom n°3 :");
         Nom23.setBounds(300,310,60,30);
 
-
-        ArrayList<String> tab2 = nomWorm(3);
-        System.out.println(tab2);
         textChoixNom21 = new JTextField(tab2.get(0));
         textChoixNom21.setBounds(360,230,90,30);
         textChoixNom22 = new JTextField(tab2.get(1));
@@ -112,14 +117,14 @@ public class Menu extends JFrame implements ActionListener {
         textChoixNom23 = new JTextField(tab2.get(2));
         textChoixNom23.setBounds(360,310,90,30);
 
-        couleurWorms2 = new JComboBox(Couleurs);
+        couleurWorms2 = new JComboBox(colorWormsList.toArray());
         couleurWorms2.setSelectedIndex(0);
         couleurWorms2.addActionListener(this);
         couleurWorms2.setBounds(340,550,90,40);
 
         photo2 = new JLabel();
         photo2.setBounds(340,350,80,160);
-        updateLabel(Couleurs[couleurWorms2.getSelectedIndex()],2);
+        updateLabel(colorWormsList.get(couleurWorms2.getSelectedIndex()),2);
 
 
         Main.add(couleurWorms1);

@@ -87,7 +87,7 @@ public class Menu extends JFrame implements ActionListener {
         photo1.setBounds(60,350,80,160);
         updateLabel(Couleurs[couleurWorms1.getSelectedIndex()],1);
 
-//Pour l'équipe 2
+//Pour l'équipe 2 2
         JLabel Worms2 = new JLabel();
         Worms2.setText("Equipe 2 :");
         Worms2.setBounds(300,180,60,40);

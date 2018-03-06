@@ -1,7 +1,9 @@
 // Chargement des bibliothèques Swing et AWT
+import org.newdawn.slick.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class Menu extends JFrame implements ActionListener {
 
@@ -25,7 +27,6 @@ public class Menu extends JFrame implements ActionListener {
         JLabel Main = new JLabel();
         Main.setBounds(0,0,500,800);
         Main.setLayout(null);
-        Main.setBackground(Color.white);
         Main.setIcon(new ImageIcon("./images/backgroundMenu.png"));
 
 
@@ -60,11 +61,13 @@ public class Menu extends JFrame implements ActionListener {
         Nom13.setBounds(20,310,60,30);
 
 
-        textChoixNom11 = new JTextField();
+        ArrayList<String> tab = nomWorm(3);
+        System.out.println(tab);
+        textChoixNom11 = new JTextField(tab.get(0));
         textChoixNom11.setBounds(80,230,90,30);
-        textChoixNom12 = new JTextField();
+        textChoixNom12 = new JTextField(tab.get(1));
         textChoixNom12.setBounds(80,270,90,30);
-        textChoixNom13 = new JTextField();
+        textChoixNom13 = new JTextField(tab.get(2));
         textChoixNom13.setBounds(80,310,90,30);
 
 
@@ -104,6 +107,8 @@ public class Menu extends JFrame implements ActionListener {
             String NomWorms13 = textChoixNom13.getText();
             System.out.println(NomWorms11);
             System.out.println((String)couleurWorms1.getSelectedItem());
+
+
         }
         if(e.getSource() == couleurWorms1){
             String CouleurChoisie1 = (String)couleurWorms1.getSelectedItem();
@@ -114,8 +119,23 @@ public class Menu extends JFrame implements ActionListener {
         Menu menu = new Menu();
     }
 
-    protected void updateLabel(String Couleur) {
+    public void updateLabel(String Couleur) {
         ImageIcon icon = new ImageIcon("images/Worm" + Couleur + "HD.png");
         photo1.setIcon(icon);
+    }
+
+    public ArrayList<String> nomWorm( int nb){
+        String[] Noms = {"Alberto", "Rex", "Wormito", "Fredo", "Gilbert", "Michel", "xXKevinXx","Ivan Touskivol","Chibroux","ElVerDeLaVega"};
+        ArrayList<String> tab= new ArrayList<String>();
+        int i =0;
+        int max = Noms.length;
+        while (i<nb){
+            int random = (int)(Math.random()*max);
+            if(!tab.contains(Noms[random])){
+                tab.add(Noms[random]);
+                i++;
+            }
+        }
+        return tab;
     }
 }

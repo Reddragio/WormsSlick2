@@ -73,8 +73,8 @@ public class GestionTerrain {
         int ybas=0;
         for(int i=2;i<terrainInitial.length-2;i++){
             for(int j=1;j<terrainInitial[0].length;j++){
-                if(terrainInitial[i][j]==1 && terrainInitial[i][j-1]==0)
-                    if(j>ybas){
+                if(terrainInitial[i][j]==1 && terrainInitial[i-1][j]==0)
+                    if(i>ybas){
                     xbas=j;
                     ybas=i;
                     }
@@ -89,17 +89,22 @@ public class GestionTerrain {
         int asperites=3; //irrégularités dans la faille
         int epMini=7; //épaisseur minimum de la faille
         int epMaxi=17; //épaisseur maximum de la faille
+        int entree=3; //taille de l'embouchure de la faille
+        int lastx=50;
+        int lasty=50;
+        int[] plusbas=pointLePlusBas();
 
-        int xInit=pointLePlusBas()[0];
-        int yInit=pointLePlusBas()[1];
+
+        int xInit=plusbas[0];
+        int yInit=plusbas[1];
         boolean sens; //Pour savoir si la faille sera vers la gauche ou la droite: 0= gauche, 1= droite
         if(xInit<terrainInitial[0].length/2) sens=true;
         else sens=false;
-        for(int I=-epaisseur;I<epaisseur;I++){
-            for(int J=-epaisseur;J<epaisseur;J++){
+        for(int I=-epaisseur-entree;I<epaisseur+entree;I++){
+            for(int J=-epaisseur-entree;J<epaisseur+entree;J++){
                 if(xInit+J>0 && xInit+J<terrainInitial[0].length&& yInit+I>0 && yInit+I<terrainInitial.length){
-                    if(Math.abs(J)+Math.abs(I)<epaisseur+2){
-                        terrainInitial[yInit+I][xInit+J]=0;
+                    if(Math.sqrt(I*I+J*J)<epaisseur+entree){
+                        terrainInitial[yInit+I-epaisseur][xInit+J]=0;
                     }
                 }
             }
@@ -110,14 +115,30 @@ public class GestionTerrain {
             if(sens){
                 for(int j=xInit;j<terrainInitial[0].length-xInit-2;j++){
                     for(int k=-epaisseur;k<epaisseur;k++)
-                        if(i-xInit==j-yInit-k){
+                        if(j-xInit==i-yInit-k){
                         terrainInitial[i][j]=0;
+                        lastx=j;
+                        lasty=i;
                         }
                 }
             }
             else{
                 for(int j=xInit;j>2;j--){
-                    for(int k=-epaisseur;k<epaisseur;k++) if(xInit-i==j-yInit-k) terrainInitial[i][j]=0;
+                    for(int k=-epaisseur;k<epaisseur;k++)
+                        if(xInit-j==i-yInit-k){
+                        terrainInitial[i][j]=0;
+                            lastx=j;
+                            lasty=i;
+                        }
+                }
+            }
+            lastx=(int) (lastx-epaisseur/2);
+            for(int k=0;k<epaisseur;k++){
+                for(int l=0;l<epaisseur/2;l++){
+                    if(lasty+l<terrainInitial.length&&lastx +k-1<terrainInitial[0].length) {
+                        terrainInitial[lasty + l][lastx + k - l] = 0;
+                        terrainInitial[lasty + l][lastx - k + l] = 0;
+                    }
                 }
             }
         }

@@ -184,7 +184,7 @@ public class FenetreJeu extends BasicGame{
         }
     }
 
-    public static void main(String[] args) throws SlickException {
+    /*public static void main(String[] args) throws SlickException {
 		//Main
 		//A deplacer dans une classe apart à l'avenir
 		
@@ -196,7 +196,7 @@ public class FenetreJeu extends BasicGame{
         app.setVSync(false);
         app.setTargetFrameRate(120);
         app.start();
-    }
+    }*/
 
     /*public void actionPerformed(ActionEvent e){
         if(e.getSource()==mt){

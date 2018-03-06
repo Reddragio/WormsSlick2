@@ -15,7 +15,6 @@ public class Menu extends JFrame implements ActionListener {
     private JComboBox couleurWorms1;
     private JLabel photo1;
 
-
     public Menu(){
         this.setTitle("Menu Worms");
         this.setLayout(null);
@@ -108,6 +107,14 @@ public class Menu extends JFrame implements ActionListener {
             System.out.println(NomWorms11);
             System.out.println((String)couleurWorms1.getSelectedItem());
 
+            this.setVisible(false);
+            System.out.println("Lancement de la partie :) !...");
+            try{
+                launchGame();
+            }
+            catch(SlickException e1){
+                //Sert à contourner les exceptions slicks génériques
+            }
 
         }
         if(e.getSource() == couleurWorms1){
@@ -115,6 +122,18 @@ public class Menu extends JFrame implements ActionListener {
             updateLabel(CouleurChoisie1);
         }
     }
+
+    public void launchGame() throws SlickException{
+        int tailleBloc = 5;
+        int blocLargeur = 300; // imperativement des multiples de 10, pour que le dessin des textures se fasse sans bug
+        int blocHauteur = 200;
+        AppGameContainer app = new AppGameContainer(new FenetreJeu(tailleBloc,blocLargeur,blocHauteur));
+        app.setDisplayMode(blocLargeur*tailleBloc, blocHauteur*tailleBloc, false); // Mode fenêtré
+        app.setVSync(false);
+        app.setTargetFrameRate(120);
+        app.start();
+    }
+
     public static void main (String[] args){
         Menu menu = new Menu();
     }

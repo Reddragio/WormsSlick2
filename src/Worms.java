@@ -175,7 +175,7 @@ public class Worms {
     }
 
     public void set_vitesse_x(int vitesse_x){
-        physic.set_vitesse_X(vitesse_x);
+        physic.set_vitesse_x(vitesse_x);
     }
 
     public void set_vitesse_y(int vitesse_y){
@@ -229,4 +229,9 @@ public class Worms {
     public void setOrientation(int orientation) {
         this.orientation = orientation;
     }
+
+    public Weapon getArmeActuelle() {
+        return armeActuelle;
+    }
+
 }

@@ -32,6 +32,16 @@ public class FenetreJeu extends BasicGame{
     protected int stackedEnter;
     protected long lastTime;
 
+    protected Projectile projectileActuel;
+    protected long timerLaunchForce;
+    protected long timerExplosionProjectile;
+    protected boolean phaseChoixPuissance;
+    protected boolean phaseProjectile;
+    protected long timerChoixPuissance;
+    protected long chronoChoixPuissance;
+    protected double pourcentage;
+    protected boolean enterRelache;
+
     //Experimental:
     protected int rayonExplosion;
     protected boolean visualiserExplosion;
@@ -87,6 +97,11 @@ public class FenetreJeu extends BasicGame{
 
         themeWorms = new Music("music/worms-theme-song.ogg");
         themeWormsActivation = false;
+
+        phaseProjectile = false;
+        phaseChoixPuissance = false;
+        chronoChoixPuissance = 1500;
+        enterRelache = false;
 
         //Experimental:
         rayonExplosion = 40;
@@ -145,7 +160,14 @@ public class FenetreJeu extends BasicGame{
             wor.draw(g);
             if(wor.getAimingState()){
                 wor.drawVisee();
+                if(phaseChoixPuissance && timerChoixPuissance<= chronoChoixPuissance){
+                    wor.armeActuelle.drawConePuissance((((double)timerChoixPuissance)/((double)chronoChoixPuissance))*100.0);
+                }
             }
+        }
+
+        if(phaseProjectile){
+            projectileActuel.draw(g);
         }
 
         if(visualiserExplosion){
@@ -163,6 +185,50 @@ public class FenetreJeu extends BasicGame{
         for(Worms wor: joueurs){
             wor.applyPhysic(delta);
         }
+
+        if(phaseChoixPuissance){
+            timerChoixPuissance += delta;
+             if(timerChoixPuissance>=chronoChoixPuissance || enterRelache){
+                phaseChoixPuissance = false;
+                 for(Worms wor: joueurs){
+                     if(wor.getAimingState()){
+                         wor.setAimingState(false);
+                         try {
+                             projectileActuel = (wor.getArmeActuelle()).generateProjectile(terrain,blockSize);
+                         } catch (SlickException e) {
+                         }
+                         double pourcentagePuissanceTir;
+                         if(timerChoixPuissance<=chronoChoixPuissance){
+                             pourcentagePuissanceTir = (((double)timerChoixPuissance)/((double)chronoChoixPuissance))*100.0;
+                         }
+                         else{
+                             pourcentagePuissanceTir = 100;
+                         }
+
+                         projectileActuel.launch(wor.getArmeActuelle(),pourcentagePuissanceTir);
+                         timerLaunchForce = 0;
+                         timerExplosionProjectile = 0;
+                         phaseProjectile = true;
+                     }
+                 }
+             }
+        }
+
+        if(phaseProjectile){
+            projectileActuel.applyPhysic(delta);
+            timerLaunchForce += delta;
+            timerExplosionProjectile += delta;
+            if(timerLaunchForce >= projectileActuel.getChronoLaunchForce()){
+                projectileActuel.removeLaunchForce();
+                timerLaunchForce = -100000000;
+            }
+            if(timerExplosionProjectile >= projectileActuel.getChronoExplosion()){
+                projectileActuel.explosion();
+                phaseProjectile = false;
+                joueurs[0].setMovingState(true);
+            }
+        }
+
         tempEcoule += delta;
         if(tempEcoule - lastTempEcoule >= vitesseDep){
             lastTempEcoule = tempEcoule;
@@ -244,7 +310,7 @@ public class FenetreJeu extends BasicGame{
                         isMovingLeft = true;
                     } else if (Input.KEY_RIGHT == key) {
                         isMovingRight = true;
-                    } else if (Input.KEY_ENTER == key) {
+                    } else if (Input.KEY_SPACE == key) {
                         /*if (wor.get_orientation() == 0) {
                             wor.set_vitesse_x(-5);
                         } else {
@@ -274,7 +340,7 @@ public class FenetreJeu extends BasicGame{
                         wor.onFloorUpdate();
                     }
             }
-            if(wor.getAimingState()){
+            if(wor.getAimingState() && !phaseChoixPuissance){
                 if (Input.KEY_UP == key) {
                     augmentationAngleVisee = true;
                 }
@@ -287,6 +353,11 @@ public class FenetreJeu extends BasicGame{
                 } else if (Input.KEY_RIGHT == key) {
                     wor.setOrientation(1);
                     wor.updateViseeOrientation();
+                }
+                else if(Input.KEY_ENTER == key){
+                    phaseChoixPuissance = true;
+                    timerChoixPuissance = 0;
+                    enterRelache = false;
                 }
             }
         }
@@ -339,6 +410,9 @@ public class FenetreJeu extends BasicGame{
         }
         else if(Input.KEY_DOWN == key){
             diminutionAngleVisee = false;
+        }
+        else if(Input.KEY_ENTER == key){
+            enterRelache = true;
         }
     }
 

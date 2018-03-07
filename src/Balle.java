@@ -5,4 +5,8 @@ public class Balle extends Projectile {
     public void deplacer(int xd, int yd) {
 
     }
+
+    public void explosion(){};
+
+    public void draw(org.newdawn.slick.Graphics g){};
 }

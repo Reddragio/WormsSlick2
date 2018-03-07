@@ -6,8 +6,8 @@ public class MoteurPhysique {
     protected final static double realPixelSize = 0.0025;
     protected final static double facteurEchelle = 0.05;
     protected final static double g = 9.81;
-    protected final static double coeffReflectionVerticaleX = 1.0/12.5;
-    protected final static double coeffReflectionVerticaleY = 1.0/20.0;
+    protected final static double coeffReflectionVerticaleX = 1.0;
+    protected final static double coeffReflectionVerticaleY = 1.0;
     protected final static double coeffReflectionHorizontaleX = 1.0/20.0;
     protected final static double coeffReflectionHorizontaleY = 1.0/12.5;
     protected double masse;//exprimée impérativement en kg
@@ -230,6 +230,10 @@ public class MoteurPhysique {
         forces.add(f);
     }
 
+    public void removeForce(Force f){
+        forces.remove(f);
+    }
+
     public void setVitesse_y(double vitesse_y) {
         this.vitesse_y = vitesse_y;
     }
@@ -250,7 +254,7 @@ public class MoteurPhysique {
         //vitesse_y = 0;
     }
 
-    public void set_vitesse_X(int xVitessePixel){
+    public void set_vitesse_x(int xVitessePixel){
         vitesse_x = convertPixelToReal(xVitessePixel);
     }
 

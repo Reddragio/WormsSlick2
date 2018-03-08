@@ -33,7 +33,6 @@ public class FenetreJeu extends BasicGame{
     protected long lastTime;
 
     protected Projectile projectileActuel;
-    protected long timerLaunchForce;
     protected long timerExplosionProjectile;
     protected boolean phaseChoixPuissance;
     protected boolean phaseProjectile;
@@ -83,7 +82,7 @@ public class FenetreJeu extends BasicGame{
         joueurs = new Worms[1];
         joueurs[0] = new Worms(1,"Popaul",terrain,blockSize,changementPrint,500,100);
         joueurs[0].setMovingState(true);
-        joueurs[0].setWeapon(new Grenade());
+        joueurs[0].setWeapon(new Bazooka());
 
         this.container = container;
         isMovingLeft = false;
@@ -207,7 +206,6 @@ public class FenetreJeu extends BasicGame{
                          }
 
                          projectileActuel.launch(wor.getArmeActuelle(),pourcentagePuissanceTir);
-                         timerLaunchForce = 0;
                          timerExplosionProjectile = 0;
                          phaseProjectile = true;
                      }
@@ -217,13 +215,8 @@ public class FenetreJeu extends BasicGame{
 
         if(phaseProjectile){
             projectileActuel.applyPhysic(delta);
-            timerLaunchForce += delta;
             timerExplosionProjectile += delta;
-            if(timerLaunchForce >= projectileActuel.getChronoLaunchForce()){
-                projectileActuel.removeLaunchForce();
-                timerLaunchForce = -100000000;
-            }
-            if(timerExplosionProjectile >= projectileActuel.getChronoExplosion()){
+            if(timerExplosionProjectile >= projectileActuel.getChronoExplosion() || !projectileActuel.isAlive()){
                 projectileActuel.explosion();
                 phaseProjectile = false;
                 joueurs[0].setMovingState(true);

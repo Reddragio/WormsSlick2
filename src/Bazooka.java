@@ -1,24 +1,22 @@
 import org.newdawn.slick.*;
 
-public class Grenade extends Weapon {
-
-    public Grenade() throws SlickException {
-        this.pictureLeft = new org.newdawn.slick.Image("images/grenade_essai_left_mini.png");
-        this.pictureRight = new org.newdawn.slick.Image("images/grenade_essai_right_mini.png");
+public class Bazooka extends Weapon {
+    public Bazooka() throws SlickException {
+        this.pictureLeft = new org.newdawn.slick.Image("images/bazooka_mini_left.png");
+        this.pictureRight = new org.newdawn.slick.Image("images/bazooka_mini_right.png");
         this.viseur = new org.newdawn.slick.Image("images/croix_visee_mini.png");
         this.conePuissance = new org.newdawn.slick.Image("images/cone_puissance_mini.png");
-        offSetLeft = -40;
-        offSetRight = 40;
+        offSetLeft = 0;
+        offSetRight = 0;
         /*coinGaucheOffset = Math.PI/2.0+Math.atan(pictureRight.getWidth()/pictureRight.getHeight());
         coinDroiteOffset = Math.atan(pictureLeft.getHeight()/pictureLeft.getWidth());*/
         coinGaucheOffset = Math.PI;
         coinDroiteOffset = 0;
-        facteurDrawOffsetLeft = 2.0/3.0;
-        facteurDrawOffsetRight = 1.0/3.0;
+        facteurDrawOffsetLeft = 1.0;
+        facteurDrawOffsetRight = 0;
     }
 
     public Projectile generateProjectile(int terrain[][],int blockSize) throws SlickException {
-        return new GrenadeProjectile(terrain,blockSize);
+        return new Rocket(terrain,blockSize);
     }
-
 }

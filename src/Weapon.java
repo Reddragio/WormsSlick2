@@ -32,13 +32,15 @@ public abstract class Weapon {
     protected double lastAngle;
     protected int xCone;
     protected int yCone;
+    protected double facteurDrawOffsetLeft;
+    protected double facteurDrawOffsetRight;
 
     //public abstract void exploser(int x,int y);
 
     public void init(int xw,int yw,int hitBoxLargeur,int hitBoxHauteur,int orientation){
         orientationWorms = orientation;
         if(orientationWorms==0){
-            xCentreRotation = xw + 2*hitBoxLargeur/3;
+            xCentreRotation = xw + (int)(facteurDrawOffsetLeft*hitBoxLargeur);
             x = xCentreRotation - pictureLeft.getWidth();
             yCentreRotation = yw - hitBoxHauteur/4;
             y = yCentreRotation - pictureLeft.getHeight()/2;
@@ -46,7 +48,7 @@ public abstract class Weapon {
         }
         else
         {
-            xCentreRotation = xw + hitBoxLargeur/3;
+            xCentreRotation = xw + (int)(facteurDrawOffsetRight*hitBoxLargeur);
             x = xCentreRotation;
             yCentreRotation = yw - hitBoxHauteur/4;
             y = yCentreRotation - pictureRight.getHeight()/2;

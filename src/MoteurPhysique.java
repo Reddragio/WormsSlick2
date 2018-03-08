@@ -6,10 +6,10 @@ public class MoteurPhysique {
     protected final static double realPixelSize = 0.0025;
     protected final static double facteurEchelle = 0.05;
     protected final static double g = 9.81;
-    protected final static double coeffReflectionVerticaleX = 1.0;
-    protected final static double coeffReflectionVerticaleY = 1.0;
-    protected final static double coeffReflectionHorizontaleX = 1.0/20.0;
-    protected final static double coeffReflectionHorizontaleY = 1.0/12.5;
+    protected double coeffReflectionVerticaleX;
+    protected double coeffReflectionVerticaleY;
+    protected double coeffReflectionHorizontaleX;//1.0/20.0
+    protected double coeffReflectionHorizontaleY;//1.0/12.5
     protected double masse;//exprimée impérativement en kg
     protected double x;//en m
     protected double y;
@@ -26,7 +26,10 @@ public class MoteurPhysique {
     protected int blocIntraversables[];
     protected boolean speedLimitation;
 
-    public MoteurPhysique(int terrain[][], int blockSize, int hitBoxHauteur,int hitBoxLargeur,int blocIntraversables[],double masse, int xPixel, int yPixel){
+    //Special rocket
+    protected boolean contactDetectedThisTime;
+
+    public MoteurPhysique(int terrain[][], int blockSize, int hitBoxHauteur,int hitBoxLargeur,int blocIntraversables[],double coeffReflectionVerticaleX,double coeffReflectionVerticaleY,double coeffReflectionHorizontaleX,double coeffReflectionHorizontaleY,double masse, int xPixel, int yPixel){
         this.terrain = terrain;
         this.blockSize = blockSize;
         this.hitBoxHauteur = hitBoxHauteur;
@@ -39,6 +42,13 @@ public class MoteurPhysique {
         vitesse_y = 0;
         speedLimitation = false;
         forces = new ArrayList<Force>();
+        this.coeffReflectionVerticaleX = coeffReflectionVerticaleX;
+        this.coeffReflectionVerticaleY = coeffReflectionVerticaleY;
+        this.coeffReflectionHorizontaleX = coeffReflectionHorizontaleX;
+        this.coeffReflectionHorizontaleY = coeffReflectionHorizontaleY;
+
+        //Special rocket
+        contactDetectedThisTime = false;
     }
 
     public void applyForces(double delta){
@@ -77,6 +87,12 @@ public class MoteurPhysique {
         yPixel = limiteSpeed(yPixelOld,yPixel);
 
         ArrayList<Block> BlockEnContact = getContactBlock(xPixel,yPixel);
+
+        //Special rocket
+        contactDetectedThisTime = false;
+        if(!BlockEnContact.isEmpty()){
+            contactDetectedThisTime = true;
+        }
 
         //On cherche sur la grille des blocs les coordonnées du haut, du bas, de la gauche et de la droite de l'objet consideré
         Block blocBas = blockEquivalent(xPixel,yPixel);
@@ -266,11 +282,19 @@ public class MoteurPhysique {
         return vitesse_x;
     }
 
+    public double getVitesse_y() {
+        return vitesse_y;
+    }
+
     public double getX() {
         return x;
     }
 
     public double getY() {
         return y;
+    }
+
+    public boolean contactDetected(){
+        return contactDetectedThisTime;
     }
 }

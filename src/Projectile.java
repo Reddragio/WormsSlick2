@@ -16,11 +16,12 @@ public abstract class Projectile {
     protected int hitBoxHauteur;
     protected int hitBoxLargeur;
     protected Force launchForce;
-    protected long chronoLaunchForce;
+    //protected long chronoLaunchForce;
     protected long chronoExplosion;
     protected boolean antiExplosion;
     protected int hauteurBlock;
     protected int largeurBlock;
+    protected double drawAngle;
 
     public void launch(Weapon lanceur,double pourcentagePuissance){
         pourcentagePuissance /= 100;
@@ -36,19 +37,21 @@ public abstract class Projectile {
         angle = (angle/180.0)*Math.PI;
         //double forceX = normeLaunchForce * Math.cos(angle);
         //double forceY = normeLaunchForce * Math.sin(angle);
-        physic = new MoteurPhysique(terrain,blockSize,hitBoxHauteur,hitBoxLargeur,blocIntraversables,masse,x,y);
+        physic = new MoteurPhysique(terrain,blockSize,hitBoxHauteur,hitBoxLargeur,blocIntraversables,1.0,1.0,1.0/3.0,1.0/3.0,masse,x,y);
         Force forceGravite = new Force(0,g/200);
         //launchForce = new Force(forceX,forceY);
         physic.addForce(forceGravite);
         //physic.addForce(launchForce);
         physic.set_vitesse_x((int)( pourcentagePuissance * normeVitesse* Math.cos(angle)));
         physic.set_vitesse_y((int)( pourcentagePuissance * normeVitesse* Math.sin(angle)));
+        specialInit(pourcentagePuissance);
     }
 
     public void applyPhysic(int delta){
         physic.applyForces(delta);
         x = physic.getPixelCoordX();
         y = physic.getPixelCoordY();
+        specialPhysic(delta);
     }
 
     public void removeLaunchForce(){
@@ -121,14 +124,17 @@ public abstract class Projectile {
         return k;
     }
 
-    public long getChronoLaunchForce() {
-        return chronoLaunchForce;
-    }
-
     public long getChronoExplosion() {
         return chronoExplosion;
     }
 
     public abstract void draw(org.newdawn.slick.Graphics g);
 
+    public abstract void specialPhysic(int delta);
+
+    public abstract void specialInit(double pourcentagePuissance);
+
+    public boolean isAlive() {
+        return alive;
+    }
 }

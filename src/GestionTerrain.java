@@ -7,10 +7,10 @@ public class GestionTerrain {
         int[][] t=new int[y][x];
         if(type == 1){
             //Generation classique
-            int p=(int) y/2;
-            int r=0; //modification denivelé
-            double montagnes=2.2; //coefficient montagnes
-            double plaine=2.5; //coefficient plaines
+            int p=(int) y/2; //point de départ
+            int r=0;
+            double montagnes=3; //coefficient montagnes
+            double plaine=2.5; //dénivelé
             int oldp=p;
             for(int i=0;i<t[0].length;i++){
                 if((Math.random()*montagnes)>1&&p!=oldp){
@@ -80,8 +80,22 @@ public class GestionTerrain {
                     }
             }
         }
-        int[] res={xbas,ybas};
-        return res;
+        return new int[]{xbas,ybas};
+    }
+
+    public int[] pointLePlusHaut(){
+        int xhaut=0;
+        int yhaut=terrainInitial.length;
+        for(int i=terrainInitial.length-2;i<2;i--){
+            for(int j=1;j<terrainInitial[0].length;j++){
+                if(terrainInitial[i][j]==1 && terrainInitial[i-1][j]==0)
+                    if(i<yhaut){
+                        xhaut=j;
+                        yhaut=i;
+                    }
+            }
+        }
+        return new int[]{xhaut,yhaut};
     }
 
     public void genererFaille(){
@@ -140,6 +154,24 @@ public class GestionTerrain {
                         terrainInitial[lasty + l][lastx - k + l] = 0;
                     }
                 }
+            }
+        }
+    }
+
+    public void genererIles(){
+        int largeur=60;
+        int hauteur=30;
+        int asperites=3;
+        int difY=3;
+        int difX=2;
+        int centreIleY=(int) (Math.random()*pointLePlusHaut()[1]);
+        while(centreIleY-hauteur<=0)
+            centreIleY=(int) (Math.random()*pointLePlusHaut()[1]);
+        int centreIleX=pointLePlusBas()[0];
+        for(int y=centreIleY-hauteur/2;y<centreIleY+hauteur/2;y++){
+            for(int x=centreIleX-largeur/2;x<centreIleX+largeur/2;x++){
+                if(y<terrainInitial.length && x<terrainInitial[0].length)
+                terrainInitial[y][x]=1;
             }
         }
     }

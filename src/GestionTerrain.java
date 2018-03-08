@@ -86,7 +86,7 @@ public class GestionTerrain {
     public int[] pointLePlusHaut(){
         int xhaut=0;
         int yhaut=terrainInitial.length;
-        for(int i=terrainInitial.length-2;i<2;i--){
+        for(int i=terrainInitial.length-2;i>2;i--){
             for(int j=1;j<terrainInitial[0].length;j++){
                 if(terrainInitial[i][j]==1 && terrainInitial[i-1][j]==0)
                     if(i<yhaut){
@@ -95,6 +95,7 @@ public class GestionTerrain {
                     }
             }
         }
+        System.out.println("x= "+xhaut+" y= "+yhaut);
         return new int[]{xhaut,yhaut};
     }
 
@@ -164,9 +165,9 @@ public class GestionTerrain {
         int asperites=3;
         int difY=3;
         int difX=2;
-        int centreIleY=(int) (Math.random()*pointLePlusHaut()[1]);
+        int centreIleY=(int) (Math.random()*(pointLePlusHaut()[1]-hauteur));
         while(centreIleY-hauteur<=0)
-            centreIleY=(int) (Math.random()*pointLePlusHaut()[1]);
+            centreIleY=(int) (Math.random()*(pointLePlusHaut()[1]-hauteur));
         int centreIleX=pointLePlusBas()[0];
         for(int y=centreIleY-hauteur/2;y<centreIleY+hauteur/2;y++){
             for(int x=centreIleX-largeur/2;x<centreIleX+largeur/2;x++){

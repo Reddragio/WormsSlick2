@@ -21,6 +21,8 @@ public class Menu extends JFrame implements ActionListener {
     private JComboBox couleurWorms2;
     private JLabel photo2;
 
+    private ArrayList<String> colorWormsList;
+
     public Menu(){
         this.setTitle("Menu Worms");
         this.setLayout(null);
@@ -34,7 +36,8 @@ public class Menu extends JFrame implements ActionListener {
         Main.setLayout(null);
         Main.setIcon(new ImageIcon("./images/backgroundMenu.png"));
 
-
+        //NomWorms
+        ArrayList<String> tab = nomWorm(6);
 
         //Logo
         ImageIcon LogoW = new ImageIcon("./images/logo.png");
@@ -51,12 +54,12 @@ public class Menu extends JFrame implements ActionListener {
         Main.add(Jouer);
 
         //Array List Couleur
-        ArrayList<String> colorWormsList = new ArrayList<String>();
+        colorWormsList = new ArrayList<String>();
         colorWormsList.add("Rouge");
+        colorWormsList.add("Bleu");
         colorWormsList.add("Noir");
         colorWormsList.add("Blanc");
         colorWormsList.add("Vert");
-        colorWormsList.add("Bleu");
 
         //Pour l'équipe 1
         JLabel Worms1 = new JLabel();
@@ -74,8 +77,8 @@ public class Menu extends JFrame implements ActionListener {
         Nom13.setBounds(20,310,60,30);
 
 
-        ArrayList<String> tab = nomWorm(3);
-        System.out.println(tab);
+
+        //System.out.println(tab);
         textChoixNom11 = new JTextField(tab.get(0));
         textChoixNom11.setBounds(80,230,90,30);
         textChoixNom12 = new JTextField(tab.get(1));
@@ -90,11 +93,8 @@ public class Menu extends JFrame implements ActionListener {
 
         photo1 = new JLabel();
         photo1.setBounds(60,350,80,160);
-        updateLabel(colorWormsList.get(couleurWorms1.getSelectedIndex()),1);
 
-//Pour l'équipe 2 worms
-        ArrayList<String> tab2 = nomWorm(3);
-        System.out.println(tab2);
+        //Pour l'équipe 2 worms
 
         JLabel Worms2 = new JLabel();
         Worms2.setText("Equipe 2 :");
@@ -110,21 +110,24 @@ public class Menu extends JFrame implements ActionListener {
         Nom23.setText("Nom n°3 :");
         Nom23.setBounds(300,310,60,30);
 
-        textChoixNom21 = new JTextField(tab2.get(0));
+        textChoixNom21 = new JTextField(tab.get(3));
         textChoixNom21.setBounds(360,230,90,30);
-        textChoixNom22 = new JTextField(tab2.get(1));
+        textChoixNom22 = new JTextField(tab.get(4));
         textChoixNom22.setBounds(360,270,90,30);
-        textChoixNom23 = new JTextField(tab2.get(2));
+        textChoixNom23 = new JTextField(tab.get(5));
         textChoixNom23.setBounds(360,310,90,30);
 
         couleurWorms2 = new JComboBox(colorWormsList.toArray());
-        couleurWorms2.setSelectedIndex(0);
+        couleurWorms2.setSelectedIndex(1);
         couleurWorms2.addActionListener(this);
         couleurWorms2.setBounds(340,550,90,40);
 
         photo2 = new JLabel();
         photo2.setBounds(340,350,80,160);
-        updateLabel(colorWormsList.get(couleurWorms2.getSelectedIndex()),2);
+
+
+        //Initialisation des images des worms
+        updateLabel(colorWormsList,couleurWorms1,couleurWorms2);
 
 
         Main.add(couleurWorms1);
@@ -169,15 +172,10 @@ public class Menu extends JFrame implements ActionListener {
             }
 
         }
-        if(e.getSource() == couleurWorms1){
-            String CouleurChoisie1 = (String)couleurWorms1.getSelectedItem();
-            updateLabel(CouleurChoisie1,1);
+        if(e.getSource() == couleurWorms1 || e.getSource() == couleurWorms2){
+            updateLabel(colorWormsList,couleurWorms1,couleurWorms2);
         }
 
-        if(e.getSource() == couleurWorms2){
-            String CouleurChoisie2 = (String)couleurWorms2.getSelectedItem();
-            updateLabel(CouleurChoisie2,2);
-        }
     }
 
     public void launchGame() throws SlickException{
@@ -195,13 +193,26 @@ public class Menu extends JFrame implements ActionListener {
         Menu menu = new Menu();
     }
 
-    public void updateLabel(String Couleur, int worms) {
-        ImageIcon icon = new ImageIcon("images/Worm" + Couleur + "HD.png");
-        if(worms==1) {
-            photo1.setIcon(icon);
-        }else {
-            photo2.setIcon(icon);
+    public void updateLabel(ArrayList<String> tab, JComboBox worms1, JComboBox worms2) {
+        int i = worms1.getSelectedIndex();
+        int j = worms2.getSelectedIndex();
+
+        if (i==j){
+            j+= 1;
+            if(j > tab.size()-1){
+                j = 0;
+            }
         }
+        String Couleur1 = tab.get(i);
+        String Couleur2 = tab.get(j);
+
+        ImageIcon icon1 = new ImageIcon("images/Worm" + Couleur1 + "HD.png");
+        ImageIcon icon2 = new ImageIcon("images/Worm" + Couleur2 + "HD.png");
+        worms1.setSelectedIndex(i);
+        worms2.setSelectedIndex(j);
+        photo1.setIcon(icon1);
+        photo2.setIcon(icon2);
+
     }
 
     public ArrayList<String> nomWorm( int nb){

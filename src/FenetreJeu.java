@@ -55,6 +55,7 @@ public class FenetreJeu extends BasicGame{
         GestionTerrain monde=new GestionTerrain();
         monde.genererTerrain(x,y,1);
         monde.genererFaille();
+        monde.genererIles();
         terrain=monde.getTerrainInitial();
         stackedEnter=0;
 
@@ -324,6 +325,7 @@ public class FenetreJeu extends BasicGame{
 
                         if(stackedEnter>1 && System.currentTimeMillis()-lastTime<180){
                             wor.set_vitesse_y(-450);
+
                             if(wor.get_orientation()==0)
                                 wor.set_vitesse_x(70);
                             if(wor.get_orientation()==1)

@@ -198,7 +198,7 @@ public class Menu extends JFrame implements ActionListener {
         int j = worms2.getSelectedIndex();
 
         if (i==j){
-            j+=1;
+            j+= 1;
             if(j > tab.size()-1){
                 j = 0;
             }

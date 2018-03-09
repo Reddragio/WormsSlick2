@@ -1,4 +1,9 @@
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.UnicodeFont;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.TrueTypeFont;
+import java.io.InputStream;
+import org.newdawn.slick.util.ResourceLoader;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -28,6 +33,8 @@ public class Worms {
     protected double angleVisee;//Entre 0 et 180°
     protected double pasVisee;
 
+    TrueTypeFont font2;
+
     //Booléens servant à enchainer les phases de jeu
     protected boolean isMoving; //Servira à savoir si un Worms est dans sa phase de déplacement
     protected boolean isAiming; //est en train de viser
@@ -54,6 +61,16 @@ public class Worms {
         angleVisee = 0;
         skinLeft = new org.newdawn.slick.Image("images/skin_worms_left.png");
         skinRight = new org.newdawn.slick.Image("images/skin_worms_right.png");
+
+        try {
+            InputStream inputStream	= ResourceLoader.getResourceAsStream("./fonts/wormcuisine.ttf");
+            Font police = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+            police = police.deriveFont(21f); // set font size
+            font2 = new TrueTypeFont(police, false);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void applyPhysic(int delta){
@@ -149,7 +166,7 @@ public class Worms {
         isAiming = etat;
     }
 
-    public void draw(org.newdawn.slick.Graphics g){
+    public void draw(org.newdawn.slick.Graphics g) throws SlickException {
 		//Dessine le Worms à l'écran
         
         //g.setColor(couleur);
@@ -161,6 +178,25 @@ public class Worms {
         else{
             skinRight.draw(x,y-hitBoxHauteur+1);
         }
+
+        //Affichage du nom
+        /*String fontPath = "./fonts/wormcuisine.ttf";
+        UnicodeFont font = new UnicodeFont(fontPath, 30, false, false);
+        font.drawString(x,y+hitBoxHauteur+10, "Wormito");*/
+        /*try {
+            InputStream inputStream	= ResourceLoader.getResourceAsStream("./fonts/wormcuisine.ttf");
+            Font police = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+            police = police.deriveFont(12f); // set font size
+            font2 = new TrueTypeFont(police, false);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+
+        //Font awtFont = new Font("Times New Roman", Font.TRUETYPE_FONT, 10);
+        //font2 = new TrueTypeFont(awtFont, false);
+        font2.drawString(x-10, y-hitBoxHauteur-30, name, Color.red);
+        font2.drawString(x-1, y-hitBoxHauteur-15,""+life, Color.red);
     }
 
     public void set_x(int x){

@@ -20,6 +20,7 @@ public class Menu extends JFrame implements ActionListener {
     private JTextField textChoixNom23;
     private JComboBox couleurWorms2;
     private JLabel photo2;
+    private String[][] joueurs;
 
     private ArrayList<String> colorWormsList;
 
@@ -156,11 +157,29 @@ public class Menu extends JFrame implements ActionListener {
     }
     public void actionPerformed (ActionEvent e){
         if(e.getSource()== Jouer){
-            String NomWorms11 = textChoixNom11.getText();
-            String NomWorms12 = textChoixNom12.getText();
-            String NomWorms13 = textChoixNom13.getText();
-            System.out.println(NomWorms11);
-            System.out.println((String)couleurWorms1.getSelectedItem());
+
+            //Noms définitifs des worms
+            String[] Noms = {textChoixNom11.getText(),textChoixNom12.getText(),textChoixNom13.getText(),textChoixNom21.getText(),textChoixNom22.getText(),textChoixNom23.getText()};
+
+            /*System.out.println(NomWorms11);
+            System.out.println((String)couleurWorms1.getSelectedItem());*/
+
+            //Couleurs Choisies
+            String[] CouleursChoisies = {(String)couleurWorms1.getSelectedItem(),(String)couleurWorms2.getSelectedItem()};
+
+
+            //Initialisation Joueurs
+            joueurs = new String[6][2];
+            for (int i=0; i<6;i++) {
+                int k=0;
+                if(i>3){
+                    k=1;
+                }
+                joueurs[i][0] = Noms[i];
+                joueurs[i][1] = CouleursChoisies[k];
+            }
+
+
 
             this.setVisible(false);
             System.out.println("Lancement de la partie :) !...");

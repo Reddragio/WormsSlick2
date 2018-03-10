@@ -4,6 +4,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
 import java.io.InputStream;
 import org.newdawn.slick.util.ResourceLoader;
+import java.util.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 public class Worms {
     protected org.newdawn.slick.Color couleur;
     protected String name;
+    protected String Couleur;
     protected int life;
     protected int x; //Les coordonnées x,y correspondent au coin en bas à gauche du Worms
     protected int y;
@@ -33,7 +35,8 @@ public class Worms {
     protected double angleVisee;//Entre 0 et 180°
     protected double pasVisee;
 
-    TrueTypeFont font2;
+    protected HashMap<String, Color> dico;
+    protected TrueTypeFont font2;
 
     //Booléens servant à enchainer les phases de jeu
     protected boolean isMoving; //Servira à savoir si un Worms est dans sa phase de déplacement
@@ -42,10 +45,12 @@ public class Worms {
 
     //protected int compteurTest;
 
-    public Worms(int t, String n,int[][] terrain,int blockSize,boolean[] changementPrint,int x,int y) throws SlickException { //t=0 ou 1, pour savoir quelle équipe
+    public Worms(int t, String c, String n,int[][] terrain,int blockSize,boolean[] changementPrint,int x,int y) throws SlickException { //t=0 ou 1, pour savoir quelle équipe
         if(t==0) couleur=org.newdawn.slick.Color.blue;
         else couleur=org.newdawn.slick.Color.red;
+
         name=n;
+        Couleur=c;
         life=200;
         this.terrain = terrain;
         this.blockSize = blockSize;
@@ -59,18 +64,27 @@ public class Worms {
         orientation = 1;
         pasVisee = 0.5;
         angleVisee = 0;
-        skinLeft = new org.newdawn.slick.Image("images/skin_worms_left.png");
-        skinRight = new org.newdawn.slick.Image("images/skin_worms_right.png");
+        skinLeft = new org.newdawn.slick.Image("images/Worm"+c+"_left.png");
+        skinRight = new org.newdawn.slick.Image("images/Worm"+c+"_right.png");
 
+        //Init police nom et vie
         try {
-            InputStream inputStream	= ResourceLoader.getResourceAsStream("./fonts/wormcuisine.ttf");
+            InputStream inputStream	= ResourceLoader.getResourceAsStream("./fonts/WormsFont.ttf");
             Font police = Font.createFont(Font.TRUETYPE_FONT, inputStream);
-            police = police.deriveFont(21f); // set font size
+            police = police.deriveFont(19f); // set font size
             font2 = new TrueTypeFont(police, false);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        //Création du dictionnaire des couleurs
+        dico = new HashMap<String, Color>();
+        dico.put("Rouge",Color.red);
+        dico.put("Bleu",Color.blue);
+        dico.put("Noir",Color.black);
+        dico.put("Blanc",Color.white);
+        dico.put("Vert",Color.green);
     }
 
     public void applyPhysic(int delta){
@@ -180,23 +194,9 @@ public class Worms {
         }
 
         //Affichage du nom
-        /*String fontPath = "./fonts/wormcuisine.ttf";
-        UnicodeFont font = new UnicodeFont(fontPath, 30, false, false);
-        font.drawString(x,y+hitBoxHauteur+10, "Wormito");*/
-        /*try {
-            InputStream inputStream	= ResourceLoader.getResourceAsStream("./fonts/wormcuisine.ttf");
-            Font police = Font.createFont(Font.TRUETYPE_FONT, inputStream);
-            police = police.deriveFont(12f); // set font size
-            font2 = new TrueTypeFont(police, false);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-
-        //Font awtFont = new Font("Times New Roman", Font.TRUETYPE_FONT, 10);
-        //font2 = new TrueTypeFont(awtFont, false);
-        font2.drawString(x-10, y-hitBoxHauteur-30, name, Color.red);
-        font2.drawString(x-1, y-hitBoxHauteur-15,""+life, Color.red);
+        font2.drawString(x - (font2.getWidth(name )/ 2) + 10, y-hitBoxHauteur-30 , name, dico.get(Couleur) );
+        font2.drawString(x - (font2.getWidth(""+life )/ 2) + 10, y-hitBoxHauteur-15,""+life, dico.get(Couleur) );
     }
 
     public void set_x(int x){

@@ -40,6 +40,7 @@ public class FenetreJeu extends BasicGame{
     protected long chronoChoixPuissance;
     protected double pourcentage;
     protected boolean enterRelache;
+    protected String[][] tabNomCoul;
 
     //Experimental:
     protected int rayonExplosion;
@@ -49,9 +50,10 @@ public class FenetreJeu extends BasicGame{
     protected final static int blocIndestructibles[] = {2,3};
     protected boolean experimentalVisee;
 
-    public FenetreJeu(int s,int x,int y) {
+    public FenetreJeu(int s,int x,int y, String[][] tab) {
         super("Worms Fighter Z - Slick Version");
         blockSize=s;
+        tabNomCoul = tab;
         GestionTerrain monde=new GestionTerrain();
         monde.genererTerrain(x,y,1);
         monde.genererFaille();
@@ -79,10 +81,12 @@ public class FenetreJeu extends BasicGame{
         changementPrint = new boolean[1];
         changementPrint[0] = true;
 
+
+
         joueurs = new Worms[1];
-        joueurs[0] = new Worms(1,"Popaul",terrain,blockSize,changementPrint,500,100);
+        joueurs[0] = new Worms(1,tabNomCoul[0][1],tabNomCoul[0][0],terrain,blockSize,changementPrint,500,100);
         joueurs[0].setMovingState(true);
-        joueurs[0].setWeapon(new Bazooka());
+        joueurs[0].setWeapon(new Grenade());
 
         this.container = container;
         isMovingLeft = false;

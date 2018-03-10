@@ -184,7 +184,7 @@ public class Menu extends JFrame implements ActionListener {
             this.setVisible(false);
             System.out.println("Lancement de la partie :) !...");
             try{
-                launchGame();
+                launchGame(joueurs);
             }
             catch(SlickException e1){
                 //Sert à contourner les exceptions slicks génériques
@@ -197,11 +197,11 @@ public class Menu extends JFrame implements ActionListener {
 
     }
 
-    public void launchGame() throws SlickException{
+    public void launchGame(String[][] tab) throws SlickException{
         int tailleBloc = 5;
         int blocLargeur = 300; // imperativement des multiples de 10, pour que le dessin des textures se fasse sans bug
         int blocHauteur = 200;
-        AppGameContainer app = new AppGameContainer(new FenetreJeu(tailleBloc,blocLargeur,blocHauteur));
+        AppGameContainer app = new AppGameContainer(new FenetreJeu(tailleBloc,blocLargeur,blocHauteur,tab));
         app.setDisplayMode(blocLargeur*tailleBloc, blocHauteur*tailleBloc, false); // Mode fenêtré
         app.setVSync(false);
         app.setTargetFrameRate(120);

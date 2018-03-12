@@ -14,7 +14,7 @@ public class Worms {
     protected org.newdawn.slick.Color couleur;
     protected String name;
     protected String Couleur;
-    protected int life;
+    protected double life;
     protected int x; //Les coordonnées x,y correspondent au coin en bas à gauche du Worms
     protected int y;
     protected int terrain[][];
@@ -76,7 +76,7 @@ public class Worms {
         try {
             InputStream inputStream	= ResourceLoader.getResourceAsStream("./fonts/WormsFont.ttf");
             Font police = Font.createFont(Font.TRUETYPE_FONT, inputStream);
-            police = police.deriveFont(19f); // set font size
+            police = police.deriveFont(18f); // set font size
             font2 = new TrueTypeFont(police, false);
 
         } catch (Exception e) {
@@ -99,7 +99,7 @@ public class Worms {
         onFloorUpdate();
     }
 
-    public void modifierVie(int hp){
+    public void modifierVie(double hp){
 		//Ajoute/eleve des points de vie au Worms
         life+=hp;
     }
@@ -204,10 +204,6 @@ public class Worms {
         font2.drawString(x - (font2.getWidth(""+life )/ 2) + 10, y-hitBoxHauteur-15,""+life, dico.get(Couleur) );
     }
 
-    public void drawInventaire(Input input){
-        inventaire.draw(input);
-    }
-
     public void set_x(int x){
 		//Permet de définir la coordonnée x
 		//A n'utiliser que pour la phase d'experimentation
@@ -278,6 +274,10 @@ public class Worms {
     public Weapon getArmeActuelle() {
         return armeActuelle;
     }
+
+    public int getX (){return x;}
+
+    public int getY (){return y;}
 
     public void setPlaying(boolean playing) {
         isPlaying = playing;

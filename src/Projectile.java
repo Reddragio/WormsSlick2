@@ -58,7 +58,7 @@ public abstract class Projectile {
         physic.removeForce(launchForce);
     }
 
-    public abstract void explosion();
+    public abstract void explosion(Worms[] joueurs);
 
     public void experimentalExplosion(int xe,int ye,int rayon){
         //Explosion !!!!!!
@@ -78,8 +78,47 @@ public abstract class Projectile {
         boolean destructible;
         double demi_block = blockSize/2.0;
         for(int i=block_hg_y;i<=block_bd_y;i++){
+            for(int j=block_hg_x;j<=block_bd_x;j++) {
+                if (distance(xe, ye, j * blockSize + demi_block, i * blockSize + demi_block) <= rayon) {
+                    destructible = true;
+                    for (int strong : blocIndestructibles) {
+                        if (terrain[i][j] == strong) {
+                            destructible = false;
+                        }
+                    }
+                    if (destructible) {
+                        if (antiExplosion) {
+                            terrain[i][j] = 1;
+                        } else {
+                            terrain[i][j] = 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //dégat worms
+    public void applyDeg(Worms[] joueurs, int rayonExplosion,double degat){
+        //Explosion !!!!!!
+
+        //Penser vérifier xe, ye dans les clous
+        //Coin en haut à gauche du rectangle:
+        int block_hg_x = (x - rayonExplosion)/blockSize;
+        block_hg_x = limiteInferieur(block_hg_x);
+        int block_hg_y = (y - rayonExplosion)/blockSize;
+        block_hg_y = limiteInferieur(block_hg_y);
+        //Coin en bas à droite du rectangle:
+        int block_bd_x = (x + rayonExplosion)/blockSize;
+        block_bd_x = limiteSuperieurX(block_bd_x);
+        int block_bd_y = (y + rayonExplosion)/blockSize;
+        block_bd_y = limiteSuperieurY(block_bd_y);
+
+        boolean destructible;
+        double demi_block = blockSize/2.0;
+        for(int i=block_hg_y;i<=block_bd_y;i++){
             for(int j=block_hg_x;j<=block_bd_x;j++){
-                if(distance(xe,ye,j*blockSize+demi_block,i*blockSize+demi_block)<=rayon){
+                if(distance(x,y,j*blockSize+demi_block,i*blockSize+demi_block)<=rayonExplosion){
                     destructible = true;
                     for(int strong :blocIndestructibles){
                         if(terrain[i][j]==strong){
@@ -96,8 +135,16 @@ public abstract class Projectile {
                     }
                 }
             }
+            //Check worms
+            for(int p=0;p<joueurs.length;p++) {
+                if (distance(x, y,joueurs[p].getX()+ 10,joueurs[p].getY()+ 20) <= rayonExplosion) {
+                    joueurs[p].modifierVie(-degat);
+                    System.out.println(degat);
+                }
+            }
         }
     }
+
 
     public double distance(double x1,double y1,double x2,double y2){
         return Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
@@ -137,4 +184,13 @@ public abstract class Projectile {
     public boolean isAlive() {
         return alive;
     }
+
+    public int getx() {
+        return x;
+    }
+
+    public int gety() {
+        return y;
+    }
+
 }

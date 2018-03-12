@@ -43,6 +43,12 @@ public class FenetreJeu extends BasicGame{
     protected boolean enterRelache;
     protected String[][] tabNomCoul;
 
+    //Explosion
+    protected Animation aExplosion;
+    protected boolean isExplosion;
+    protected float tempsExplo;
+    protected float timerExplo;
+
     //Experimental:
     protected int rayonExplosion;
     protected boolean visualiserExplosion;
@@ -110,6 +116,17 @@ public class FenetreJeu extends BasicGame{
         enterRelache = false;
 
         phaseInventaire = false;
+
+        //SpriteSheet explosion
+
+        Image Sprite = new Image("./images/SpriteSheetExplosion.png");
+        int spritelong = 130;
+        SpriteSheet sExplosion = new SpriteSheet(Sprite, spritelong,spritelong);
+        tempsExplo = 1000;
+        timerExplo = 0;
+        aExplosion = new Animation(sExplosion, (int)tempsExplo/10);
+
+        isExplosion=false;
 
         //Experimental:
         rayonExplosion = 40;
@@ -189,6 +206,10 @@ public class FenetreJeu extends BasicGame{
         }
 
 
+
+        if(isExplosion){
+            aExplosion.draw((float)(projectileActuel.getx()-65),(float)(projectileActuel.gety()-65));
+        }
     }
 
     public void update(GameContainer container, int delta) throws SlickException {
@@ -237,7 +258,8 @@ public class FenetreJeu extends BasicGame{
             projectileActuel.applyPhysic(delta);
             timerExplosionProjectile += delta;
             if(timerExplosionProjectile >= projectileActuel.getChronoExplosion() || !projectileActuel.isAlive()){
-                projectileActuel.explosion();
+                projectileActuel.explosion(joueurs);
+                isExplosion=true;
                 phaseProjectile = false;
                 joueurs[0].setMovingState(true);
             }
@@ -261,6 +283,16 @@ public class FenetreJeu extends BasicGame{
                     wor.diminuerAngle();
                 }
             }
+        }
+
+
+        if(isExplosion){
+            timerExplo+=delta;
+            if(timerExplo >= tempsExplo-50){
+                isExplosion=false;
+                timerExplo=0;
+            }
+
         }
     }
 
@@ -354,10 +386,6 @@ public class FenetreJeu extends BasicGame{
                         }
                         wor.onFloorUpdate();
                     }
-                    else if(Input.KEY_ENTER == key){
-                        joueurs[0].setMovingState(false);
-                        phaseInventaire = true;
-                    }
             }
             if(wor.getAimingState() && !phaseChoixPuissance){
                 if (Input.KEY_UP == key) {
@@ -394,7 +422,7 @@ public class FenetreJeu extends BasicGame{
             antiExplosion = !antiExplosion;
         }
         else if(Input.KEY_V == key){
-            /*experimentalVisee = !experimentalVisee;
+            experimentalVisee = !experimentalVisee;
             if(experimentalVisee){
                 joueurs[0].setMovingState(false);
                 joueurs[0].setAimingState(true);
@@ -403,7 +431,7 @@ public class FenetreJeu extends BasicGame{
             else{
                 joueurs[0].setMovingState(true);
                 joueurs[0].setAimingState(false);
-            }*/
+            }
         }
         /*else if(Input.KEY_T == key){
             joueurs[0].set_y(50);
@@ -449,20 +477,6 @@ public class FenetreJeu extends BasicGame{
 		//Traitement de la souris
 		
         if(button == 0){//Clik gauche
-            if(phaseInventaire){
-                for(Worms wor:joueurs){
-                    if(wor.isPlaying){
-                        if(wor.interactInventaire(input)){
-                            joueurs[0].setAimingState(true);
-                            joueurs[0].initVisee();
-                            phaseInventaire = false;
-                        }
-                    }
-                }
-            }
-            else{
-
-            }
             experimentalExplosion(x,y,rayonExplosion);
         }
         else if(button==1){//Clik droit
@@ -548,5 +562,6 @@ public class FenetreJeu extends BasicGame{
     public double distance(double x1,double y1,double x2,double y2){
         return Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
     }
+
 
 }

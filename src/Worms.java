@@ -2,6 +2,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.Input;
 import java.io.InputStream;
 import org.newdawn.slick.util.ResourceLoader;
 import java.util.*;
@@ -34,6 +35,7 @@ public class Worms {
     protected Weapon armeActuelle;
     protected double angleVisee;//Entre 0 et 180°
     protected double pasVisee;
+    protected Inventaire inventaire;
 
     protected HashMap<String, Color> dico;
     protected TrueTypeFont font2;
@@ -41,7 +43,7 @@ public class Worms {
     //Booléens servant à enchainer les phases de jeu
     protected boolean isMoving; //Servira à savoir si un Worms est dans sa phase de déplacement
     protected boolean isAiming; //est en train de viser
-
+    protected boolean isPlaying;
 
     //protected int compteurTest;
 
@@ -64,8 +66,11 @@ public class Worms {
         orientation = 1;
         pasVisee = 0.5;
         angleVisee = 0;
+        isPlaying = false;
         skinLeft = new org.newdawn.slick.Image("images/Worm"+c+"_left.png");
         skinRight = new org.newdawn.slick.Image("images/Worm"+c+"_right.png");
+
+        inventaire = new Inventaire(terrain[0].length*blockSize,terrain.length*blockSize);
 
         //Init police nom et vie
         try {
@@ -199,6 +204,10 @@ public class Worms {
         font2.drawString(x - (font2.getWidth(""+life )/ 2) + 10, y-hitBoxHauteur-15,""+life, dico.get(Couleur) );
     }
 
+    public void drawInventaire(Input input){
+        inventaire.draw(input);
+    }
+
     public void set_x(int x){
 		//Permet de définir la coordonnée x
 		//A n'utiliser que pour la phase d'experimentation
@@ -268,6 +277,18 @@ public class Worms {
 
     public Weapon getArmeActuelle() {
         return armeActuelle;
+    }
+
+    public void setPlaying(boolean playing) {
+        isPlaying = playing;
+    }
+
+    public boolean isPlaying() {
+        return isPlaying;
+    }
+
+    public boolean interactInventaire(Input input){
+        return inventaire.interact(input,this);
     }
 
 }

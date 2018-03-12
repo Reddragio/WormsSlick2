@@ -1,11 +1,12 @@
 import org.newdawn.slick.*;
 
 public class Bazooka extends Weapon {
-    public Bazooka() throws SlickException {
+    public Bazooka(int nombre) throws SlickException {
         this.pictureLeft = new org.newdawn.slick.Image("images/bazooka_mini_left.png");
         this.pictureRight = new org.newdawn.slick.Image("images/bazooka_mini_right.png");
         this.viseur = new org.newdawn.slick.Image("images/croix_visee_mini.png");
         this.conePuissance = new org.newdawn.slick.Image("images/cone_puissance_mini.png");
+        this.pictureHD = new org.newdawn.slick.Image("images/bazooka.png");
         offSetLeft = 0;
         offSetRight = 0;
         /*coinGaucheOffset = Math.PI/2.0+Math.atan(pictureRight.getWidth()/pictureRight.getHeight());
@@ -14,6 +15,7 @@ public class Bazooka extends Weapon {
         coinDroiteOffset = 0;
         facteurDrawOffsetLeft = 1.0;
         facteurDrawOffsetRight = 0;
+        nombrePossede = nombre;
     }
 
     public Projectile generateProjectile(int terrain[][],int blockSize) throws SlickException {

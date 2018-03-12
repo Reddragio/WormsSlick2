@@ -36,6 +36,7 @@ public class FenetreJeu extends BasicGame{
     protected long timerExplosionProjectile;
     protected boolean phaseChoixPuissance;
     protected boolean phaseProjectile;
+    protected boolean phaseInventaire;
     protected long timerChoixPuissance;
     protected long chronoChoixPuissance;
     protected double pourcentage;
@@ -86,7 +87,8 @@ public class FenetreJeu extends BasicGame{
         joueurs = new Worms[1];
         joueurs[0] = new Worms(1,tabNomCoul[0][1],tabNomCoul[0][0],terrain,blockSize,changementPrint,500,100);
         joueurs[0].setMovingState(true);
-        joueurs[0].setWeapon(new Grenade());
+        joueurs[0].setWeapon(new Bazooka(100));
+        joueurs[0].setPlaying(true);
 
         this.container = container;
         isMovingLeft = false;
@@ -106,6 +108,8 @@ public class FenetreJeu extends BasicGame{
         phaseChoixPuissance = false;
         chronoChoixPuissance = 1500;
         enterRelache = false;
+
+        phaseInventaire = false;
 
         //Experimental:
         rayonExplosion = 40;
@@ -168,6 +172,11 @@ public class FenetreJeu extends BasicGame{
                     wor.armeActuelle.drawConePuissance((((double)timerChoixPuissance)/((double)chronoChoixPuissance))*100.0);
                 }
             }
+            if(wor.isPlaying()){
+                if(phaseInventaire){
+                    wor.drawInventaire(input);
+                }
+            }
         }
 
         if(phaseProjectile){
@@ -178,6 +187,8 @@ public class FenetreJeu extends BasicGame{
             g.setColor(Color.red);
             g.drawOval((float)(input.getMouseX()-rayonExplosion),(float)(input.getMouseY()-rayonExplosion),(float)(2*rayonExplosion),(float)(2*rayonExplosion));
         }
+
+
     }
 
     public void update(GameContainer container, int delta) throws SlickException {
@@ -188,6 +199,11 @@ public class FenetreJeu extends BasicGame{
 
         for(Worms wor: joueurs){
             wor.applyPhysic(delta);
+            /*if(wor.isPlaying()){
+                if(phaseInventaire){
+
+                }
+            }*/
         }
 
         if(phaseChoixPuissance){
@@ -338,6 +354,10 @@ public class FenetreJeu extends BasicGame{
                         }
                         wor.onFloorUpdate();
                     }
+                    else if(Input.KEY_ENTER == key){
+                        joueurs[0].setMovingState(false);
+                        phaseInventaire = true;
+                    }
             }
             if(wor.getAimingState() && !phaseChoixPuissance){
                 if (Input.KEY_UP == key) {
@@ -374,7 +394,7 @@ public class FenetreJeu extends BasicGame{
             antiExplosion = !antiExplosion;
         }
         else if(Input.KEY_V == key){
-            experimentalVisee = !experimentalVisee;
+            /*experimentalVisee = !experimentalVisee;
             if(experimentalVisee){
                 joueurs[0].setMovingState(false);
                 joueurs[0].setAimingState(true);
@@ -383,7 +403,7 @@ public class FenetreJeu extends BasicGame{
             else{
                 joueurs[0].setMovingState(true);
                 joueurs[0].setAimingState(false);
-            }
+            }*/
         }
         /*else if(Input.KEY_T == key){
             joueurs[0].set_y(50);
@@ -429,6 +449,20 @@ public class FenetreJeu extends BasicGame{
 		//Traitement de la souris
 		
         if(button == 0){//Clik gauche
+            if(phaseInventaire){
+                for(Worms wor:joueurs){
+                    if(wor.isPlaying){
+                        if(wor.interactInventaire(input)){
+                            joueurs[0].setAimingState(true);
+                            joueurs[0].initVisee();
+                            phaseInventaire = false;
+                        }
+                    }
+                }
+            }
+            else{
+
+            }
             experimentalExplosion(x,y,rayonExplosion);
         }
         else if(button==1){//Clik droit

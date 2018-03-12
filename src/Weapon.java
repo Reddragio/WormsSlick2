@@ -6,6 +6,7 @@ public abstract class Weapon {
     protected int y;
     protected org.newdawn.slick.Image pictureLeft;
     protected org.newdawn.slick.Image pictureRight;
+    protected org.newdawn.slick.Image pictureHD;
     protected org.newdawn.slick.Image viseur;
     protected org.newdawn.slick.Image conePuissance;
     protected final static int distanceWormsViseur = 60;
@@ -34,6 +35,9 @@ public abstract class Weapon {
     protected int yCone;
     protected double facteurDrawOffsetLeft;
     protected double facteurDrawOffsetRight;
+
+    //Gestion inventaire
+    protected int nombrePossede;
 
     //public abstract void exploser(int x,int y);
 
@@ -118,6 +122,18 @@ public abstract class Weapon {
         return lastAngle;
     }
 
-    public abstract Projectile generateProjectile(int terrain[][],int blockSizes) throws SlickException;
+    public int getNombrePossede() {
+        return nombrePossede;
+    }
+
+    public void decreasePossede(){
+        nombrePossede--;
+    }
+
+    public void draw(int x,int y,float scale){
+        pictureHD.draw(x,y,scale);
+    }
+
+    public abstract Projectile generateProjectile(int terrain[][], int blockSizes) throws SlickException;
 
 }

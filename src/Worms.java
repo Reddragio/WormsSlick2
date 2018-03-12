@@ -202,10 +202,10 @@ public class Worms {
             //Affichage du nom
 
             font2.drawString(x - (font2.getWidth(name) / 2) + 10, y - hitBoxHauteur - 30, name, dico.get(Couleur));
-            font2.drawString(x - (font2.getWidth("" + life) / 2) + 10, y - hitBoxHauteur - 15, "" + life, dico.get(Couleur));
+            font2.drawString(x - (font2.getWidth("" + (int)life) / 2) + 10, y - hitBoxHauteur - 15, "" + (int)life, dico.get(Couleur));
         } else{
             font2.drawString(x - (font2.getWidth("RIP "+name) / 2) + 10, y - hitBoxHauteur - 15, "RIP "+name, dico.get(Couleur));
-            skinGrave.draw(x, y - hitBoxHauteur + 1,26,40);
+            skinGrave.draw(x, y - hitBoxHauteur +5,26,40);
         }
     }
 

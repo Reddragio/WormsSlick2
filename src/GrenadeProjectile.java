@@ -20,13 +20,14 @@ public class GrenadeProjectile extends Projectile{
         antiExplosion = false;
         hauteurBlock = terrain.length;
         largeurBlock = terrain[0].length;
+        degat=50;
 
         //chronoLaunchForce = 200;
         chronoExplosion = 2000;
     }
 
-    public void explosion(){
-        experimentalExplosion(x,y,rayonExplosion);
+    public void explosion(Worms[] joueurs){
+        applyDeg(joueurs,rayonExplosion,degat);
         bruitExplosion.play();
     }
 

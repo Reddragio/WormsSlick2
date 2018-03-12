@@ -221,7 +221,7 @@ public class FenetreJeu extends BasicGame{
             projectileActuel.applyPhysic(delta);
             timerExplosionProjectile += delta;
             if(timerExplosionProjectile >= projectileActuel.getChronoExplosion() || !projectileActuel.isAlive()){
-                projectileActuel.explosion();
+                projectileActuel.explosion(joueurs);
                 phaseProjectile = false;
                 joueurs[0].setMovingState(true);
             }

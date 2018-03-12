@@ -15,4 +15,6 @@ public class Balle extends Projectile {
     }
 
     public void specialInit(double pourcentagePuissance){}
+
+    public void explosion(Worms[] joueurs){}
 }

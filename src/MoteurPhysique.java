@@ -88,12 +88,6 @@ public class MoteurPhysique {
 
         ArrayList<Block> BlockEnContact = getContactBlock(xPixel,yPixel);
 
-        //Special rocket
-        contactDetectedThisTime = false;
-        if(!BlockEnContact.isEmpty()){
-            contactDetectedThisTime = true;
-        }
-
         //On cherche sur la grille des blocs les coordonnées du haut, du bas, de la gauche et de la droite de l'objet consideré
         Block blocBas = blockEquivalent(xPixel,yPixel);
         int yGrilleBas = blocBas.y;
@@ -142,6 +136,12 @@ public class MoteurPhysique {
                         physicCorrection = true;
                     }
                 }
+            }
+
+            //Special rocket
+            contactDetectedThisTime = false;
+            if(!BlockEnContact.isEmpty()){
+                contactDetectedThisTime = true;
             }
         }
 

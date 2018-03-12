@@ -138,7 +138,8 @@ public abstract class Projectile {
             //Check worms
             for(int p=0;p<joueurs.length;p++) {
                 if (distance(x, y,joueurs[p].getX()+ 10,joueurs[p].getY()+ 20) <= rayonExplosion) {
-                    joueurs[p].modifierVie(degat);
+                    joueurs[p].modifierVie(-degat);
+                    System.out.println(degat);
                 }
             }
         }

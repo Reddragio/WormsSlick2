@@ -32,6 +32,7 @@ public class Worms {
     protected final static int climbAbility = 2; //Nombre de bloc que le Worms est capable d'escalader
     protected org.newdawn.slick.Image skinLeft;
     protected org.newdawn.slick.Image skinRight;
+    protected org.newdawn.slick.Image skinGrave;
     protected Weapon armeActuelle;
     protected double angleVisee;//Entre 0 et 180°
     protected double pasVisee;
@@ -69,6 +70,7 @@ public class Worms {
         isPlaying = false;
         skinLeft = new org.newdawn.slick.Image("images/Worm"+c+"_left.png");
         skinRight = new org.newdawn.slick.Image("images/Worm"+c+"_right.png");
+        skinGrave = new org.newdawn.slick.Image("/images/GraveStone.png");
 
         inventaire = new Inventaire(terrain[0].length*blockSize,terrain.length*blockSize);
 
@@ -190,18 +192,21 @@ public class Worms {
         
         //g.setColor(couleur);
         //g.fillRect(x,y-hitBoxHauteur+1,hitBoxLargeur,hitBoxHauteur);
+        if(life>0) {
+            if (orientation == 0) {
+                skinLeft.draw(x, y - hitBoxHauteur + 1);
+            } else {
+                skinRight.draw(x, y - hitBoxHauteur + 1);
+            }
 
-        if(orientation==0){
-            skinLeft.draw(x,y-hitBoxHauteur+1);
+            //Affichage du nom
+
+            font2.drawString(x - (font2.getWidth(name) / 2) + 10, y - hitBoxHauteur - 30, name, dico.get(Couleur));
+            font2.drawString(x - (font2.getWidth("" + life) / 2) + 10, y - hitBoxHauteur - 15, "" + life, dico.get(Couleur));
+        } else{
+            font2.drawString(x - (font2.getWidth("RIP "+name) / 2) + 10, y - hitBoxHauteur - 15, "RIP "+name, dico.get(Couleur));
+            skinGrave.draw(x, y - hitBoxHauteur + 1,26,40);
         }
-        else{
-            skinRight.draw(x,y-hitBoxHauteur+1);
-        }
-
-        //Affichage du nom
-
-        font2.drawString(x - (font2.getWidth(name )/ 2) + 10, y-hitBoxHauteur-30 , name, dico.get(Couleur) );
-        font2.drawString(x - (font2.getWidth(""+life )/ 2) + 10, y-hitBoxHauteur-15,""+life, dico.get(Couleur) );
     }
 
     public void setpos(int x, int y){

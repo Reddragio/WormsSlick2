@@ -29,8 +29,8 @@ public class FenetreJeu extends BasicGame{
     protected int largeur_draw_texture;
     protected Music themeWorms;
     protected boolean themeWormsActivation;
-    protected int stackedEnter;
-    protected long lastTime;
+    protected int stackedEnter; //permet de gerer le double saut
+    protected long lastTime; //permet de gerer le double saut
 
     protected Projectile projectileActuel;
     protected long timerExplosionProjectile;
@@ -42,6 +42,7 @@ public class FenetreJeu extends BasicGame{
     protected double pourcentage;
     protected boolean enterRelache;
     protected String[][] tabNomCoul;
+    protected GestionTerrain monde; //permet de connaitre le terrain tel qu'il a été généré (avant les explosions)
 
     //Explosion
     protected Animation aExplosion;
@@ -61,7 +62,7 @@ public class FenetreJeu extends BasicGame{
         super("Worms Fighter Z - Slick Version");
         blockSize=s;
         tabNomCoul = tab;
-        GestionTerrain monde=new GestionTerrain();
+        monde=new GestionTerrain();
         monde.genererTerrain(x,y,1);
         monde.genererFaille();
         monde.genererIles();
@@ -578,6 +579,17 @@ public class FenetreJeu extends BasicGame{
 
     public double distance(double x1,double y1,double x2,double y2){
         return Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
+    }
+
+    public void spawnWorm(){
+        int spawnArea=largeurBlock/joueurs.length;
+        int i=1;
+        for(Worms wor: joueurs){
+            int xs=(int) (i*spawnArea-Math.random()*spawnArea);
+            int ys=monde.surfaceBlock(xs);
+            wor.setpos(xs*blockSize,ys*blockSize+3);
+        }
+
     }
 
 

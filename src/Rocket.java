@@ -29,15 +29,13 @@ public class Rocket extends Projectile {
         largeurBlock = terrain[0].length;
         propulsion = new Force(42,42);
         accumulateurPropulsion = 1;
-        degat=75;
 
         //chronoLaunchForce = 200;
         chronoExplosion = 10000;
     }
 
-    public void explosion(Worms[] joueurs){
-        applyDeg(joueurs,rayonExplosion,degat);
-        bruitExplosion.play();
+    public void explosion(){
+        experimentalExplosion(x,y,rayonExplosion);
         bruitTir.stop();
         bruitExplosion.play();
     }

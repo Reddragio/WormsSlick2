@@ -95,6 +95,7 @@ public class GestionTerrain {
                     }
             }
         }
+        System.out.println("x= "+xhaut+" y= "+yhaut);
         return new int[]{xhaut,yhaut};
     }
 
@@ -103,7 +104,7 @@ public class GestionTerrain {
         int asperites=3; //irrégularités dans la faille
         int epMini=7; //épaisseur minimum de la faille
         int epMaxi=17; //épaisseur maximum de la faille
-        int entree=4; //taille de l'embouchure de la faille
+        int entree=3; //taille de l'embouchure de la faille
         int lastx=50;
         int lasty=50;
         int[] plusbas=pointLePlusBas();
@@ -114,7 +115,7 @@ public class GestionTerrain {
         boolean sens; //Pour savoir si la faille sera vers la gauche ou la droite: 0= gauche, 1= droite
         if(xInit<terrainInitial[0].length/2) sens=true;
         else sens=false;
-        for(int I=-epaisseur-entree+2;I<epaisseur+entree+2;I++){
+        for(int I=-epaisseur-entree;I<epaisseur+entree;I++){
             for(int J=-epaisseur-entree;J<epaisseur+entree;J++){
                 if(xInit+J>0 && xInit+J<terrainInitial[0].length&& yInit+I>0 && yInit+I<terrainInitial.length){
                     if(Math.sqrt(I*I+J*J)<epaisseur+entree){
@@ -150,8 +151,8 @@ public class GestionTerrain {
             for(int k=0;k<epaisseur;k++){
                 for(int l=0;l<epaisseur/2;l++){
                     if(lasty+l<terrainInitial.length&&lastx +k-1<terrainInitial[0].length) {
-                        if(lasty + l>0 && lastx + k - l>0) terrainInitial[lasty + l][lastx + k - l] = 0;
-                        if(lasty + l>0 && lastx - k + l>0) terrainInitial[lasty + l][lastx - k + l] = 0;
+                        terrainInitial[lasty + l][lastx + k - l] = 0;
+                        terrainInitial[lasty + l][lastx - k + l] = 0;
                     }
                 }
             }
@@ -178,17 +179,5 @@ public class GestionTerrain {
 
     public int[][] getTerrainInitial() {
         return terrainInitial;
-    }
-    public void check(int y){
-        for(int i=0;i<terrainInitial[0].length;i++) terrainInitial[y][i]=1;
-    }
-
-    public int surfaceBlock(int xs){
-        for(int i=0;i<terrainInitial.length;i++){
-            if(terrainInitial[i][xs]==0 && terrainInitial[i+1][xs]==1){
-                return i;
-            }
-        }
-        return terrainInitial.length/2;
     }
 }

@@ -199,6 +199,11 @@ public class Worms {
         font2.drawString(x - (font2.getWidth(""+life )/ 2) + 10, y-hitBoxHauteur-15,""+life, dico.get(Couleur) );
     }
 
+    public void setpos(int x,int y){
+        set_x(x);
+        set_y(y);
+    }
+
     public void set_x(int x){
 		//Permet de définir la coordonnée x
 		//A n'utiliser que pour la phase d'experimentation

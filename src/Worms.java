@@ -287,6 +287,10 @@ public class Worms {
         return isPlaying;
     }
 
+    public void drawInventaire(Input input){
+        inventaire.draw(input);
+    }
+
     public boolean interactInventaire(Input input){
         return inventaire.interact(input,this);
     }

@@ -385,7 +385,11 @@ public class FenetreJeu extends BasicGame{
                             stackedEnter=0;
                         }
                         wor.onFloorUpdate();
-                    }
+                }
+                else if(Input.KEY_ENTER == key){
+                    phaseInventaire = true;
+                    joueurs[0].setMovingState(false);
+                }
             }
             if(wor.getAimingState() && !phaseChoixPuissance){
                 if (Input.KEY_UP == key) {
@@ -421,7 +425,7 @@ public class FenetreJeu extends BasicGame{
         else if(Input.KEY_B == key){
             antiExplosion = !antiExplosion;
         }
-        else if(Input.KEY_V == key){
+        /*else if(Input.KEY_V == key){
             experimentalVisee = !experimentalVisee;
             if(experimentalVisee){
                 joueurs[0].setMovingState(false);
@@ -432,7 +436,7 @@ public class FenetreJeu extends BasicGame{
                 joueurs[0].setMovingState(true);
                 joueurs[0].setAimingState(false);
             }
-        }
+        }*/
         /*else if(Input.KEY_T == key){
             joueurs[0].set_y(50);
             System.out.println(joueurs[0].physic.getPixelCoordX());
@@ -477,7 +481,20 @@ public class FenetreJeu extends BasicGame{
 		//Traitement de la souris
 		
         if(button == 0){//Clik gauche
-            experimentalExplosion(x,y,rayonExplosion);
+            if(phaseInventaire){
+                for(Worms wor:joueurs){
+                    if(wor.isPlaying){
+                        if(wor.interactInventaire(input)){
+                            joueurs[0].setAimingState(true);
+                            joueurs[0].initVisee();
+                            phaseInventaire = false;
+                            }
+                    }
+                }
+            }
+            else{
+                experimentalExplosion(x,y,rayonExplosion);
+            }
         }
         else if(button==1){//Clik droit
             joueurs[0].set_x(x);

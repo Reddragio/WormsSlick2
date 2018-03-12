@@ -183,4 +183,13 @@ public abstract class Projectile {
     public boolean isAlive() {
         return alive;
     }
+
+    public int getx() {
+        return x;
+    }
+
+    public int gety() {
+        return y;
+    }
+
 }

@@ -71,7 +71,7 @@ public class Worms {
         try {
             InputStream inputStream	= ResourceLoader.getResourceAsStream("./fonts/WormsFont.ttf");
             Font police = Font.createFont(Font.TRUETYPE_FONT, inputStream);
-            police = police.deriveFont(19f); // set font size
+            police = police.deriveFont(18f); // set font size
             font2 = new TrueTypeFont(police, false);
 
         } catch (Exception e) {

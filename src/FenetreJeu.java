@@ -42,6 +42,12 @@ public class FenetreJeu extends BasicGame{
     protected boolean enterRelache;
     protected String[][] tabNomCoul;
 
+    //Explosion
+    protected Animation aExplosion;
+    protected boolean isExplosion;
+    protected float tempsExplo;
+    protected float timerExplo;
+
     //Experimental:
     protected int rayonExplosion;
     protected boolean visualiserExplosion;
@@ -106,6 +112,17 @@ public class FenetreJeu extends BasicGame{
         phaseChoixPuissance = false;
         chronoChoixPuissance = 1500;
         enterRelache = false;
+
+        //SpriteSheet explosion
+
+        Image Sprite = new Image("./images/SpriteSheetExplosion.png");
+        int spritelong = 130;
+        SpriteSheet sExplosion = new SpriteSheet(Sprite, spritelong,spritelong);
+        tempsExplo = 1000;
+        timerExplo = 0;
+        aExplosion = new Animation(sExplosion, (int)tempsExplo/10);
+
+        isExplosion=false;
 
         //Experimental:
         rayonExplosion = 40;
@@ -178,6 +195,10 @@ public class FenetreJeu extends BasicGame{
             g.setColor(Color.red);
             g.drawOval((float)(input.getMouseX()-rayonExplosion),(float)(input.getMouseY()-rayonExplosion),(float)(2*rayonExplosion),(float)(2*rayonExplosion));
         }
+
+        if(isExplosion){
+            aExplosion.draw((float)(input.getMouseX()-65),(float)(input.getMouseY()-65));
+        }
     }
 
     public void update(GameContainer container, int delta) throws SlickException {
@@ -245,6 +266,16 @@ public class FenetreJeu extends BasicGame{
                     wor.diminuerAngle();
                 }
             }
+        }
+
+
+        if(isExplosion){
+            timerExplo+=delta;
+            if(timerExplo >= tempsExplo-50){
+                isExplosion=false;
+                timerExplo=0;
+            }
+
         }
     }
 
@@ -430,6 +461,7 @@ public class FenetreJeu extends BasicGame{
 		
         if(button == 0){//Clik gauche
             experimentalExplosion(x,y,rayonExplosion);
+            isExplosion=true;
         }
         else if(button==1){//Clik droit
             joueurs[0].set_x(x);
@@ -514,5 +546,6 @@ public class FenetreJeu extends BasicGame{
     public double distance(double x1,double y1,double x2,double y2){
         return Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
     }
+
 
 }

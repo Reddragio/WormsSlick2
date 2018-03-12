@@ -92,7 +92,7 @@ public class FenetreJeu extends BasicGame{
         joueurs = new Worms[1];
         joueurs[0] = new Worms(1,tabNomCoul[0][1],tabNomCoul[0][0],terrain,blockSize,changementPrint,500,100);
         joueurs[0].setMovingState(true);
-        joueurs[0].setWeapon(new Grenade());
+        joueurs[0].setWeapon(new Bazooka());
 
         this.container = container;
         isMovingLeft = false;
@@ -197,7 +197,7 @@ public class FenetreJeu extends BasicGame{
         }
 
         if(isExplosion){
-            aExplosion.draw((float)(input.getMouseX()-65),(float)(input.getMouseY()-65));
+            aExplosion.draw((float)(projectileActuel.getx()-65),(float)(projectileActuel.gety()-65));
         }
     }
 
@@ -243,6 +243,7 @@ public class FenetreJeu extends BasicGame{
             timerExplosionProjectile += delta;
             if(timerExplosionProjectile >= projectileActuel.getChronoExplosion() || !projectileActuel.isAlive()){
                 projectileActuel.explosion();
+                isExplosion=true;
                 phaseProjectile = false;
                 joueurs[0].setMovingState(true);
             }
@@ -461,7 +462,6 @@ public class FenetreJeu extends BasicGame{
 		
         if(button == 0){//Clik gauche
             experimentalExplosion(x,y,rayonExplosion);
-            isExplosion=true;
         }
         else if(button==1){//Clik droit
             joueurs[0].set_x(x);

@@ -204,7 +204,7 @@ public class Menu extends JFrame implements ActionListener {
         AppGameContainer app = new AppGameContainer(new FenetreJeu(tailleBloc,blocLargeur,blocHauteur,tab));
         app.setDisplayMode(blocLargeur*tailleBloc, blocHauteur*tailleBloc, false); // Mode fenêtré
         app.setVSync(false);
-        //app.setTargetFrameRate(120);
+        app.setTargetFrameRate(120);
         app.start();
     }
 

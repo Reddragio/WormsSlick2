@@ -13,7 +13,7 @@ public class Worms {
     protected org.newdawn.slick.Color couleur;
     protected String name;
     protected String Couleur;
-    protected int life;
+    protected double life;
     protected int x; //Les coordonnées x,y correspondent au coin en bas à gauche du Worms
     protected int y;
     protected int terrain[][];
@@ -94,7 +94,7 @@ public class Worms {
         onFloorUpdate();
     }
 
-    public void modifierVie(int hp){
+    public void modifierVie(double hp){
 		//Ajoute/eleve des points de vie au Worms
         life+=hp;
     }

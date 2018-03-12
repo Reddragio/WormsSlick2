@@ -136,13 +136,9 @@ public abstract class Projectile {
                 }
             }
             //Check worms
-            for(int p=0;p<joueurs.length;i++) {
-                for (int l = block_hg_y; l <= block_bd_y; l++) {
-                    for (int m = block_hg_x; m <= block_bd_x; m++) {
-                        if (distance(x, y,joueurs[p].getX()+ 10,joueurs[p].getY()+ 20) <= rayonExplosion) {
-                            joueurs[p].modifierVie((int)-degat);
-                        }
-                    }
+            for(int p=0;p<joueurs.length;p++) {
+                if (distance(x, y,joueurs[p].getX()+ 10,joueurs[p].getY()+ 20) <= rayonExplosion) {
+                    joueurs[p].modifierVie(degat);
                 }
             }
         }

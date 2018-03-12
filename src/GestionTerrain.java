@@ -10,7 +10,7 @@ public class GestionTerrain {
             int p=(int) y/2; //point de départ
             int r=0;
             double montagnes=3; //coefficient montagnes
-            double plaine=2.5; //dénivelé
+            double plaine=2.2; //dénivelé
             int oldp=p;
             for(int i=0;i<t[0].length;i++){
                 if((Math.random()*montagnes)>1&&p!=oldp){

@@ -135,6 +135,8 @@ public class FenetreJeu extends BasicGame{
         input = container.getInput();
         antiExplosion = false;
         experimentalVisee = false;
+
+        spawnWorm();
     }
 
     public void render(GameContainer container, Graphics g) throws SlickException {

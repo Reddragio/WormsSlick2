@@ -2,7 +2,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
 public class Rocket extends Projectile {
-    protected int rayonExplosion;
     protected Sound bruitExplosion;
     protected Sound bruitTir;
     protected double normePropulsion;
@@ -29,14 +28,16 @@ public class Rocket extends Projectile {
         largeurBlock = terrain[0].length;
         propulsion = new Force(42,42);
         accumulateurPropulsion = 1;
-        degat=75;
+        degat=50;
+        normeSouffleExplosion = 900;
 
         //chronoLaunchForce = 200;
         chronoExplosion = 10000;
     }
 
     public void explosion(Worms[] joueurs){
-        applyDeg(joueurs,rayonExplosion,degat);
+        genericExplosion(x,y,rayonExplosion);
+        applyDegAndPhysic(joueurs);
         bruitExplosion.play();
         bruitTir.stop();
         bruitExplosion.play();

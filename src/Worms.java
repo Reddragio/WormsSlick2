@@ -305,4 +305,11 @@ public class Worms {
         return inventaire.interact(input,this);
     }
 
+    public static int getHitBoxLargeur() {
+        return hitBoxLargeur;
+    }
+
+    public static int getHitBoxHauteur() {
+        return hitBoxHauteur;
+    }
 }

@@ -22,6 +22,8 @@ public abstract class Projectile {
     protected int hauteurBlock;
     protected int largeurBlock;
     protected double drawAngle;
+    protected int rayonExplosion;
+    protected double normeSouffleExplosion;
 
     public void launch(Weapon lanceur,double pourcentagePuissance){
         pourcentagePuissance /= 100;
@@ -60,7 +62,7 @@ public abstract class Projectile {
 
     public abstract void explosion(Worms[] joueurs);
 
-    public void experimentalExplosion(int xe,int ye,int rayon){
+    public void genericExplosion(int xe,int ye,int rayon){
         //Explosion !!!!!!
 
         //Penser vérifier xe, ye dans les clous
@@ -99,48 +101,29 @@ public abstract class Projectile {
     }
 
     //dégat worms
-    public void applyDeg(Worms[] joueurs, int rayonExplosion,double degat){
-        //Explosion !!!!!!
+    public void applyDegAndPhysic(Worms[] joueurs){
+        //Pauvre Worms :'( ...
 
-        //Penser vérifier xe, ye dans les clous
-        //Coin en haut à gauche du rectangle:
-        int block_hg_x = (x - rayonExplosion)/blockSize;
-        block_hg_x = limiteInferieur(block_hg_x);
-        int block_hg_y = (y - rayonExplosion)/blockSize;
-        block_hg_y = limiteInferieur(block_hg_y);
-        //Coin en bas à droite du rectangle:
-        int block_bd_x = (x + rayonExplosion)/blockSize;
-        block_bd_x = limiteSuperieurX(block_bd_x);
-        int block_bd_y = (y + rayonExplosion)/blockSize;
-        block_bd_y = limiteSuperieurY(block_bd_y);
+        //Check worms
+        double distanceWor;
+        double facteurDistance;
+        double degatEffectif;
+        double deltaX,deltaY, angleSouffle;
+        for(Worms wor:joueurs) {
+            distanceWor = distance(x, y,wor.getX()+ wor.getHitBoxLargeur()/2,wor.getY() - wor.getHitBoxHauteur()/2);
+            if (distanceWor <= rayonExplosion) {
+                facteurDistance = (1 - distanceWor/rayonExplosion);
+                //Degats
+                degatEffectif = facteurDistance * degat;
+                wor.modifierVie(-degatEffectif);
+                System.out.println(degatEffectif);
 
-        boolean destructible;
-        double demi_block = blockSize/2.0;
-        for(int i=block_hg_y;i<=block_bd_y;i++){
-            for(int j=block_hg_x;j<=block_bd_x;j++){
-                if(distance(x,y,j*blockSize+demi_block,i*blockSize+demi_block)<=rayonExplosion){
-                    destructible = true;
-                    for(int strong :blocIndestructibles){
-                        if(terrain[i][j]==strong){
-                            destructible = false;
-                        }
-                    }
-                    if(destructible){
-                        if(antiExplosion){
-                            terrain[i][j] = 1;
-                        }
-                        else{
-                            terrain[i][j] = 0;
-                        }
-                    }
-                }
-            }
-            //Check worms
-            for(int p=0;p<joueurs.length;p++) {
-                if (distance(x, y,joueurs[p].getX()+ 10,joueurs[p].getY()+ 20) <= rayonExplosion) {
-                    joueurs[p].modifierVie(-degat);
-                    System.out.println(degat);
-                }
+                //Worms projeté par le souffle de l'explosion
+                deltaX = wor.getX()+ wor.getHitBoxLargeur()/2 - x;
+                deltaY = wor.getY() - wor.getHitBoxHauteur()/2 - y;
+                angleSouffle = Math.atan2(deltaY,deltaX);
+                wor.set_vitesse_x((int)(Math.cos(angleSouffle)*facteurDistance*normeSouffleExplosion));
+                wor.set_vitesse_y((int)(Math.sin(angleSouffle)*facteurDistance*normeSouffleExplosion));
             }
         }
     }

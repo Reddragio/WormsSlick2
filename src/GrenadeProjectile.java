@@ -2,7 +2,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
 public class GrenadeProjectile extends Projectile{
-    protected int rayonExplosion;
     protected Sound bruitExplosion;
 
     public GrenadeProjectile(int terrain[][], int blockSize) throws SlickException {
@@ -21,13 +20,15 @@ public class GrenadeProjectile extends Projectile{
         hauteurBlock = terrain.length;
         largeurBlock = terrain[0].length;
         degat=50;
+        normeSouffleExplosion = 800;
 
         //chronoLaunchForce = 200;
         chronoExplosion = 2000;
     }
 
     public void explosion(Worms[] joueurs){
-        applyDeg(joueurs,rayonExplosion,degat);
+        genericExplosion(x,y,rayonExplosion);
+        applyDegAndPhysic(joueurs);
         bruitExplosion.play();
     }
 

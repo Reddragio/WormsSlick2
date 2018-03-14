@@ -24,9 +24,9 @@ public class Inventaire {
         image = new org.newdawn.slick.Image("images/inventaire.png");
         armesWorms = new Weapon[2];
         drawScale = new double[2];
-        armesWorms[0] = new Bazooka(2);
+        armesWorms[0] = new Bazooka(10);
         drawScale[0] = 0.7;
-        armesWorms[1] = new Grenade(5);
+        armesWorms[1] = new Grenade(20);
         drawScale[1] = 0.9;
         this.hauteurFenetre = hauteurFenetre;
         this.largeurFenetre = largeurFenetre;

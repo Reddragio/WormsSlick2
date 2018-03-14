@@ -18,7 +18,7 @@ public class Bazooka extends Weapon {
         nombrePossede = nombre;
     }
 
-    public Projectile generateProjectile(int terrain[][],int blockSize) throws SlickException {
-        return new Rocket(terrain,blockSize);
+    public Projectile generateProjectile(int terrain[][],int blockSize,Worms tireur) throws SlickException {
+        return new Rocket(terrain,blockSize,tireur);
     }
 }

@@ -9,11 +9,12 @@ public class Rocket extends Projectile {
     protected int accumulateurPropulsion;
     protected double facteurPropulsion;
 
-    public Rocket(int terrain[][], int blockSize) throws SlickException {
+    public Rocket(int terrain[][], int blockSize,Worms tireur) throws SlickException {
         pictureLeft = new org.newdawn.slick.Image("images/rocket_left.png");
         pictureRight = new org.newdawn.slick.Image("images/rocket_right.png");
         bruitExplosion = new Sound("music/rocket_explosion.ogg");
         bruitTir = new Sound("music/bazooka_tir_2.ogg");
+        bruitFail = new Sound("music/failSound.ogg");
         alive = true;
         normeVitesse = 2000;
         normePropulsion = (g/200.0);
@@ -30,6 +31,7 @@ public class Rocket extends Projectile {
         accumulateurPropulsion = 1;
         degat=50;
         normeSouffleExplosion = 900;
+        this.tireur = tireur;
 
         //chronoLaunchForce = 200;
         chronoExplosion = 10000;

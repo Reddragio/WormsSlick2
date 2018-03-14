@@ -19,8 +19,8 @@ public class Grenade extends Weapon {
         nombrePossede = nombre;
     }
 
-    public Projectile generateProjectile(int terrain[][],int blockSize) throws SlickException {
-        return new GrenadeProjectile(terrain,blockSize);
+    public Projectile generateProjectile(int terrain[][],int blockSize,Worms tireur) throws SlickException {
+        return new GrenadeProjectile(terrain,blockSize,tireur);
     }
 
 }

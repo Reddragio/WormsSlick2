@@ -1,6 +1,9 @@
+import org.newdawn.slick.Sound;
+
 public abstract class Projectile {
     protected org.newdawn.slick.Image pictureLeft;
     protected org.newdawn.slick.Image pictureRight;
+    protected Sound bruitFail;
     protected int x;
     protected int y;
     protected double masse;
@@ -24,6 +27,7 @@ public abstract class Projectile {
     protected double drawAngle;
     protected int rayonExplosion;
     protected double normeSouffleExplosion;
+    protected Worms tireur;
 
     public void launch(Weapon lanceur,double pourcentagePuissance){
         pourcentagePuissance /= 100;
@@ -124,8 +128,14 @@ public abstract class Projectile {
                 angleSouffle = Math.atan2(deltaY,deltaX);
                 wor.set_vitesse_x((int)(Math.cos(angleSouffle)*facteurDistance*normeSouffleExplosion));
                 wor.set_vitesse_y((int)(Math.sin(angleSouffle)*facteurDistance*normeSouffleExplosion));
+
+                //Fail noise
+                if(wor == tireur){
+                    bruitFail.play();
+                }
             }
         }
+
     }
 
 

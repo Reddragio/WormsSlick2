@@ -238,7 +238,7 @@ public class FenetreJeu extends BasicGame{
                      if(wor.getAimingState()){
                          wor.setAimingState(false);
                          try {
-                             projectileActuel = (wor.getArmeActuelle()).generateProjectile(terrain,blockSize);
+                             projectileActuel = (wor.getArmeActuelle()).generateProjectile(terrain,blockSize,wor);
                          } catch (SlickException e) {
                          }
                          double pourcentagePuissanceTir;

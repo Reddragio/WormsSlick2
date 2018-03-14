@@ -30,6 +30,8 @@ public class Worms {
     protected final static int blocIntraversables[] = {1,3};
     protected final static double facteurEchelle = 0.05;
     protected final static int climbAbility = 2; //Nombre de bloc que le Worms est capable d'escalader
+    protected final static double degatChuteMaximal = 100;
+    protected final static double vitesseYChuteLimite = 100;
     protected org.newdawn.slick.Image skinLeft;
     protected org.newdawn.slick.Image skinRight;
     protected org.newdawn.slick.Image skinGrave;
@@ -37,6 +39,7 @@ public class Worms {
     protected double angleVisee;//Entre 0 et 180°
     protected double pasVisee;
     protected Inventaire inventaire;
+    protected long lastTimeDegatChute;
 
     protected HashMap<String, Color> dico;
     protected TrueTypeFont font2;
@@ -45,8 +48,6 @@ public class Worms {
     protected boolean isMoving; //Servira à savoir si un Worms est dans sa phase de déplacement
     protected boolean isAiming; //est en train de viser
     protected boolean isPlaying;
-
-    //protected int compteurTest;
 
     public Worms(int t, String c, String n,int[][] terrain,int blockSize,boolean[] changementPrint,int x,int y) throws SlickException { //t=0 ou 1, pour savoir quelle équipe
         if(t==0) couleur=org.newdawn.slick.Color.blue;
@@ -73,6 +74,7 @@ public class Worms {
         skinGrave = new org.newdawn.slick.Image("/images/GraveStone.png");
 
         inventaire = new Inventaire(terrain[0].length*blockSize,terrain.length*blockSize);
+        lastTimeDegatChute = 0;
 
         //Init police nom et vie
         try {
@@ -99,6 +101,7 @@ public class Worms {
         x = physic.getPixelCoordX();
         y = physic.getPixelCoordY();
         onFloorUpdate();
+        applyDegatChute();
     }
 
     public void modifierVie(double hp){
@@ -242,7 +245,10 @@ public class Worms {
     public void onFloorUpdate(){
         if(physic.getContactBlock(x,y+1).isEmpty()) isOnFloor=false;
         else isOnFloor=true;
-        //System.out.println(physic.getContactBlock(x,y+1));
+    }
+
+    public boolean nearFloor(){
+        return physic.getContactBlock(x,y).isEmpty() && !(physic.getContactBlock(x,y+6).isEmpty());
     }
 
     public void drawVisee(){
@@ -271,6 +277,22 @@ public class Worms {
             angleVisee = 89;
         }
 
+    }
+
+    public void applyDegatChute(){
+        if(nearFloor() && System.currentTimeMillis() - lastTimeDegatChute >= 1000){
+            double vitesseY,degatChute;
+            vitesseY = physic.getVitesse_y() * 12;//*12 parce que les valeurs de vitesse ont été étudié en faisant
+            //tourner le jeu à 10 fps au lieu de 120 (les vitesses étaient 12 fois plus grandes)
+            if(vitesseY>=20){
+                lastTimeDegatChute = System.currentTimeMillis();
+                if(vitesseY>vitesseYChuteLimite){
+                    vitesseY = vitesseYChuteLimite;
+                }
+                degatChute = (vitesseY/vitesseYChuteLimite)*degatChuteMaximal;
+                modifierVie(-degatChute);
+            }
+        }
     }
 
     public void setWeapon(Weapon armeTemp){

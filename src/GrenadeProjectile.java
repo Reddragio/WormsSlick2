@@ -4,10 +4,11 @@ import org.newdawn.slick.Sound;
 public class GrenadeProjectile extends Projectile{
     protected Sound bruitExplosion;
 
-    public GrenadeProjectile(int terrain[][], int blockSize) throws SlickException {
+    public GrenadeProjectile(int terrain[][], int blockSize,Worms tireur) throws SlickException {
         pictureLeft = new org.newdawn.slick.Image("images/grenade_essai_left_mini.png");
         pictureRight = new org.newdawn.slick.Image("images/grenade_essai_right_mini.png");
         bruitExplosion = new Sound("music/Grenade.ogg");
+        bruitFail = new Sound("music/failSound.ogg");
         alive = true;
         normeVitesse = 1600;
         hitBoxHauteur = 20;
@@ -21,6 +22,7 @@ public class GrenadeProjectile extends Projectile{
         largeurBlock = terrain[0].length;
         degat=50;
         normeSouffleExplosion = 800;
+        this.tireur = tireur;
 
         //chronoLaunchForce = 200;
         chronoExplosion = 2000;

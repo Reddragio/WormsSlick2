@@ -134,6 +134,6 @@ public abstract class Weapon {
         pictureHD.draw(x,y,scale);
     }
 
-    public abstract Projectile generateProjectile(int terrain[][], int blockSizes) throws SlickException;
+    public abstract Projectile generateProjectile(int terrain[][], int blockSizes,Worms tireur) throws SlickException;
 
 }

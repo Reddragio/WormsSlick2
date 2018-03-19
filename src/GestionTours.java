@@ -15,6 +15,7 @@ public class GestionTours {
     protected FenetreJeu mainFenetre;
 
     public GestionTours(Worms[] joueurs,FenetreJeu mainFenetre){
+        //Initialisation
         this.joueurs = joueurs;
         nombreJoueurs = joueurs.length;
         nombreJoueursDevantJouer = joueurs.length;

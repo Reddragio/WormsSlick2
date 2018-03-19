@@ -618,7 +618,7 @@ public class FenetreJeu extends BasicGame{
     }
 
     public void spawnWorm(){
-        int spawnArea=largeurBlock/joueurs.length;
+        int spawnArea=largeurBlock/(joueurs.length+1);
         int i=1;
         for(Worms wor: joueurs){
             int xs=(int) (i*spawnArea-Math.random()*spawnArea);

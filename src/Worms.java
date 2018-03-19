@@ -50,17 +50,13 @@ public class Worms {
     protected boolean isPlaying;
     protected boolean aDejaJoue;
 
-    public Worms(int t, String c, String n,int[][] terrain,int blockSize,boolean[] changementPrint,int x,int y) throws SlickException { //t=0 ou 1, pour savoir quelle équipe
-        if(t==0) couleur=org.newdawn.slick.Color.blue;
-        else couleur=org.newdawn.slick.Color.red;
-
+    public Worms(String c, String n,int[][] terrain,int blockSize,int x,int y) throws SlickException { //t=0 ou 1, pour savoir quelle équipe
         name=n;
         Couleur=c;
         life=200;
         this.terrain = terrain;
         this.blockSize = blockSize;
         isMoving = false;
-        this.changementPrint =  changementPrint;
         this.x = x;
         this.y = y;
         physic = new MoteurPhysique(terrain,blockSize,hitBoxHauteur,hitBoxLargeur,blocIntraversables,1.0/12.5,1.0/20.0,1.0/20.0,1.0/12.5,masse,x,y);

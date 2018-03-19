@@ -1,5 +1,8 @@
 public class GestionTerrain {
     private int[][] terrainInitial; //Le terrain tel qu'il est après la génération
+    int[] plusBas;
+    int[] plusHaut;
+
     public GestionTerrain() {
     }
 
@@ -66,6 +69,8 @@ public class GestionTerrain {
             }
         }
         terrainInitial=t;
+        plusBas=pointLePlusBas();
+        plusHaut=pointLePlusHaut();
     }
 
     public int[] pointLePlusBas(){
@@ -99,22 +104,22 @@ public class GestionTerrain {
     }
 
     public void genererFaille(){
-        int epaisseur=7; //l'épaisseur de la faille
+        int epaisseur=12; //l'épaisseur de la faille
         int asperites=3; //irrégularités dans la faille
         int epMini=7; //épaisseur minimum de la faille
         int epMaxi=17; //épaisseur maximum de la faille
         int entree=4; //taille de l'embouchure de la faille
         int lastx=50;
         int lasty=50;
-        int[] plusbas=pointLePlusBas();
 
 
-        int xInit=plusbas[0];
-        int yInit=plusbas[1];
+
+        int xInit=plusBas[0];
+        int yInit=plusBas[1];
         boolean sens; //Pour savoir si la faille sera vers la gauche ou la droite: 0= gauche, 1= droite
         if(xInit<terrainInitial[0].length/2) sens=true;
         else sens=false;
-        for(int I=-epaisseur-entree+2;I<epaisseur+entree+2;I++){
+        /*for(int I=-epaisseur-entree+4;I<epaisseur+entree+4;I++){
             for(int J=-epaisseur-entree;J<epaisseur+entree;J++){
                 if(xInit+J>0 && xInit+J<terrainInitial[0].length&& yInit+I>0 && yInit+I<terrainInitial.length){
                     if(Math.sqrt(I*I+J*J)<epaisseur+entree){
@@ -122,27 +127,31 @@ public class GestionTerrain {
                     }
                 }
             }
-        }
-        for(int i=yInit;i<terrainInitial.length-Math.random()*40;i++){
+        }*/
+        for(int i=yInit-10;i<terrainInitial.length-Math.random()*40;i++){
             int randomIntRel=(int) (Math.random()*asperites-Math.random()*asperites);
             if(epaisseur+randomIntRel>epMini&&epaisseur+randomIntRel<epMaxi) epaisseur+=randomIntRel;
             if(sens){
-                for(int j=xInit;j<terrainInitial[0].length-xInit-2;j++){
+                for(int j=xInit-10;j<terrainInitial[0].length-xInit-2;j++){
                     for(int k=-epaisseur;k<epaisseur;k++)
                         if(j-xInit==i-yInit-k){
-                        terrainInitial[i][j]=0;
-                        lastx=j;
-                        lasty=i;
+                            if(i<terrainInitial.length&&j>0&&j<terrainInitial[0].length){
+                                terrainInitial[i][j]=0;
+                                lastx=j;
+                                lasty=i;
+                            }
                         }
                 }
             }
             else{
-                for(int j=xInit;j>2;j--){
+                for(int j=xInit+10;j>2;j--){
                     for(int k=-epaisseur;k<epaisseur;k++)
                         if(xInit-j==i-yInit-k){
-                        terrainInitial[i][j]=0;
+                        if(i<terrainInitial.length&&j>0&&j<terrainInitial[0].length){
+                            terrainInitial[i][j]=0;
                             lastx=j;
                             lasty=i;
+                        }
                         }
                 }
             }
@@ -159,23 +168,19 @@ public class GestionTerrain {
     }
 
     public void genererIles(){
-        int largeur=60;
-        int hauteur=20;
-        int asperites=4;
-        int denivele=3;
-        int difY=3;
-        int difX=2;
-
-        int centreIleY=(int) (Math.random()*(pointLePlusHaut()[1]-hauteur));
-        while(centreIleY-hauteur<=0)
-            centreIleY=(int) (Math.random()*(pointLePlusHaut()[1]-hauteur));
-        int centreIleX=pointLePlusBas()[0];
-
-        int p=(int) centreIleY-hauteur/2+2; //point de départ
-        int r=0;
+        int largeur=130;
+        int hauteur=40;
         double montagnes1=3; //coefficient montagnes
         double montagnes2=2; //coefficient montagnes
         double plaine=2; //dénivelé
+
+        int centreIleY=(int) (Math.random()*(plusHaut[1]-2*hauteur)+hauteur);
+        if(centreIleY-hauteur<=0)
+            centreIleY=(int) (Math.random()*(plusHaut[1]-2*hauteur)+hauteur);
+        int centreIleX=(int) (Math.random()*(terrainInitial[0].length-2*largeur)+largeur);
+
+        int p=(int) centreIleY-hauteur/2+2; //point de départ
+        int r=0;
         int oldp=p;
         /*for(int y=centreIleY-hauteur/2;y<centreIleY+hauteur/2;y++){
             for(int x=centreIleX-largeur/2+randomIntRel(asperites);x<centreIleX+largeur/2-randomIntRel(asperites);x++){
@@ -184,7 +189,12 @@ public class GestionTerrain {
             }
         }*/
 
-        for(int i=centreIleX-largeur/2;i<centreIleX+largeur/2;i++){
+        int[] hautGauche={centreIleX-largeur/2,centreIleY};
+        int[] basGauche={centreIleX-largeur/2,centreIleY};
+        int[] hautDroite={centreIleX+largeur/2,centreIleY};
+        int[] basDroite={centreIleX+largeur/2,centreIleY};
+
+        for(int i=centreIleX-largeur/2;i<centreIleX+largeur/2+1;i++){
             if((Math.random()*montagnes1)>1&&p!=oldp){
                 r=(p-oldp)+(int)(Math.random()*2-1);
             }
@@ -195,17 +205,20 @@ public class GestionTerrain {
             if(p>centreIleY) p-=Math.abs(r);
             if(p<centreIleY-hauteur) p+=Math.abs(r);
             else p+=r;
-            while(p<0) p++;
-            if(p<terrainInitial.length && p>0){
-                terrainInitial[p][i]=1;
-                for(int j=p;j<centreIleY+1;j++){
+            while(p<=0) p++;
+            terrainInitial[p][i]=1;
+            if(i==centreIleX-largeur/2)
+                hautGauche[1]=p;
+            if(i==centreIleX+largeur/2)
+                hautDroite[1]=p;
+            for(int j=p;j<centreIleY+1;j++){
+                if(j<terrainInitial.length && j>0)
                     terrainInitial[j][i]=1;
-                }
             }
         }
         p=(int) centreIleY+hauteur/2-2; //point de départ
         oldp=p;
-        for(int i=centreIleX-largeur/2;i<centreIleX+largeur/2;i++){
+        for(int i=centreIleX-largeur/2;i<centreIleX+largeur/2+1;i++){
             if((Math.random()*montagnes2)>1&&p!=oldp){
                 r=(p-oldp)+(int)(Math.random()*2-1);
             }
@@ -216,14 +229,21 @@ public class GestionTerrain {
             if(p>centreIleY+hauteur/2) p-=Math.abs(r);
             if(p<centreIleY) p+=Math.abs(r);
             else p+=r;
-            while(p<0) p++;
-            if(p<terrainInitial.length && p>0){
-                terrainInitial[p][i]=1;
-                for(int j=p;j>centreIleY;j--){
+            while(p<=0) p++;
+            terrainInitial[p][i]=1;
+            if(i==centreIleX-largeur/2)
+                basGauche[1]=p;
+            if(i==centreIleX+largeur/2)
+                basDroite[1]=p;
+            for(int j=p;j>centreIleY;j--){
+                if(j<terrainInitial.length && j>0)
                     terrainInitial[j][i]=1;
-                }
             }
         }
+        terrainInitial[hautDroite[1]][hautDroite[0]]=2;
+        terrainInitial[basDroite[1]][basDroite[0]]=2;
+        terrainInitial[hautGauche[1]][hautGauche[0]]=2;
+        terrainInitial[basGauche[1]][basGauche[0]]=2;
     }
 
     public int[][] getTerrainInitial() {

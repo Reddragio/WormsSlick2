@@ -29,7 +29,7 @@ public class Rocket extends Projectile {
         largeurBlock = terrain[0].length;
         propulsion = new Force(42,42);
         accumulateurPropulsion = 1;
-        degat=50;
+        degat=200;
         normeSouffleExplosion = 900;
         this.tireur = tireur;
 

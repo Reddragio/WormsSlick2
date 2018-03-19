@@ -58,6 +58,8 @@ public class FenetreJeu extends BasicGame{
     protected boolean antiExplosion;//Permet de mettre des blocs au lieu d'en détruire
     protected final static int blocIndestructibles[] = {2,3};
     protected boolean experimentalVisee;
+    protected boolean cheatMode;
+    protected int lastDelta;
 
     public FenetreJeu(int s,int x,int y, String[][] tab) throws SlickException {
         super("Worms Fighter Z - Slick Version");
@@ -70,6 +72,7 @@ public class FenetreJeu extends BasicGame{
         monde.genererIles();
         terrain=monde.getTerrainInitial();
 
+        lastDelta = 0;
     }
 
     public void init(GameContainer container) throws SlickException {
@@ -145,6 +148,7 @@ public class FenetreJeu extends BasicGame{
         input = container.getInput();
         antiExplosion = false;
         experimentalVisee = false;
+        cheatMode = false;
 
         spawnWorm();
     }
@@ -223,6 +227,9 @@ public class FenetreJeu extends BasicGame{
         }
 
         gestionTours.printTime();
+        gestionTours.printMessage(lastDelta);
+
+        gestionTours.printEnd();
     }
 
     public void update(GameContainer container, int delta) throws SlickException {
@@ -231,9 +238,10 @@ public class FenetreJeu extends BasicGame{
 		//Ce qui explique qu'à l'heure actuelle le jeu soit plus ou moins rapide
 		//selon l'ordi
         gestionTours.updateLogic(delta);
+        lastDelta = delta;
 
         for(Worms wor: joueurs){
-            wor.applyPhysic(delta);
+            wor.applyPhysic(delta,gestionTours);
             /*if(wor.isPlaying()){
                 if(phaseInventaire){
 
@@ -443,6 +451,15 @@ public class FenetreJeu extends BasicGame{
         else if(Input.KEY_B == key){
             antiExplosion = !antiExplosion;
         }
+        else if(Input.KEY_C == key){
+            cheatMode = !cheatMode;
+            if(cheatMode){
+                gestionTours.showMessage("Cheat Mode activé !",2000,org.newdawn.slick.Color.magenta);
+            }
+            else{
+                gestionTours.showMessage("Cheat Mode desactivé !",2000,org.newdawn.slick.Color.magenta);
+            }
+        }
         /*else if(Input.KEY_V == key){
             experimentalVisee = !experimentalVisee;
             if(experimentalVisee){
@@ -511,14 +528,16 @@ public class FenetreJeu extends BasicGame{
                 }
             }
             else{
-                experimentalExplosion(x,y,rayonExplosion);
+                if(cheatMode){
+                    experimentalExplosion(x,y,rayonExplosion);
+                }
             }
         }
-        else if(button==1){//Clik droit
+        else if(button==1 && cheatMode){//Clik droit
             (gestionTours.getActualWorms()).set_x(x);
             (gestionTours.getActualWorms()).set_y(y);
         }
-        else if(button==2){//Clik molette
+        else if(button==2 && cheatMode){//Clik molette
             visualiserExplosion = !visualiserExplosion;
         }
     }

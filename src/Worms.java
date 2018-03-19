@@ -49,11 +49,14 @@ public class Worms {
     protected boolean isAiming; //est en train de viser
     protected boolean isPlaying;
     protected boolean aDejaJoue;
+    protected boolean alive;
+    protected int ordre;
 
     public Worms(String c, String n,int[][] terrain,int blockSize,int x,int y) throws SlickException { //t=0 ou 1, pour savoir quelle équipe
         name=n;
         Couleur=c;
         life=200;
+        alive=true;
         this.terrain = terrain;
         this.blockSize = blockSize;
         isMoving = false;
@@ -93,12 +96,18 @@ public class Worms {
         dico.put("Vert",Color.green);
     }
 
-    public void applyPhysic(int delta){
+    public void applyPhysic(int delta,GestionTours gestionTours){
         physic.applyForces(delta);
         x = physic.getPixelCoordX();
         y = physic.getPixelCoordY();
         onFloorUpdate();
         applyDegatChute();
+
+        //detection mort
+        if(alive && life<=0){
+            alive = false;
+            gestionTours.nouvelleMort(this);
+        }
     }
 
     public void modifierVie(double hp){
@@ -330,7 +339,7 @@ public class Worms {
         return hitBoxHauteur;
     }
 
-    public boolean isAlive(){
+    public boolean estEnVie(){
         return life>0;
     }
 
@@ -344,5 +353,25 @@ public class Worms {
 
     public void setaDejaJoue(boolean aDejaJoue) {
         this.aDejaJoue = aDejaJoue;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setOrdre(int ordre) {
+        this.ordre = ordre;
+    }
+
+    public int getOrdre() {
+        return ordre;
+    }
+
+    public String getName() {
+        return name;
     }
 }

@@ -22,12 +22,14 @@ public class Inventaire {
 
     public Inventaire(int largeurFenetre,int hauteurFenetre) throws SlickException {
         image = new org.newdawn.slick.Image("images/inventaire.png");
-        armesWorms = new Weapon[2];
-        drawScale = new double[2];
+        armesWorms = new Weapon[3];
+        drawScale = new double[3];
         armesWorms[0] = new Bazooka(10);
         drawScale[0] = 0.7;
         armesWorms[1] = new Grenade(20);
         drawScale[1] = 0.9;
+        armesWorms[2] = new HolyGrenade(20);
+        drawScale[2] = 0.9;
         this.hauteurFenetre = hauteurFenetre;
         this.largeurFenetre = largeurFenetre;
         x = largeurFenetre/2-image.getWidth()/2;

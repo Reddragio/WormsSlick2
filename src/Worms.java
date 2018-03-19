@@ -109,17 +109,17 @@ public class Worms {
     }
 
     public void deplacer(int direction){
-		//Deplace le Worms à gauche ou à droite
-        int tempx = x;
-        int tempy = y;
-        if(direction==0){
-            tempx -= 1;//Si on va à gauche
-        }
-        else if(direction==1){
-            tempx += 1;//Si on va à droite
-        }
-        orientation = direction;//On garde l'orientation en mémoire, pour afficher le Worms dans la bonne direction ainsi que
-        //pour sauter dans la bonne direction
+        if (life > 0) {
+            //Deplace le Worms à gauche ou à droite
+            int tempx = x;
+            int tempy = y;
+            if (direction == 0) {
+                tempx -= 1;//Si on va à gauche
+            } else if (direction == 1) {
+                tempx += 1;//Si on va à droite
+            }
+            orientation = direction;//On garde l'orientation en mémoire, pour afficher le Worms dans la bonne direction ainsi que
+            //pour sauter dans la bonne direction
 
 		//Début de la gestion de la physique !
         ArrayList<Block> BlockEnContact = physic.getContactBlock(tempx,tempy);
@@ -167,7 +167,6 @@ public class Worms {
                 }
             }
         }
-
     }
 
     public boolean getMovingState(){
@@ -332,6 +331,9 @@ public class Worms {
 
     public static int getHitBoxHauteur() {
         return hitBoxHauteur;
+    }
+    public boolean isAlive(){
+        return life>0;
     }
 
     public String getCouleur() {

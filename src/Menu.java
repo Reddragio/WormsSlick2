@@ -215,7 +215,7 @@ public class Menu extends JFrame implements ActionListener {
             joueurs = new String[6][2];
             for (int i=0; i<6;i++) {
                 int k=0;
-                if(i>3){
+                if(i>=3){
                     k=1;
                 }
                 joueurs[i][0] = Noms[i];

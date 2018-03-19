@@ -1,3 +1,9 @@
+import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.util.ResourceLoader;
+
+import java.awt.*;
+import java.io.InputStream;
+
 public class GestionTours {
     protected final static double tempsDeplacement = 30000;
     protected final static double tempsVisee = 20000;
@@ -13,6 +19,7 @@ public class GestionTours {
     protected String couleurEquipe1;
     protected String couleurEquipe2;
     protected FenetreJeu mainFenetre;
+    protected TrueTypeFont font2;
 
     public GestionTours(Worms[] joueurs,FenetreJeu mainFenetre){
         //Initialisation
@@ -26,6 +33,17 @@ public class GestionTours {
         phase = 0;
         timer = 0;
         this.mainFenetre = mainFenetre;
+
+        //Init police nom et vie
+        try {
+            InputStream inputStream	= ResourceLoader.getResourceAsStream("./fonts/WormsFont.ttf");
+            Font police = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+            police = police.deriveFont(18f); // set font size
+            font2 = new TrueTypeFont(police, false);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void updateLogic(int delta){
@@ -67,6 +85,7 @@ public class GestionTours {
                 }
             }
             else if(phase==3){
+                timer+=delta;
                 if(timer>=tempsVisualiserExplosion){
                     phase = 4;
                 }
@@ -90,5 +109,18 @@ public class GestionTours {
 
     public Worms getActualWorms() {
         return actualWorms;
+    }
+
+    public void printTime(){
+        if(phase==0){
+            font2.drawString(20,20,String.valueOf((int)((tempsDeplacement-timer)*0.001)), org.newdawn.slick.Color.red);
+        }
+        else if(phase==1){
+            font2.drawString(20,20,String.valueOf((int)((tempsVisee-timer)*0.001)), org.newdawn.slick.Color.red);
+        }
+        else if(phase==3){
+            font2.drawString(20,20,String.valueOf((int)((tempsVisualiserExplosion-timer)*0.001)), org.newdawn.slick.Color.red);
+        }
+
     }
 }

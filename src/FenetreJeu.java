@@ -59,16 +59,16 @@ public class FenetreJeu extends BasicGame{
     protected final static int blocIndestructibles[] = {2,3};
     protected boolean experimentalVisee;
 
-    public FenetreJeu(int s,int x,int y, String[][] tab) {
+    public FenetreJeu(int s,int x,int y, String[][] tab) throws SlickException {
         super("Worms Fighter Z - Slick Version");
         blockSize=s;
         tabNomCoul = tab;
+
         monde=new GestionTerrain();
         monde.genererTerrain(x,y,1);
         monde.genererFaille();
         monde.genererIles();
         terrain=monde.getTerrainInitial();
-        stackedEnter=0;
 
     }
 
@@ -90,13 +90,20 @@ public class FenetreJeu extends BasicGame{
         changementPrint = new boolean[1];
         changementPrint[0] = true;
 
+        /*joueurs = new Worms[6];
+        joueurs[0] = new Worms("Rouge","1",terrain,blockSize,400,100);
+        joueurs[1] = new Worms("Rouge","2",terrain,blockSize,500,100);
+        joueurs[2] = new Worms("Rouge","3",terrain,blockSize,600,100);
+        joueurs[3] = new Worms("Bleu","1",terrain,blockSize,700,100);
+        joueurs[4] = new Worms("Bleu","2",terrain,blockSize,800,100);
+        joueurs[5] = new Worms("Bleu","3",terrain,blockSize,900,100);*/
 
+        joueurs = new Worms[6];
+        for(int i=0;i<tabNomCoul.length;i++){
+            joueurs[i] = new Worms(tabNomCoul[i][1],tabNomCoul[i][0],terrain,blockSize,100+i*50,100);
+        }
 
-        joueurs = new Worms[1];
-        joueurs[0] = new Worms(tabNomCoul[0][1],tabNomCoul[0][0],terrain,blockSize,500,100);
-        joueurs[0].setMovingState(true);
-        joueurs[0].setWeapon(new Bazooka(100));
-        joueurs[0].setPlaying(true);
+        stackedEnter=0;
 
         gestionTours = new GestionTours(joueurs,this);
 
@@ -211,11 +218,11 @@ public class FenetreJeu extends BasicGame{
             g.drawOval((float)(input.getMouseX()-rayonExplosion),(float)(input.getMouseY()-rayonExplosion),(float)(2*rayonExplosion),(float)(2*rayonExplosion));
         }
 
-
-
         if(isExplosion){
             aExplosion.draw((float)(projectileActuel.getx()-65),(float)(projectileActuel.gety()-65));
         }
+
+        gestionTours.printTime();
     }
 
     public void update(GameContainer container, int delta) throws SlickException {
@@ -223,6 +230,7 @@ public class FenetreJeu extends BasicGame{
 		//la boucle s'execute à la meme fréquence que la boucle render
 		//Ce qui explique qu'à l'heure actuelle le jeu soit plus ou moins rapide
 		//selon l'ordi
+        gestionTours.updateLogic(delta);
 
         for(Worms wor: joueurs){
             wor.applyPhysic(delta);
@@ -275,18 +283,20 @@ public class FenetreJeu extends BasicGame{
         if(tempEcoule - lastTempEcoule >= vitesseDep){
             lastTempEcoule = tempEcoule;
             for(Worms wor: joueurs) {
-                if(isMovingLeft){
-                    wor.deplacer(0);
-                }
-                else if(isMovingRight){
-                    wor.deplacer(1);
-                }
+                if(wor.isPlaying()){
+                    if(isMovingLeft){
+                        wor.deplacer(0);
+                    }
+                    else if(isMovingRight){
+                        wor.deplacer(1);
+                    }
 
-                if(augmentationAngleVisee){
-                    wor.augmenterAngle();
-                }
-                else if(diminutionAngleVisee){
-                    wor.diminuerAngle();
+                    if(augmentationAngleVisee){
+                        wor.augmenterAngle();
+                    }
+                    else if(diminutionAngleVisee){
+                        wor.diminuerAngle();
+                    }
                 }
             }
         }

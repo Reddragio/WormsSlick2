@@ -159,8 +159,8 @@ public class GestionTerrain {
             for(int k=0;k<epaisseur;k++){
                 for(int l=0;l<epaisseur/2;l++){
                     if(lasty+l<terrainInitial.length&&lastx +k-1<terrainInitial[0].length) {
-                        if(lasty + l>0 && lastx + k - l>0) terrainInitial[lasty + l][lastx + k - l] = 0;
-                        if(lasty + l>0 && lastx - k + l>0) terrainInitial[lasty + l][lastx - k + l] = 0;
+                        if(lasty + l<terrainInitial.length && lastx + k - l>0 && lastx + k - l<terrainInitial[0].length) terrainInitial[lasty + l][lastx + k - l] = 0;
+                        if(lasty + l<terrainInitial.length && lastx - k + l>0 && lastx - k + l<terrainInitial[0].length) terrainInitial[lasty + l][lastx - k + l] = 0;
                     }
                 }
             }
@@ -240,10 +240,23 @@ public class GestionTerrain {
                     terrainInitial[j][i]=1;
             }
         }
-        terrainInitial[hautDroite[1]][hautDroite[0]]=2;
-        terrainInitial[basDroite[1]][basDroite[0]]=2;
-        terrainInitial[hautGauche[1]][hautGauche[0]]=2;
-        terrainInitial[basGauche[1]][basGauche[0]]=2;
+        int rayonGauche=(basGauche[1]-hautGauche[1])/2;
+        int rayonDroite=(basDroite[1]-hautDroite[1])/2;
+
+        for(int i=hautGauche[1];i<=basGauche[1];i++){
+            for(int j=hautGauche[0];j>=hautGauche[0]-rayonGauche;j--){
+                if(Math.sqrt((i-(hautGauche[1]+basGauche[1])/2)*(i-(hautGauche[1]+basGauche[1])/2)+(j-hautGauche[0])*(j-hautGauche[0]))<=rayonGauche)
+                    if(0<i && i<terrainInitial.length && 0<j && j<terrainInitial[0].length)
+                        terrainInitial[i][j]=1;
+            }
+        }
+        for(int i=hautDroite[1];i<=basDroite[1];i++){
+            for(int j=hautDroite[0];j<=hautDroite[0]+rayonDroite;j++){
+                if(Math.sqrt((i-(hautDroite[1]+basDroite[1])/2)*(i-(hautDroite[1]+basDroite[1])/2)+(j-hautDroite[0])*(j-hautDroite[0]))<=rayonDroite)
+                    if(0<i && i<terrainInitial.length && 0<j && j<terrainInitial[0].length)
+                        terrainInitial[i][j]=1;
+            }
+        }
     }
 
     public int[][] getTerrainInitial() {

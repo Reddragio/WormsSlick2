@@ -110,65 +110,63 @@ public class Worms {
     }
 
     public void deplacer(int direction){
-		//Deplace le Worms à gauche ou à droite
-        int tempx = x;
-        int tempy = y;
-        if(direction==0){
-            tempx -= 1;//Si on va à gauche
-        }
-        else if(direction==1){
-            tempx += 1;//Si on va à droite
-        }
-        orientation = direction;//On garde l'orientation en mémoire, pour afficher le Worms dans la bonne direction ainsi que
-        //pour sauter dans la bonne direction
+        if (life > 0) {
+            //Deplace le Worms à gauche ou à droite
+            int tempx = x;
+            int tempy = y;
+            if (direction == 0) {
+                tempx -= 1;//Si on va à gauche
+            } else if (direction == 1) {
+                tempx += 1;//Si on va à droite
+            }
+            orientation = direction;//On garde l'orientation en mémoire, pour afficher le Worms dans la bonne direction ainsi que
+            //pour sauter dans la bonne direction
 
-		//Début de la gestion de la physique !
-        ArrayList<Block> BlockEnContact = physic.getContactBlock(tempx,tempy);
+            //Début de la gestion de la physique !
+            ArrayList<Block> BlockEnContact = physic.getContactBlock(tempx, tempy);
 
-        if(BlockEnContact.isEmpty()){//Si mouvement possible, alors on met à jour les coordonnées RÉELLES du Worms
-            x = tempx;
-            y = tempy;
-            physic.setX(x);
-            physic.setY(y);
-        }
-        else{//Si le mouvement est impossible, on regarde si le Worms n'a pas tenté d'escalader un block
-            Block BlocBasWorms = physic.blockEquivalent(tempx,tempy);
-            int yGrilleBasWorms = BlocBasWorms.y;
-            //compteurTest++;
-            //System.out.println(compteurTest);
-            //System.out.println("Worms x="+BlocBasWorms.x+" y="+BlocBasWorms.y);
-            boolean sameYforAll = true;
-            int max_diff = 1;
-            //La boucle suivante sert à regarder si tous les blocs en contact sont escaladables
-            //(sachant que la capacité d'escalade du Worms est défini par la variable ClimbAbility)
-            for(Block bContact:BlockEnContact){
-                if(bContact.y < yGrilleBasWorms - climbAbility +1){//detecte un bloc non escaladable
-                    sameYforAll = false;
+            if (BlockEnContact.isEmpty()) {//Si mouvement possible, alors on met à jour les coordonnées RÉELLES du Worms
+                x = tempx;
+                y = tempy;
+                physic.setX(x);
+                physic.setY(y);
+            } else {//Si le mouvement est impossible, on regarde si le Worms n'a pas tenté d'escalader un block
+                Block BlocBasWorms = physic.blockEquivalent(tempx, tempy);
+                int yGrilleBasWorms = BlocBasWorms.y;
+                //compteurTest++;
+                //System.out.println(compteurTest);
+                //System.out.println("Worms x="+BlocBasWorms.x+" y="+BlocBasWorms.y);
+                boolean sameYforAll = true;
+                int max_diff = 1;
+                //La boucle suivante sert à regarder si tous les blocs en contact sont escaladables
+                //(sachant que la capacité d'escalade du Worms est défini par la variable ClimbAbility)
+                for (Block bContact : BlockEnContact) {
+                    if (bContact.y < yGrilleBasWorms - climbAbility + 1) {//detecte un bloc non escaladable
+                        sameYforAll = false;
+                    } else {
+                        int test = yGrilleBasWorms - bContact.y + 1;
+                        if (test > max_diff) {
+                            max_diff = test;
+                        }
+                    }
                 }
-                else{
-                    int test = yGrilleBasWorms - bContact.y + 1;
-                    if(test>max_diff){
-                        max_diff = test;
+                if (sameYforAll) {//Si tous les blocs sont escaladables, alors on escalade !
+                    tempy -= (int) (blockSize * max_diff);//Pour se faire, on diminue la coordonnée y
+
+                    //Ce qui suit est une sécurité
+                    //Elle vérifie que l'escalade ne met pas le Worms à cheval sur des blocks,
+                    //ce qui serait physiquement impossible
+                    BlockEnContact = physic.getContactBlock(tempx, tempy);
+                    if (BlockEnContact.isEmpty()) {//Si tout va bien, alors on met à jour les coordonnées RÉELLES du Worms
+                        //Le Worms vient d'escalader un block !
+                        x = tempx;
+                        y = tempy;
+                        physic.setX(x);
+                        physic.setY(y);
                     }
                 }
             }
-            if(sameYforAll){//Si tous les blocs sont escaladables, alors on escalade !
-                tempy -= (int)(blockSize*max_diff);//Pour se faire, on diminue la coordonnée y
-
-                //Ce qui suit est une sécurité
-                //Elle vérifie que l'escalade ne met pas le Worms à cheval sur des blocks,
-                //ce qui serait physiquement impossible
-                BlockEnContact = physic.getContactBlock(tempx,tempy);
-                if(BlockEnContact.isEmpty()){//Si tout va bien, alors on met à jour les coordonnées RÉELLES du Worms
-					//Le Worms vient d'escalader un block !
-                    x = tempx;
-                    y = tempy;
-                    physic.setX(x);
-                    physic.setY(y);
-                }
-            }
         }
-
     }
 
     public boolean getMovingState(){
@@ -333,5 +331,8 @@ public class Worms {
 
     public static int getHitBoxHauteur() {
         return hitBoxHauteur;
+    }
+    public boolean isAlive(){
+        return life>0;
     }
 }

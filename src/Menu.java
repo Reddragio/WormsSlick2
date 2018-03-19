@@ -278,7 +278,7 @@ public class Menu extends JFrame implements ActionListener {
     }
 
     public ArrayList<String> nomWorm( int nb){
-        String[] Noms = {"Alberto", "Rex", "Wormito", "Fredo", "Gilbert", "Michel", "xXKevinXx","Ivan Touskivol","Chibroux","ElVerDeLaVega","Carlos"};
+        String[] Noms = {"Alberto", "Rex", "Wormito", "Fredo", "Gilbert", "Michel", "xXKevinXx","Ivan Touskivol","Chibroux","ElVerDeLaVega","Carlos","Jean-Marie","Jacky-Michel","Chibrette","Blaise P","Freud","Jean-Eude","Roméo","Pedro","Juan","Vladimir","Trump","Margaux","Wormy","Nadine","Géraldine","Krustufle","Marguerite"};
         ArrayList<String> tab= new ArrayList<String>();
         int i =0;
         int max = Noms.length;

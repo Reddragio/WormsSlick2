@@ -1,7 +1,11 @@
 // Chargement des bibliothèques Swing et AWT
+import java.awt.Font;
+import java.io.*;
+
 import org.newdawn.slick.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.Font;
 import java.awt.event.*;
 import java.util.ArrayList;
 
@@ -21,6 +25,8 @@ public class Menu extends JFrame implements ActionListener {
     private JComboBox couleurWorms2;
     private JLabel photo2;
     private String[][] joueurs;
+    private Font police;
+    private Font FatPolice;
 
     private ArrayList<String> colorWormsList;
 
@@ -30,6 +36,23 @@ public class Menu extends JFrame implements ActionListener {
         this.setResizable(false);
         this.setSize(500,800);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        //Police
+        try {
+            //create the font to use. Specify the size!
+            police = Font.createFont(Font.TRUETYPE_FONT, new File("fonts\\WormsFont.ttf")).deriveFont(12f);
+            FatPolice = Font.createFont(Font.TRUETYPE_FONT, new File("fonts\\WormsFont.ttf")).deriveFont(20f);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            //register the font
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("fonts\\WormsFont.ttf")));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch(FontFormatException e) {
+            e.printStackTrace();
+        }
+
+
 
         //Main Panel
         JLabel Main = new JLabel();
@@ -47,10 +70,13 @@ public class Menu extends JFrame implements ActionListener {
         Main.add(logo);
 
         //BoutonJouer
-        ImageIcon BoutonJouer = new ImageIcon("./images/Jouer.png");
+        ImageIcon BoutonJouerPresse = new ImageIcon("./images/Jouer.png");
+        ImageIcon BoutonJouer = new ImageIcon("./images/Jouer2.png");
         Jouer = new JButton(BoutonJouer);
+        Jouer.setRolloverIcon(BoutonJouerPresse);
         Jouer.setBounds(50,650,400,100);
         Jouer.setBorderPainted(false);
+        Jouer.setContentAreaFilled(false);
         Jouer.addActionListener(this);
         Main.add(Jouer);
 
@@ -64,33 +90,42 @@ public class Menu extends JFrame implements ActionListener {
 
         //Pour l'équipe 1
         JLabel Worms1 = new JLabel();
+        Worms1.setFont(FatPolice);
         Worms1.setText("Equipe 1 :");
-        Worms1.setBounds(20,180,60,40);
+        Worms1.setBounds(20,180,120,40);
 
         JLabel Nom11 = new JLabel();
         Nom11.setText("Nom n°1 :");
-        Nom11.setBounds(20,230,60,30);
+        Nom11.setBounds(20,230,80,30);
         JLabel Nom12 = new JLabel();
         Nom12.setText("Nom n°2 :");
-        Nom12.setBounds(20,270,60,30);
+        Nom12.setBounds(20,270,80,30);
         JLabel Nom13 = new JLabel();
         Nom13.setText("Nom n°3 :");
-        Nom13.setBounds(20,310,60,30);
-
+        Nom13.setBounds(20,310,80,30);
+        Nom11.setFont(police);
+        Nom12.setFont(police);
+        Nom13.setFont(police);
 
 
         //System.out.println(tab);
         textChoixNom11 = new JTextField(tab.get(0));
-        textChoixNom11.setBounds(80,230,90,30);
+        textChoixNom11.setBounds(100,230,100,30);
         textChoixNom12 = new JTextField(tab.get(1));
-        textChoixNom12.setBounds(80,270,90,30);
+        textChoixNom12.setBounds(100,270,100,30);
         textChoixNom13 = new JTextField(tab.get(2));
-        textChoixNom13.setBounds(80,310,90,30);
+        textChoixNom13.setBounds(100,310,100,30);
+        textChoixNom11.setFont(police);
+        textChoixNom12.setFont(police);
+        textChoixNom13.setFont(police);
+
+
 
         couleurWorms1 = new JComboBox(colorWormsList.toArray());
         couleurWorms1.setSelectedIndex(0);
         couleurWorms1.addActionListener(this);
         couleurWorms1.setBounds(60,550,90,40);
+        couleurWorms1.setFont(police);
 
         photo1 = new JLabel();
         photo1.setBounds(60,350,80,160);
@@ -99,29 +134,37 @@ public class Menu extends JFrame implements ActionListener {
 
         JLabel Worms2 = new JLabel();
         Worms2.setText("Equipe 2 :");
-        Worms2.setBounds(300,180,60,40);
+        Worms2.setBounds(280,180,120,40);
+        Worms2.setFont(FatPolice);
 
         JLabel Nom21 = new JLabel();
         Nom21.setText("Nom n°1 :");
-        Nom21.setBounds(300,230,60,30);
+        Nom21.setBounds(280,230,80,30);
         JLabel Nom22 = new JLabel();
         Nom22.setText("Nom n°2 :");
-        Nom22.setBounds(300,270,60,30);
+        Nom22.setBounds(280,270,80,30);
         JLabel Nom23 = new JLabel();
         Nom23.setText("Nom n°3 :");
-        Nom23.setBounds(300,310,60,30);
+        Nom23.setBounds(280,310,80,30);
+        Nom21.setFont(police);
+        Nom22.setFont(police);
+        Nom23.setFont(police);
 
         textChoixNom21 = new JTextField(tab.get(3));
-        textChoixNom21.setBounds(360,230,90,30);
+        textChoixNom21.setBounds(360,230,100,30);
         textChoixNom22 = new JTextField(tab.get(4));
-        textChoixNom22.setBounds(360,270,90,30);
+        textChoixNom22.setBounds(360,270,100,30);
         textChoixNom23 = new JTextField(tab.get(5));
-        textChoixNom23.setBounds(360,310,90,30);
+        textChoixNom23.setBounds(360,310,100,30);
+        textChoixNom21.setFont(police);
+        textChoixNom22.setFont(police);
+        textChoixNom23.setFont(police);
 
         couleurWorms2 = new JComboBox(colorWormsList.toArray());
         couleurWorms2.setSelectedIndex(1);
         couleurWorms2.addActionListener(this);
         couleurWorms2.setBounds(340,550,90,40);
+        couleurWorms2.setFont(police);
 
         photo2 = new JLabel();
         photo2.setBounds(340,350,80,160);

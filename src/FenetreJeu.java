@@ -605,6 +605,7 @@ public class FenetreJeu extends BasicGame{
             int xs=(int) (i*spawnArea-Math.random()*spawnArea);
             int ys=monde.surfaceBlock(xs);
             wor.setpos(xs*blockSize,ys*blockSize-4);
+            i++;
         }
 
     }

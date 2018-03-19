@@ -43,6 +43,7 @@ public class FenetreJeu extends BasicGame{
     protected boolean enterRelache;
     protected String[][] tabNomCoul;
     protected GestionTerrain monde; //permet de connaitre le terrain tel qu'il a été généré (avant les explosions)
+    protected GestionTours gestionTours;
 
     //Explosion
     protected Animation aExplosion;
@@ -92,10 +93,12 @@ public class FenetreJeu extends BasicGame{
 
 
         joueurs = new Worms[1];
-        joueurs[0] = new Worms(1,tabNomCoul[0][1],tabNomCoul[0][0],terrain,blockSize,changementPrint,500,100);
+        joueurs[0] = new Worms(tabNomCoul[0][1],tabNomCoul[0][0],terrain,blockSize,500,100);
         joueurs[0].setMovingState(true);
         joueurs[0].setWeapon(new Bazooka(100));
         joueurs[0].setPlaying(true);
+
+        gestionTours = new GestionTours(joueurs,this);
 
         this.container = container;
         isMovingLeft = false;
@@ -264,7 +267,7 @@ public class FenetreJeu extends BasicGame{
                 projectileActuel.explosion(joueurs);
                 isExplosion=true;
                 phaseProjectile = false;
-                joueurs[0].setMovingState(true);
+                gestionTours.setPhase(3);
             }
         }
 
@@ -391,7 +394,8 @@ public class FenetreJeu extends BasicGame{
                 }
                 else if(Input.KEY_ENTER == key){
                     phaseInventaire = true;
-                    joueurs[0].setMovingState(false);
+                    wor.setMovingState(false);
+                    gestionTours.setPhase(1);
                 }
             }
             if(wor.getAimingState() && !phaseChoixPuissance){
@@ -412,6 +416,7 @@ public class FenetreJeu extends BasicGame{
                     phaseChoixPuissance = true;
                     timerChoixPuissance = 0;
                     enterRelache = false;
+                    gestionTours.setPhase(2);
                 }
             }
         }
@@ -488,8 +493,8 @@ public class FenetreJeu extends BasicGame{
                 for(Worms wor:joueurs){
                     if(wor.isPlaying){
                         if(wor.interactInventaire(input)){
-                            joueurs[0].setAimingState(true);
-                            joueurs[0].initVisee();
+                            wor.setAimingState(true);
+                            wor.initVisee();
                             phaseInventaire = false;
                             }
                     }
@@ -500,8 +505,8 @@ public class FenetreJeu extends BasicGame{
             }
         }
         else if(button==1){//Clik droit
-            joueurs[0].set_x(x);
-            joueurs[0].set_y(y);
+            (gestionTours.getActualWorms()).set_x(x);
+            (gestionTours.getActualWorms()).set_y(y);
         }
         else if(button==2){//Clik molette
             visualiserExplosion = !visualiserExplosion;
@@ -594,5 +599,7 @@ public class FenetreJeu extends BasicGame{
 
     }
 
-
+    public void setPhaseInventaire(boolean phaseInventaire) {
+        this.phaseInventaire = phaseInventaire;
+    }
 }

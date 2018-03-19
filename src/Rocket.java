@@ -61,7 +61,7 @@ public class Rocket extends Projectile {
         if(facteurPropulsion<0){
             facteurPropulsion = 0;
         }
-        propulsion = new Force( facteurPropulsion*normePropulsion*Math.cos(drawAngle), -(g/200.0)*(9.0/10.0)+facteurPropulsion*normePropulsion*Math.sin(drawAngle));
+        propulsion = new Force( facteurPropulsion*normePropulsion*Math.cos(drawAngle), -(g/200.0)*(7.0/10.0)+facteurPropulsion*normePropulsion*Math.sin(drawAngle));
         physic.addForce(propulsion);
         accumulateurPropulsion+= delta;
     }

@@ -48,11 +48,9 @@ public class Worms {
     protected boolean isMoving; //Servira à savoir si un Worms est dans sa phase de déplacement
     protected boolean isAiming; //est en train de viser
     protected boolean isPlaying;
+    protected boolean aDejaJoue;
 
-    public Worms(int t, String c, String n,int[][] terrain,int blockSize,boolean[] changementPrint,int x,int y) throws SlickException { //t=0 ou 1, pour savoir quelle équipe
-        if(t==0) couleur=org.newdawn.slick.Color.blue;
-        else couleur=org.newdawn.slick.Color.red;
-
+    public Worms(String c, String n,int[][] terrain,int blockSize,int x,int y) throws SlickException { //t=0 ou 1, pour savoir quelle équipe
         name=n;
         Couleur=c;
         life=200;
@@ -72,6 +70,7 @@ public class Worms {
         skinLeft = new org.newdawn.slick.Image("images/Worm"+c+"_left.png");
         skinRight = new org.newdawn.slick.Image("images/Worm"+c+"_right.png");
         skinGrave = new org.newdawn.slick.Image("/images/GraveStone.png");
+        aDejaJoue = false;
 
         inventaire = new Inventaire(terrain[0].length*blockSize,terrain.length*blockSize);
         lastTimeDegatChute = 0;
@@ -334,4 +333,17 @@ public class Worms {
     public static int getHitBoxHauteur() {
         return hitBoxHauteur;
     }
+
+    public String getCouleur() {
+        return Couleur;
+    }
+
+    public void setaDejaJoue(boolean aDejaJoue) {
+        this.aDejaJoue = aDejaJoue;
+    }
+
+    public boolean aDejaJoue() {
+        return aDejaJoue;
+    }
+
 }

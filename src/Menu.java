@@ -29,8 +29,11 @@ public class Menu extends JFrame implements ActionListener {
     private Font FatPolice;
 
     private ArrayList<String> colorWormsList;
+    private boolean seulementUneFois;
 
-    public Menu(){
+    protected Music themeWorms;
+
+    public Menu() throws SlickException {
         this.setTitle("Menu Worms");
         this.setLayout(null);
         this.setResizable(false);
@@ -197,10 +200,17 @@ public class Menu extends JFrame implements ActionListener {
         //Affichage
         this.setContentPane(Main);
         this.setVisible(true);
+
+        //Musique
+        themeWorms = new Music("music/worms-theme-song.ogg");
+        themeWorms.play();
+
+        seulementUneFois = true;
     }
     public void actionPerformed (ActionEvent e){
-        if(e.getSource()== Jouer){
-
+        if(seulementUneFois && e.getSource()== Jouer){
+            seulementUneFois = false;
+            Jouer.removeActionListener(this);
             //Noms définitifs des worms
             String[] Noms = {textChoixNom11.getText(),textChoixNom12.getText(),textChoixNom13.getText(),textChoixNom21.getText(),textChoixNom22.getText(),textChoixNom23.getText()};
 
@@ -226,32 +236,46 @@ public class Menu extends JFrame implements ActionListener {
 
             this.setVisible(false);
             System.out.println("Lancement de la partie :) !...");
+            themeWorms.stop();
+            /*try
+            {
+                Thread.sleep(200);
+            }
+            catch(InterruptedException ex)
+            {
+                Thread.currentThread().interrupt();
+            }*/
             try{
                 launchGame(joueurs);
             }
             catch(SlickException e1){
                 //Sert à contourner les exceptions slicks génériques
+            } catch (IOException e1) {
+                e1.printStackTrace();
             }
 
         }
-        if(e.getSource() == couleurWorms1 || e.getSource() == couleurWorms2){
+        if(seulementUneFois &&(e.getSource() == couleurWorms1 || e.getSource() == couleurWorms2)){
             updateLabel(colorWormsList,couleurWorms1,couleurWorms2);
         }
 
     }
 
-    public void launchGame(String[][] tab) throws SlickException{
+    public void launchGame(String[][] tab) throws SlickException, IOException {
         int tailleBloc = 5;
-        int blocLargeur = 300; // imperativement des multiples de 10, pour que le dessin des textures se fasse sans bug
-        int blocHauteur = 200;
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double width = screenSize.getWidth();
+        double height = screenSize.getHeight();
+        int blocLargeur = (int)(width/tailleBloc); // imperativement des multiples de 10, pour que le dessin des textures se fasse sans bug
+        int blocHauteur = (int)(height/tailleBloc);
         AppGameContainer app = new AppGameContainer(new FenetreJeu(tailleBloc,blocLargeur,blocHauteur,tab));
-        app.setDisplayMode(blocLargeur*tailleBloc, blocHauteur*tailleBloc, false); // Mode fenêtré
+        app.setDisplayMode(blocLargeur*tailleBloc, blocHauteur*tailleBloc, true); // Mode fenêtré
         app.setVSync(false);
         app.setTargetFrameRate(120);
         app.start();
     }
 
-    public static void main (String[] args){
+    public static void main (String[] args) throws SlickException {
         Menu menu = new Menu();
     }
 

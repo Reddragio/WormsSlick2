@@ -1,5 +1,6 @@
 import org.newdawn.slick.*;
 import javax.swing.*;
+import java.io.IOException;
 
 public class FenetreJeu extends BasicGame{
     protected GameContainer container;
@@ -23,12 +24,14 @@ public class FenetreJeu extends BasicGame{
     protected long lastTempEcoule;
     protected BigImage sky;
     protected BigImage big_ground;
-    protected Image water;
+    protected BigImage sea;
     protected int texture_size;
     protected int hauteur_draw_texture;
     protected int largeur_draw_texture;
-    protected Music themeWorms;
-    protected boolean themeWormsActivation;
+    protected Music[] battlePlayList;
+    protected Music musiqueActuelle;
+    protected int musicIndex;
+    protected boolean musicActivation;
     protected int stackedEnter; //permet de gerer le double saut
     protected long lastTime; //permet de gerer le double saut
 
@@ -61,7 +64,7 @@ public class FenetreJeu extends BasicGame{
     protected boolean cheatMode;
     protected int lastDelta;
 
-    public FenetreJeu(int s,int x,int y, String[][] tab) throws SlickException {
+    public FenetreJeu(int s,int x,int y, String[][] tab) throws SlickException, IOException {
         super("Worms Fighter Z - Slick Version");
         blockSize=s;
         tabNomCoul = tab;
@@ -70,6 +73,11 @@ public class FenetreJeu extends BasicGame{
         monde.genererTerrain(x,y,1);
         monde.genererFaille();
         monde.genererIles();
+
+        monde.genererTerrain(x,y,"images/map1.bmp");
+
+        monde.generateSea();
+        monde.generateLimite(x,y);
         terrain=monde.getTerrainInitial();
 
         lastDelta = 0;
@@ -108,7 +116,7 @@ public class FenetreJeu extends BasicGame{
 
         stackedEnter=0;
 
-        gestionTours = new GestionTours(joueurs,this);
+        gestionTours = new GestionTours(joueurs,this,largeur,hauteur);
 
         this.container = container;
         isMovingLeft = false;
@@ -119,10 +127,17 @@ public class FenetreJeu extends BasicGame{
         lastTempEcoule = 0;
 
         sky = new BigImage("images/Mountain_Background.png");
-        big_ground = new BigImage("images/big_ground.png");
+        big_ground = new BigImage("images/big_ground_FullHD.png");
+        sea = new BigImage("images/sea_dark.png");
 
-        themeWorms = new Music("music/worms-theme-song.ogg");
-        themeWormsActivation = false;
+        battlePlayList = new Music[4];
+        battlePlayList[0] = new Music("music/battle1.ogg");
+        battlePlayList[1] = new Music("music/battle2.ogg");
+        battlePlayList[2] = new Music("music/battle3.ogg");
+        battlePlayList[3] = new Music("music/battle4.ogg");
+        musiqueActuelle = battlePlayList[0];
+        musicIndex = 0;
+        musicActivation = true;
 
         phaseProjectile = false;
         phaseChoixPuissance = false;
@@ -181,22 +196,22 @@ public class FenetreJeu extends BasicGame{
             }
         }
 
-        for(int i=0;i<terrain.length;i++){
+        /*for(int i=0;i<terrain.length;i++){
             for(int j=0;j<terrain[0].length;j++){
-                /*if(terrain[i][j]==0){
+                if(terrain[i][j]==0){
                     g.setColor(Color.cyan);
                     g.fillRect(blockSize*j,blockSize*i,blockSize,blockSize);
                 }
                 if(terrain[i][j]==1){
                     ground.draw(blockSize*j,blockSize*i);
-                }*/
+                }
                 if(terrain[i][j]==2){
                     g.setColor(Color.blue);
                     g.fillRect(blockSize*j,blockSize*i,blockSize,blockSize);
                 }
 
             }
-        }
+        }*/
 
         for(Worms wor: joueurs){
             wor.draw(g);
@@ -226,6 +241,8 @@ public class FenetreJeu extends BasicGame{
             aExplosion.draw((float)(projectileActuel.getx()-65),(float)(projectileActuel.gety()-65));
         }
 
+        sea.draw(0,monde.getNiveauEau()*blockSize);
+
         gestionTours.printTime();
         gestionTours.printMessage(lastDelta);
 
@@ -241,7 +258,7 @@ public class FenetreJeu extends BasicGame{
         lastDelta = delta;
 
         for(Worms wor: joueurs){
-            wor.applyPhysic(delta,gestionTours);
+            wor.applyPhysic(delta,gestionTours,monde);
             /*if(wor.isPlaying()){
                 if(phaseInventaire){
 
@@ -277,7 +294,7 @@ public class FenetreJeu extends BasicGame{
         }
 
         if(phaseProjectile){
-            projectileActuel.applyPhysic(delta);
+            projectileActuel.applyPhysic(delta,joueurs);
             timerExplosionProjectile += delta;
             if(timerExplosionProjectile >= projectileActuel.getChronoExplosion() || !projectileActuel.isAlive()){
                 projectileActuel.explosion(joueurs);
@@ -318,6 +335,9 @@ public class FenetreJeu extends BasicGame{
             }
 
         }
+
+        //Changement de musique
+        changeMusic();
     }
 
     /*public static void main(String[] args) throws SlickException {
@@ -439,13 +459,12 @@ public class FenetreJeu extends BasicGame{
             }
         }
         if (Input.KEY_M == key){
-            if(!themeWormsActivation){
-                themeWorms.loop();
-                themeWormsActivation = true;
+            musicActivation = !musicActivation;
+            if(musicActivation){
+                musiqueActuelle.setVolume(1);
             }
             else{
-                themeWorms.stop();
-                themeWormsActivation = false;
+                musiqueActuelle.setVolume(0);
             }
         }
         else if(Input.KEY_B == key){
@@ -631,5 +650,22 @@ public class FenetreJeu extends BasicGame{
 
     public void setPhaseInventaire(boolean phaseInventaire) {
         this.phaseInventaire = phaseInventaire;
+    }
+
+    public void changeMusic(){
+        if(!musiqueActuelle.playing()){
+            musiqueActuelle = battlePlayList[musicIndex];
+            musiqueActuelle.play();
+            if(musicActivation){
+                musiqueActuelle.setVolume(1);
+            }
+            else{
+                musiqueActuelle.setVolume(0);
+            }
+            musicIndex++;
+            if(musicIndex==battlePlayList.length){
+                musicIndex=0;
+            }
+        }
     }
 }

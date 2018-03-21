@@ -96,7 +96,7 @@ public class Worms {
         dico.put("Vert",Color.green);
     }
 
-    public void applyPhysic(int delta,GestionTours gestionTours){
+    public void applyPhysic(int delta,GestionTours gestionTours,GestionTerrain monde){
         physic.applyForces(delta);
         x = physic.getPixelCoordX();
         y = physic.getPixelCoordY();
@@ -104,8 +104,9 @@ public class Worms {
         applyDegatChute();
 
         //detection mort
-        if(alive && life<=0){
+        if(alive && (life<=0 || isUnderwater(monde))){
             alive = false;
+            life = -999;
             gestionTours.nouvelleMort(this);
         }
     }
@@ -299,6 +300,10 @@ public class Worms {
         }
     }
 
+    public boolean isUnderwater(GestionTerrain monde){
+        return y>(monde.getNiveauEau()+1)*blockSize;
+    }
+
     public void setWeapon(Weapon armeTemp){
         armeActuelle = armeTemp;
     }
@@ -373,5 +378,9 @@ public class Worms {
 
     public String getName() {
         return name;
+    }
+
+    public boolean inside(int x1,int y1){
+        return x <= x1 && x1 <= x+hitBoxLargeur && y-hitBoxHauteur<= y1 && y1<=y;
     }
 }

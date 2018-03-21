@@ -37,11 +37,13 @@ public class GestionTours {
     protected org.newdawn.slick.Color couleurMessage;
     protected HashMap<String, org.newdawn.slick.Color> dico;
     protected boolean theEnd;
+    protected int hauteur;
+    protected int largeur;
 
-    public GestionTours(Worms[] joueurs,FenetreJeu mainFenetre) throws SlickException {
+    public GestionTours(Worms[] joueurs,FenetreJeu mainFenetre,int largeur,int hauteur) throws SlickException {
         //Initialisation
         chrono = new org.newdawn.slick.Image("images/mini_chrono.png");
-        endScreen = new BigImage("images/endScreen.png");
+        endScreen = new BigImage("images/endScreen.jpg");
         this.joueurs = joueurs;
         nombreJoueurs = joueurs.length;
         nombreJoueursEnVie = joueurs.length;
@@ -56,6 +58,8 @@ public class GestionTours {
         this.mainFenetre = mainFenetre;
         indexTeam1 = 0;
         indexTeam2 = 3;
+        this.largeur = largeur;
+        this.hauteur = hauteur;
 
         theEnd = false;
 
@@ -182,23 +186,23 @@ public class GestionTours {
 
     public void printTime(){
         if(phase==0){
-            font2.drawString(1430,25,String.valueOf((int)((tempsDeplacement-timer)*0.001)), org.newdawn.slick.Color.black);
+            font2.drawString(largeur-70,25,String.valueOf((int)((tempsDeplacement-timer)*0.001)), org.newdawn.slick.Color.black);
         }
         else if(phase==1){
-            font2.drawString(1430,25,String.valueOf((int)((tempsVisee-timer)*0.001)), org.newdawn.slick.Color.black);
+            font2.drawString(largeur-70,25,String.valueOf((int)((tempsVisee-timer)*0.001)), org.newdawn.slick.Color.black);
         }
         else if(phase==3){
-            font2.drawString(1430,25,String.valueOf((int)((tempsVisualiserExplosion-timer)*0.001)), org.newdawn.slick.Color.black);
+            font2.drawString(largeur-70,25,String.valueOf((int)((tempsVisualiserExplosion-timer)*0.001)), org.newdawn.slick.Color.black);
         }
         if(phase==0 || phase==1 || phase==3){
-            chrono.draw(1350,2);
+            chrono.draw(largeur-150,2);
         }
 
     }
 
     public void printMessage(int delta){
         if(printingMessage){
-            font2.drawString(750 - (messageAffiche.length()/2)*20,490,messageAffiche,couleurMessage);
+            font2.drawString( largeur/2 - (messageAffiche.length()/2)*20,hauteur/2-10,messageAffiche,couleurMessage);
             timerMessage+=delta;
             if(timerMessage>=tempsMessage){
                 printingMessage = false;
@@ -225,11 +229,11 @@ public class GestionTours {
                 messageAffiche = "L'équipe "+joueurs[0].getCouleur()+" a remporté la partie !";
                 couleurMessage = dico.get(joueurs[0].getCouleur());
             }
-            font2.drawString(750 - (messageAffiche.length()/2)*20,100,messageAffiche,couleurMessage);
+            font2.drawString(largeur/2 - (messageAffiche.length()/2)*20,hauteur/10,messageAffiche,couleurMessage);
 
             messageAffiche = "Merci d'avoir joué à notre jeu ;) !";
             couleurMessage = org.newdawn.slick.Color.magenta;
-            font2.drawString(750 - (messageAffiche.length()/2)*20,200,messageAffiche,couleurMessage);
+            font2.drawString(largeur/2 - (messageAffiche.length()/2)*20,hauteur/5,messageAffiche,couleurMessage);
         }
     }
 }

@@ -8,6 +8,7 @@ public class Rocket extends Projectile {
     protected Force propulsion;
     protected int accumulateurPropulsion;
     protected double facteurPropulsion;
+    protected boolean wormsTouche;
 
     public Rocket(int terrain[][], int blockSize,Worms tireur) throws SlickException {
         pictureLeft = new org.newdawn.slick.Image("images/rocket_left.png");
@@ -18,8 +19,8 @@ public class Rocket extends Projectile {
         alive = true;
         normeVitesse = 2000;
         normePropulsion = (g/200.0);
-        hitBoxHauteur = 20;
-        hitBoxLargeur = 40;
+        hitBoxHauteur = 5;
+        hitBoxLargeur = 5;
         masse = 0.01;
         rayonExplosion = 70;
         this.terrain = terrain;
@@ -29,7 +30,7 @@ public class Rocket extends Projectile {
         largeurBlock = terrain[0].length;
         propulsion = new Force(42,42);
         accumulateurPropulsion = 1;
-        degat=200;
+        degat=75;
         normeSouffleExplosion = 900;
         this.tireur = tireur;
 
@@ -51,8 +52,16 @@ public class Rocket extends Projectile {
         pictureRight.draw(x,y-pictureRight.getHeight()+1);
     }
 
-    public void specialPhysic(int delta){
-        if(physic.contactDetected()){
+    public void specialPhysic(int delta,Worms[] joueurs){
+        wormsTouche = false;
+        for(Worms wor:joueurs){
+            if(wor.inside(x,y) && wor!=tireur){
+                wormsTouche = true;
+            }
+        }
+
+        if(physic.contactDetected() || wormsTouche){
+            //&& (System.currentTimeMillis()-launchTime) >= 2000
             alive = false;
         }
         drawAngle = Math.atan2(physic.getVitesse_y(),physic.getVitesse_x());

@@ -1,7 +1,14 @@
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 public class GestionTerrain {
     private int[][] terrainInitial; //Le terrain tel qu'il est après la génération
     int[] plusBas;
     int[] plusHaut;
+    protected int niveauEau;
 
     public GestionTerrain() {
     }
@@ -33,11 +40,8 @@ public class GestionTerrain {
                     }
                 }
             }
-            for(int i=0;i<t[0].length;i++){
-                t[t.length-1][i]=2;
-                t[t.length-2][i]=2;
-                t[t.length-3][i]=2;
-            }
+
+
         }
         else if(type >=2){
             if(type == 2){
@@ -57,20 +61,30 @@ public class GestionTerrain {
                 }
             }
         }
-        //Ajout de bloc intraversables invisibles sur les bords de la map
-        for(int i=0;i<y;i+=y-1){
-            for(int j=0;j<x;j++){
-                t[i][j] = 3;
-            }
-        }
-        for(int j=0;j<x;j+=x-1){
-            for(int i=0;i<y;i++){
-                t[i][j] = 3;
-            }
-        }
+
         terrainInitial=t;
         plusBas=pointLePlusBas();
         plusHaut=pointLePlusHaut();
+        niveauEau = y-40;
+    }
+
+    public void genererTerrain(int x, int y, String adresse) throws IOException {
+        int[][] t = new int[y][x];
+        BufferedImage image = ImageIO.read(new File(adresse));
+
+        for (int xPixel = 0; xPixel < image.getWidth(); xPixel++) //*
+        {
+            for (int yPixel = 0; yPixel < image.getHeight(); yPixel++) //*
+            {
+                int color = image.getRGB(xPixel,yPixel); //*
+                if (color== Color.BLACK.getRGB()) {
+                    t[yPixel][xPixel] = 1;
+                } else {
+                    t[yPixel][xPixel] = 0; // ?
+                }
+            }
+        }
+        terrainInitial = t;
     }
 
     public int[] pointLePlusBas(){
@@ -276,5 +290,34 @@ public class GestionTerrain {
     }
     public int randomIntRel(double intervale){
         return (int) (Math.random()*intervale-Math.random()*intervale);
+    }
+
+    public int getNiveauEau() {
+        return niveauEau;
+    }
+
+    public void generateSea(){
+        for(int i=1;i<terrainInitial[0].length-1;i++){
+            for(int j=niveauEau;j<terrainInitial.length-2;j++){
+                terrainInitial[j][i] = 2;
+            }
+        }
+    }
+
+    public void generateLimite(int x, int y){
+        //Ajout de bloc intraversables invisibles sur les bords de la map
+        for(int i=0;i<y;i+=y-1){
+            for(int j=0;j<x;j++){
+                terrainInitial[i][j] = 3;
+                if(i==y-1){
+                    terrainInitial[i-1][j] = 3;
+                }
+            }
+        }
+        for(int j=0;j<x;j+=x-1){
+            for(int i=0;i<y;i++){
+                terrainInitial[i][j] = 3;
+            }
+        }
     }
 }

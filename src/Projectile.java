@@ -28,11 +28,14 @@ public abstract class Projectile {
     protected int rayonExplosion;
     protected double normeSouffleExplosion;
     protected Worms tireur;
+    protected long launchTime;
 
     public void launch(Weapon lanceur,double pourcentagePuissance){
         pourcentagePuissance /= 100;
-        this.x = lanceur.getxCentreRotation();
-        this.y = lanceur.getyCentreRotation();
+        //this.x = lanceur.getxCentreRotation();
+        //this.y = lanceur.getyCentreRotation();
+        this.x = tireur.getX();
+        this.y = tireur.getY();
         double angle = 2;
         if(lanceur.getOrientationWorms()==0){
             angle = 180 - lanceur.getLastAngle();
@@ -51,13 +54,14 @@ public abstract class Projectile {
         physic.set_vitesse_x((int)( pourcentagePuissance * normeVitesse* Math.cos(angle)));
         physic.set_vitesse_y((int)( pourcentagePuissance * normeVitesse* Math.sin(angle)));
         specialInit(pourcentagePuissance);
+        launchTime = System.currentTimeMillis();
     }
 
-    public void applyPhysic(int delta){
+    public void applyPhysic(int delta,Worms[] joueurs){
         physic.applyForces(delta);
         x = physic.getPixelCoordX();
         y = physic.getPixelCoordY();
-        specialPhysic(delta);
+        specialPhysic(delta,joueurs);
     }
 
     public void removeLaunchForce(){
@@ -170,7 +174,7 @@ public abstract class Projectile {
 
     public abstract void draw(org.newdawn.slick.Graphics g);
 
-    public abstract void specialPhysic(int delta);
+    public abstract void specialPhysic(int delta,Worms[] joueurs);
 
     public abstract void specialInit(double pourcentagePuissance);
 

@@ -20,7 +20,7 @@ public class GrenadeProjectile extends Projectile{
         antiExplosion = false;
         hauteurBlock = terrain.length;
         largeurBlock = terrain[0].length;
-        degat=50;
+        degat=75;
         normeSouffleExplosion = 800;
         this.tireur = tireur;
 
@@ -40,7 +40,7 @@ public class GrenadeProjectile extends Projectile{
         pictureRight.draw(x,y-pictureRight.getHeight()+1);
     }
 
-    public void specialPhysic(int delta){}
+    public void specialPhysic(int delta,Worms[] joueurs){}
 
     public void specialInit(double pourcentagePuissance){}
 

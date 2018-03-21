@@ -10,7 +10,7 @@ public class Balle extends Projectile {
 
     public void draw(org.newdawn.slick.Graphics g){};
 
-    public void specialPhysic(int delta) {
+    public void specialPhysic(int delta,Worms[] joueurs) {
 
     }
 

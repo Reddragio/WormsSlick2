@@ -383,4 +383,14 @@ public class Worms {
     public boolean inside(int x1,int y1){
         return x <= x1 && x1 <= x+hitBoxLargeur && y-hitBoxHauteur<= y1 && y1<=y;
     }
+
+    public void setInventaire(Inventaire inventaire) {
+        this.inventaire = inventaire;
+    }
+
+    public void synchroniserInventaire(Worms wor){
+        wor.setInventaire(inventaire);
+    }
+
+
 }

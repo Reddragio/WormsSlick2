@@ -113,6 +113,10 @@ public class FenetreJeu extends BasicGame{
         for(int i=0;i<tabNomCoul.length;i++){
             joueurs[i] = new Worms(tabNomCoul[i][1],tabNomCoul[i][0],terrain,blockSize,100+i*50,100);
         }
+        joueurs[0].synchroniserInventaire(joueurs[1]);
+        joueurs[0].synchroniserInventaire(joueurs[2]);
+        joueurs[3].synchroniserInventaire(joueurs[4]);
+        joueurs[3].synchroniserInventaire(joueurs[5]);
 
         stackedEnter=0;
 

@@ -197,19 +197,20 @@ public class Menu extends JFrame implements ActionListener {
         Main.add(textChoixNom23);
         Main.add(photo2);
 
+        //Musique
+        themeWorms = new Music("music/worms-theme-song.ogg");
+        themeWorms.loop();
+
+        seulementUneFois = true;
+
         //Affichage
         this.setContentPane(Main);
         this.setVisible(true);
-
-        //Musique
-        themeWorms = new Music("music/worms-theme-song.ogg");
-        themeWorms.play();
-
-        seulementUneFois = true;
     }
     public void actionPerformed (ActionEvent e){
         if(seulementUneFois && e.getSource()== Jouer){
             seulementUneFois = false;
+            themeWorms.stop();
             Jouer.removeActionListener(this);
             //Noms définitifs des worms
             String[] Noms = {textChoixNom11.getText(),textChoixNom12.getText(),textChoixNom13.getText(),textChoixNom21.getText(),textChoixNom22.getText(),textChoixNom23.getText()};
@@ -236,7 +237,6 @@ public class Menu extends JFrame implements ActionListener {
 
             this.setVisible(false);
             System.out.println("Lancement de la partie :) !...");
-            themeWorms.stop();
             /*try
             {
                 Thread.sleep(200);

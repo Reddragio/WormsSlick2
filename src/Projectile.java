@@ -34,8 +34,8 @@ public abstract class Projectile {
         pourcentagePuissance /= 100;
         //this.x = lanceur.getxCentreRotation();
         //this.y = lanceur.getyCentreRotation();
-        this.x = tireur.getX();
-        this.y = tireur.getY();
+        this.x = tireur.getX() + tireur.hitBoxLargeur/2;
+        this.y = tireur.getY() - tireur.hitBoxHauteur/2;
         double angle = 2;
         if(lanceur.getOrientationWorms()==0){
             angle = 180 - lanceur.getLastAngle();
@@ -124,7 +124,7 @@ public abstract class Projectile {
                 //Degats
                 degatEffectif = facteurDistance * degat;
                 wor.modifierVie(-degatEffectif);
-                System.out.println(degatEffectif);
+                //System.out.println(degatEffectif);
 
                 //Worms projeté par le souffle de l'explosion
                 deltaX = wor.getX()+ wor.getHitBoxLargeur()/2 - x;

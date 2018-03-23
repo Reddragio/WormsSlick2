@@ -219,6 +219,9 @@ public class FenetreJeu extends BasicGame{
 
         for(Worms wor: joueurs){
             wor.draw(g);
+        }
+
+        for(Worms wor: joueurs){
             if(wor.getAimingState()){
                 wor.drawVisee();
                 if(phaseChoixPuissance && timerChoixPuissance<= chronoChoixPuissance){

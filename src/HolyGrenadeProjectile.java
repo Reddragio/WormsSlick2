@@ -11,5 +11,6 @@ public class HolyGrenadeProjectile extends GrenadeProjectile{
         bruitFail = new Sound("music/failSound.ogg");
         rayonExplosion = 150;
         degat=150;
+        normeSouffleExplosion = 1200;
     }
 }

@@ -221,6 +221,14 @@ public class FenetreJeu extends BasicGame{
             wor.draw(g);
         }
 
+        if(isExplosion){
+            aExplosion.draw((float)(projectileActuel.getx()-65),(float)(projectileActuel.gety()-65));
+        }
+
+        for(Worms wor:joueurs){
+            wor.printPerteVie(lastDelta);
+        }
+
         for(Worms wor: joueurs){
             if(wor.getAimingState()){
                 wor.drawVisee();
@@ -242,10 +250,6 @@ public class FenetreJeu extends BasicGame{
         if(visualiserExplosion){
             g.setColor(Color.red);
             g.drawOval((float)(input.getMouseX()-rayonExplosion),(float)(input.getMouseY()-rayonExplosion),(float)(2*rayonExplosion),(float)(2*rayonExplosion));
-        }
-
-        if(isExplosion){
-            aExplosion.draw((float)(projectileActuel.getx()-65),(float)(projectileActuel.gety()-65));
         }
 
         sea.draw(0,monde.getNiveauEau()*blockSize);

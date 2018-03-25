@@ -52,6 +52,15 @@ public class Worms {
     protected boolean alive;
     protected int ordre;
 
+    //Affichage de la perte de pvs
+    protected long timerMessage;
+    protected long tempsMessage;
+    protected String messageAffiche;
+    protected boolean printingMessage;
+    protected org.newdawn.slick.Color couleurMessage;
+    protected int xDegat;
+    protected int yDegat;
+
     public Worms(String c, String n,int[][] terrain,int blockSize,int x,int y) throws SlickException { //t=0 ou 1, pour savoir quelle équipe
         name=n;
         Couleur=c;
@@ -94,6 +103,15 @@ public class Worms {
         dico.put("Noir",Color.black);
         dico.put("Blanc",Color.white);
         dico.put("Vert",Color.green);
+
+        //Affichage de la perte de pvs
+        timerMessage = 0;
+        tempsMessage = 0;
+        messageAffiche = "";
+        printingMessage = false;
+        couleurMessage = org.newdawn.slick.Color.black;
+        xDegat = 50;
+        yDegat = 50;
     }
 
     public void applyPhysic(int delta,GestionTours gestionTours,GestionTerrain monde){
@@ -114,6 +132,34 @@ public class Worms {
     public void modifierVie(double hp){
 		//Ajoute/eleve des points de vie au Worms
         life+=hp;
+        messageAffiche = String.valueOf((int)Math.abs(hp));
+        tempsMessage = 1500;
+        printingMessage = true;
+        timerMessage=0;
+        xDegat = x;
+        yDegat = y;
+        if(hp<0){
+            couleurMessage = org.newdawn.slick.Color.red;
+        }
+        else{
+            couleurMessage = org.newdawn.slick.Color.green;
+        }
+    }
+
+    public void printPerteVie(int delta){
+        if(printingMessage){
+            if(couleurMessage == org.newdawn.slick.Color.red){
+                font2.drawString( xDegat+hitBoxLargeur/4,(float)(yDegat-hitBoxLargeur/2-(timerMessage/((double)tempsMessage))*70),messageAffiche,new org.newdawn.slick.Color((float)1,(float)0,(float)0,(float)(1-timerMessage/((double)tempsMessage))));
+            }
+            else{
+                font2.drawString( xDegat+hitBoxLargeur/4,(float)(yDegat-hitBoxLargeur/2-(timerMessage/((double)tempsMessage))*70),messageAffiche,new org.newdawn.slick.Color((float)0,(float)1,(float)0,(float)(1-timerMessage/((double)tempsMessage))));
+            }
+            timerMessage+=delta;
+            if(timerMessage>=tempsMessage){
+                printingMessage = false;
+                timerMessage = 0;
+            }
+        }
     }
 
     public void deplacer(int direction){

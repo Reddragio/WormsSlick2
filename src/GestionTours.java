@@ -216,6 +216,7 @@ public class GestionTours {
         tempsMessage = duree;
         printingMessage = true;
         couleurMessage = couleur;
+        timerMessage=0;
     }
 
     public void printEnd(){

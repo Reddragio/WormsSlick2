@@ -64,17 +64,35 @@ public class FenetreJeu extends BasicGame{
     protected boolean cheatMode;
     protected int lastDelta;
 
-    public FenetreJeu(int s,int x,int y, String[][] tab) throws SlickException, IOException {
+    //Parametrage du décor
+    String adresseArrierePlan;
+    String adresseGround;
+    String adresseMap;
+
+    public FenetreJeu(int s,int x,int y, String[][] tab,int decor) throws SlickException, IOException {
         super("Worms Fighter Z - Slick Version");
         blockSize=s;
         tabNomCoul = tab;
+
+        //Parametrage du décor
+        if(decor ==1){
+            adresseArrierePlan = "images/Mountain_Background.png";
+            adresseGround = "images/big_ground_FullHD.png";
+            adresseMap = "images/map2.bmp";
+        }
+        else if(decor ==2){
+
+        }
+        else{
+
+        }
 
         monde=new GestionTerrain();
         monde.genererTerrain(x,y,1);
         monde.genererFaille();
         monde.genererIles();
 
-        monde.genererTerrain(x,y,"images/map1.bmp");
+        monde.genererTerrain(x,y,adresseMap);
 
         monde.generateSea();
         monde.generateLimite(x,y);
@@ -130,8 +148,8 @@ public class FenetreJeu extends BasicGame{
         tempEcoule = 0;
         lastTempEcoule = 0;
 
-        sky = new BigImage("images/Mountain_Background.png");
-        big_ground = new BigImage("images/big_ground_FullHD.png");
+        sky = new BigImage(adresseArrierePlan);
+        big_ground = new BigImage(adresseGround);
         sea = new BigImage("images/sea_dark.png");
 
         battlePlayList = new Music[4];
@@ -648,15 +666,42 @@ public class FenetreJeu extends BasicGame{
     }
 
     public void spawnWorm(){
-        int spawnArea=largeurBlock/(joueurs.length+1);
+        int spawnArea=largeur/(joueurs.length+1);
         int i=1;
-        for(Worms wor: joueurs){
-            int xs=(int) (i*spawnArea-Math.random()*spawnArea);
-            int ys=monde.surfaceBlock(xs);
-            wor.setpos(xs*blockSize,ys*blockSize-4);
-            i++;
+        int antiBug, actualI;
+        for(int j=0;j<3;j++){
+            for(int k=0;k<=3;k+=3){
+                int xs;
+                antiBug = 0;
+                actualI = i;
+                do{
+                    xs=(int) (actualI*spawnArea-Math.random()*spawnArea);
+                    antiBug++;
+                    System.out.println("antiBug="+antiBug);
+                    if(antiBug>=25){
+                        actualI = (int)(Math.random()*joueurs.length)+1;
+                    }
+                }while(eauVerticale(xs));
+                int ys=45;
+                while((joueurs[j+k].physic.getContactBlock(xs,ys)).isEmpty()){
+                    ys++;
+                }
+                ys--;
+                joueurs[j+k].setpos(xs,ys);
+                i++;
+            }
         }
 
+    }
+
+    public boolean eauVerticale(int xw){
+        //Permet de savoir si de l'eau se trouve directement en dessous de l'abscisse x en argument
+        int yw = 2; //Ne pas mettre 0 ou la fonction bug à cause de la limite invisible en haut de la map
+        while(terrain[yw][xw/blockSize]==0){
+            yw++;
+        }
+        System.out.println("eauVerticale="+terrain[yw][xw/blockSize]);
+        return terrain[yw][xw/blockSize]==2;
     }
 
     public void setPhaseInventaire(boolean phaseInventaire) {

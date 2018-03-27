@@ -77,8 +77,8 @@ public class FenetreJeu extends BasicGame{
         //Parametrage du décor
         if(decor ==1){
             adresseArrierePlan = "images/Mountain_Background.png";
-            adresseGround = "images/big_ground_FullHD.png";
-            adresseMap = "images/map2.bmp";
+            adresseGround = "images/big_ground_FullHD2.png";
+            adresseMap = "images/map3.bmp";
         }
         else if(decor ==2){
 

@@ -26,6 +26,7 @@ public class Menu extends JFrame implements ActionListener {
     private JLabel photo2;
     private String[][] joueurs;
     private Font police;
+    private Font police2;
     private Font FatPolice;
 
     private JComboBox choixMap;
@@ -41,6 +42,7 @@ public class Menu extends JFrame implements ActionListener {
         this.setLayout(null);
         this.setResizable(false);
         this.setSize(1500,800);
+        this.setLocation(180,100);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Police
@@ -48,6 +50,7 @@ public class Menu extends JFrame implements ActionListener {
             //create the font to use. Specify the size!
             police = Font.createFont(Font.TRUETYPE_FONT, new File("fonts\\WormsFont.ttf")).deriveFont(12f);
             FatPolice = Font.createFont(Font.TRUETYPE_FONT, new File("fonts\\WormsFont.ttf")).deriveFont(20f);
+            police2 = police.deriveFont(24f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             //register the font
             ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("fonts\\WormsFont.ttf")));
@@ -179,16 +182,23 @@ public class Menu extends JFrame implements ActionListener {
         //Maps
         ArrayList<Map> maps = new ArrayList<Map>();
         maps.add(new Map("Montagnes célestes","images/Mountain_Background.png","images/big_ground_FullHD.png","images/map1.bmp","images/previsuMap1.png"));
-        maps.add(new Map("Test eau","images/Mountain_Background.png","images/big_ground_FullHD.png","images/map2.bmp","images/previsuTest.png"));
+        //maps.add(new Map("Test eau","images/Mountain_Background.png","images/big_ground_FullHD.png","images/map2.bmp","images/previsuTest.png"));
+        maps.add(new Map("Chateau Fort","images/Mountain_Background.png","images/big_ground_FullHD2.png","images/map3.bmp","images/previsuChateau.png"));
 
         //Choix map
         choixMap = new JComboBox(maps.toArray());
         choixMap.setSelectedIndex(0);
         choixMap.addActionListener(this);
-        choixMap.setBounds(920,680,200,40);
-        choixMap.setFont(police);
+        choixMap.setBounds(810,640,400,50);
+        choixMap.setFont(police2);
         choixMap.addActionListener(this);
         Main.add(choixMap);
+
+        JLabel titreMap = new JLabel();
+        titreMap.setText("Carte :");
+        titreMap.setBounds(710,646,120,40);
+        titreMap.setFont(FatPolice);
+        Main.add(titreMap);
 
         previsuMap = new JLabel();
         previsuMap.setBounds(500,50,1000,550);
@@ -297,7 +307,7 @@ public class Menu extends JFrame implements ActionListener {
         int blocLargeur = (int)(width/tailleBloc); // imperativement des multiples de 10, pour que le dessin des textures se fasse sans bug
         int blocHauteur = (int)(height/tailleBloc);
         AppGameContainer app = new AppGameContainer(new FenetreJeu(tailleBloc,blocLargeur,blocHauteur,tab,(Map)choixMap.getSelectedItem()));
-        app.setDisplayMode(blocLargeur*tailleBloc, blocHauteur*tailleBloc, false); // Mode fenêtré
+        app.setDisplayMode(blocLargeur*tailleBloc, blocHauteur*tailleBloc, true); // Mode fenêtré
         app.setVSync(false);
         app.setTargetFrameRate(120);
         app.start();

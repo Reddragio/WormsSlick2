@@ -65,20 +65,22 @@ public class FenetreJeu extends BasicGame{
     protected int lastDelta;
 
     //Parametrage du décor
-    String adresseArrierePlan;
-    String adresseGround;
-    String adresseMap;
+    protected String adresseArrierePlan;
+    protected String adresseGround;
+    protected String adresseMap;
 
-    public FenetreJeu(int s,int x,int y, String[][] tab,int decor) throws SlickException, IOException {
+    public FenetreJeu(int s,int x,int y, String[][] tab,Map carte) throws SlickException, IOException {
         super("Worms Fighter Z - Slick Version");
         blockSize=s;
         tabNomCoul = tab;
 
+        int decor = 2;
+
         //Parametrage du décor
         if(decor ==1){
             adresseArrierePlan = "images/Mountain_Background.png";
-            adresseGround = "images/big_ground_FullHD.png";
-            adresseMap = "images/map2.bmp";
+            adresseGround = "images/big_ground_FullHD2.png";
+            adresseMap = "images/map3.bmp";
         }
         else if(decor ==2){
 
@@ -86,6 +88,11 @@ public class FenetreJeu extends BasicGame{
         else{
 
         }
+
+        //Parametrage du décor
+        adresseArrierePlan = carte.getAdresseArrierePlan();
+        adresseGround = carte.getAdresseGround();
+        adresseMap = carte.getAdresseMap();
 
         monde=new GestionTerrain();
         monde.genererTerrain(x,y,1);

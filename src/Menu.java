@@ -28,6 +28,9 @@ public class Menu extends JFrame implements ActionListener {
     private Font police;
     private Font FatPolice;
 
+    private JComboBox choixMap;
+    private JLabel previsuMap;
+
     private ArrayList<String> colorWormsList;
     private boolean seulementUneFois;
 
@@ -37,7 +40,7 @@ public class Menu extends JFrame implements ActionListener {
         this.setTitle("Menu Worms");
         this.setLayout(null);
         this.setResizable(false);
-        this.setSize(500,800);
+        this.setSize(1500,800);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Police
@@ -61,7 +64,8 @@ public class Menu extends JFrame implements ActionListener {
         JLabel Main = new JLabel();
         Main.setBounds(0,0,500,800);
         Main.setLayout(null);
-        Main.setIcon(new ImageIcon("./images/backgroundMenu.png"));
+        //Main.setIcon(new ImageIcon("./images/backgroundMenu.png"));
+        Main.setIcon(new ImageIcon("images/Mountain_Background.png"));
 
         //NomWorms
         ArrayList<String> tab = nomWorm(6);
@@ -172,6 +176,25 @@ public class Menu extends JFrame implements ActionListener {
         photo2 = new JLabel();
         photo2.setBounds(340,350,80,160);
 
+        //Maps
+        ArrayList<Map> maps = new ArrayList<Map>();
+        maps.add(new Map("Montagnes célestes","images/Mountain_Background.png","images/big_ground_FullHD.png","images/map1.bmp","images/previsuMap1.png"));
+        maps.add(new Map("Test eau","images/Mountain_Background.png","images/big_ground_FullHD.png","images/map2.bmp","images/previsuTest.png"));
+
+        //Choix map
+        choixMap = new JComboBox(maps.toArray());
+        choixMap.setSelectedIndex(0);
+        choixMap.addActionListener(this);
+        choixMap.setBounds(920,680,200,40);
+        choixMap.setFont(police);
+        choixMap.addActionListener(this);
+        Main.add(choixMap);
+
+        previsuMap = new JLabel();
+        previsuMap.setBounds(500,50,1000,550);
+        Main.add(previsuMap);
+
+        updatePrevisu((Map)choixMap.getSelectedItem());
 
         //Initialisation des images des worms
         updateLabel(colorWormsList,couleurWorms1,couleurWorms2);
@@ -259,6 +282,11 @@ public class Menu extends JFrame implements ActionListener {
             updateLabel(colorWormsList,couleurWorms1,couleurWorms2);
         }
 
+        if(e.getSource() == choixMap){
+            Map newMap = (Map)choixMap.getSelectedItem();
+            updatePrevisu(newMap);
+        }
+
     }
 
     public void launchGame(String[][] tab) throws SlickException, IOException {
@@ -268,8 +296,8 @@ public class Menu extends JFrame implements ActionListener {
         double height = screenSize.getHeight();
         int blocLargeur = (int)(width/tailleBloc); // imperativement des multiples de 10, pour que le dessin des textures se fasse sans bug
         int blocHauteur = (int)(height/tailleBloc);
-        AppGameContainer app = new AppGameContainer(new FenetreJeu(tailleBloc,blocLargeur,blocHauteur,tab,1));
-        app.setDisplayMode(blocLargeur*tailleBloc, blocHauteur*tailleBloc, true); // Mode fenêtré
+        AppGameContainer app = new AppGameContainer(new FenetreJeu(tailleBloc,blocLargeur,blocHauteur,tab,(Map)choixMap.getSelectedItem()));
+        app.setDisplayMode(blocLargeur*tailleBloc, blocHauteur*tailleBloc, false); // Mode fenêtré
         app.setVSync(false);
         app.setTargetFrameRate(120);
         app.start();
@@ -299,6 +327,10 @@ public class Menu extends JFrame implements ActionListener {
         photo1.setIcon(icon1);
         photo2.setIcon(icon2);
 
+    }
+
+    public void updatePrevisu(Map newMap){
+        previsuMap.setIcon(new ImageIcon(newMap.getAdressePrevisualisation()));
     }
 
     public ArrayList<String> nomWorm( int nb){

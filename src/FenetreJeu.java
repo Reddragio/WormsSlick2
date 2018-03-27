@@ -74,21 +74,6 @@ public class FenetreJeu extends BasicGame{
         blockSize=s;
         tabNomCoul = tab;
 
-        int decor = 2;
-
-        //Parametrage du décor
-        if(decor ==1){
-            adresseArrierePlan = "images/Mountain_Background.png";
-            adresseGround = "images/big_ground_FullHD2.png";
-            adresseMap = "images/map3.bmp";
-        }
-        else if(decor ==2){
-
-        }
-        else{
-
-        }
-
         //Parametrage du décor
         adresseArrierePlan = carte.getAdresseArrierePlan();
         adresseGround = carte.getAdresseGround();

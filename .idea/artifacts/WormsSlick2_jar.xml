@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="WormsSlick2:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/WormsSlick2_jar</output-path>
+    <root id="archive" name="WormsSlick2.jar">
+      <element id="module-output" name="WormsSlick2bis" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/lwjgl.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jogg-0.0.7.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jorbis-0.0.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jinput.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/slick.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

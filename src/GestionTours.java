@@ -88,8 +88,8 @@ public class GestionTours {
         }
     }
 
-    public void updateLogic(int delta){
-        if(nombreJoueursEnVieTeam1==0 || nombreJoueursEnVieTeam2==0){
+    public void updateLogic(int delta) throws SlickException {
+        if((nombreJoueursEnVieTeam1==0 || nombreJoueursEnVieTeam2==0)&&!theEnd){
             theEnd = true;
         }
 

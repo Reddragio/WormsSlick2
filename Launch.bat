@@ -1,3 +1,3 @@
 @echo off
-java -Djava.library.path=lib/natives -jar WormsSlick2.jar
+java -Djava.library.path=lib/natives -Xmx2048m -jar WormsSlickFinal.jar
 pause

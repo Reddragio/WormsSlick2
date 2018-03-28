@@ -154,6 +154,8 @@ public class GestionTours {
                     actualWorms.setAimingState(false);
                     actualWorms.setaDejaJoue(true);
                     mainFenetre.setPhaseInventaire(false);
+                    mainFenetre.setPhaseTeleporteur(false);
+                    mainFenetre.container.setMouseGrabbed(false);
                     enTrainDeJouer = false;
                 }
             }
@@ -234,7 +236,11 @@ public class GestionTours {
 
             messageAffiche = "Merci d'avoir joué à notre jeu ;) !";
             couleurMessage = org.newdawn.slick.Color.magenta;
-            font2.drawString(largeur/2 - (messageAffiche.length()/2)*20,hauteur/5,messageAffiche,couleurMessage);
+            font2.drawString(largeur/2 - (messageAffiche.length()/2)*20,hauteur/6,messageAffiche,couleurMessage);
+
+            messageAffiche = "Un projet de fin d'année réalisé par Jack, Toto, Max et Paulo";
+            couleurMessage = org.newdawn.slick.Color.red;
+            font2.drawString(largeur/2 - (messageAffiche.length()/2)*20,hauteur/4,messageAffiche,couleurMessage);
         }
     }
 }

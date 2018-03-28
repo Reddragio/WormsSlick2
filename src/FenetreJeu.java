@@ -40,6 +40,7 @@ public class FenetreJeu extends BasicGame{
     protected boolean phaseChoixPuissance;
     protected boolean phaseProjectile;
     protected boolean phaseInventaire;
+    protected boolean phaseTeleporteur;
     protected long timerChoixPuissance;
     protected long chronoChoixPuissance;
     protected double pourcentage;
@@ -47,6 +48,7 @@ public class FenetreJeu extends BasicGame{
     protected String[][] tabNomCoul;
     protected GestionTerrain monde; //permet de connaitre le terrain tel qu'il a été généré (avant les explosions)
     protected GestionTours gestionTours;
+    protected Teleporteur drawTeleporteur;
 
     //Explosion
     protected Animation aExplosion;
@@ -180,6 +182,10 @@ public class FenetreJeu extends BasicGame{
         cheatMode = false;
 
         spawnWorm();
+        phaseTeleporteur = false;
+        drawTeleporteur = new Teleporteur(42);
+
+        this.container = container;
     }
 
     public void render(GameContainer container, Graphics g) throws SlickException {
@@ -255,6 +261,18 @@ public class FenetreJeu extends BasicGame{
 
         if(phaseProjectile){
             projectileActuel.draw(g);
+        }
+
+        if(phaseTeleporteur){
+            int xSouris = input.getMouseX();
+            int ySouris = input.getMouseY();
+            if(0<=xSouris && xSouris < largeur - 20 && 40 <= ySouris && ySouris < hauteur &&(((gestionTours.getActualWorms()).physic.getContactBlock(xSouris,ySouris)).isEmpty())){
+                drawTeleporteur.drawTeleporteur(xSouris,ySouris);
+            }
+            else{
+                drawTeleporteur.drawTeleporteurRed(xSouris,ySouris);
+            }
+
         }
 
         if(visualiserExplosion){
@@ -560,17 +578,31 @@ public class FenetreJeu extends BasicGame{
                 for(Worms wor:joueurs){
                     if(wor.isPlaying){
                         if(wor.interactInventaire(input)){
-                            wor.setAimingState(true);
-                            wor.initVisee();
-                            phaseInventaire = false;
+                            if(wor.getArmeActuelle() instanceof Teleporteur){
+                                phaseTeleporteur = true;
+                                container.setMouseGrabbed(true);
                             }
+                            else{
+                                wor.setAimingState(true);
+                                wor.initVisee();
+                            }
+                            phaseInventaire = false;
+                        }
                     }
                 }
             }
-            else{
-                if(cheatMode){
-                    experimentalExplosion(x,y,rayonExplosion);
+            else if(phaseTeleporteur){
+                if(0<=x && x < largeur && 0<= y && y < hauteur && (((gestionTours.getActualWorms()).physic.getContactBlock(x,y)).isEmpty())){
+                    (gestionTours.getActualWorms()).set_x(x);
+                    (gestionTours.getActualWorms()).set_y(y);
+                    drawTeleporteur.playSound();
+                    phaseTeleporteur = false;
+                    container.setMouseGrabbed(false);
+                    gestionTours.setPhase(3);
                 }
+            }
+            else if(cheatMode){
+                experimentalExplosion(x,y,rayonExplosion);
             }
         }
         else if(button==1 && cheatMode){//Clik droit
@@ -675,10 +707,10 @@ public class FenetreJeu extends BasicGame{
                     if(antiBug>=25){
                         actualI = (int)(Math.random()*joueurs.length)+1;
                     }
-                    while(!((joueurs[j+k].physic.getContactBlock(xs,ys)).isEmpty())){
+                    while(!((joueurs[j+k].physic.getContactBlock(xs,ys)).isEmpty())&&ys<hauteur-joueurs[j+k].getHitBoxHauteur()){
                         ys++;
                     }
-                }while(eauVerticale(xs,ys));
+                }while(ys == hauteur || eauVerticale(xs,ys));
 
                 while((joueurs[j+k].physic.getContactBlock(xs,ys)).isEmpty()){
                     ys++;
@@ -721,4 +753,9 @@ public class FenetreJeu extends BasicGame{
             }
         }
     }
+
+    public void setPhaseTeleporteur(boolean phaseTeleporteur) {
+        this.phaseTeleporteur = phaseTeleporteur;
+    }
+
 }

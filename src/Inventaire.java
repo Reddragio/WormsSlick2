@@ -22,14 +22,17 @@ public class Inventaire {
 
     public Inventaire(int largeurFenetre,int hauteurFenetre) throws SlickException {
         image = new org.newdawn.slick.Image("images/inventaire.png");
-        armesWorms = new Weapon[3];
-        drawScale = new double[3];
+        armesWorms = new Weapon[4];
+        drawScale = new double[4];
         armesWorms[0] = new Bazooka(15);
         drawScale[0] = 0.7;
         armesWorms[1] = new Grenade(20);
         drawScale[1] = 0.9;
         armesWorms[2] = new HolyGrenade(2);
         drawScale[2] = 0.9;
+        armesWorms[3] = new Teleporteur(3);
+        drawScale[3] = 0.9;
+
         this.hauteurFenetre = hauteurFenetre;
         this.largeurFenetre = largeurFenetre;
         x = largeurFenetre/2-image.getWidth()/2;
@@ -52,10 +55,10 @@ public class Inventaire {
         while(((i+1)+j*largeur)<=armesWorms.length){
             if(armesWorms[i+j*largeur].getNombrePossede()>=1){
                 if(x+offsetX+k*tailleCase<=input.getMouseX() && input.getMouseX() <= x+offsetX+(k+1)*tailleCase && y+offsetY+l*tailleCase <= input.getMouseY() && input.getMouseY() <= y+offsetY+(l+1)*tailleCase){
-                    armesWorms[i+j*largeur].draw(x+offsetX+k*tailleCase,y+offsetY+l*tailleCase,(float)(drawScale[i+j*largeur]+0.1));
+                    armesWorms[i+j*largeur].draw(x+offsetX+k*tailleCase,y+offsetY+l*(tailleCase-10),(float)(drawScale[i+j*largeur]+0.1));
                 }
                 else{
-                    armesWorms[i+j*largeur].draw(x+offsetX+k*tailleCase,y+offsetY+l*tailleCase,(float)drawScale[i+j*largeur]);
+                    armesWorms[i+j*largeur].draw(x+offsetX+k*tailleCase,y+offsetY+l*(tailleCase-10),(float)drawScale[i+j*largeur]);
                 }
                 font2.drawString((float)(x+offsetX+(k+0.6)*tailleCase),(float)(y+offsetY+(l-0.2)*tailleCase),"x"+armesWorms[i+j*largeur].getNombrePossede(),org.newdawn.slick.Color.red);
 

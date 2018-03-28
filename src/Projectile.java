@@ -30,13 +30,13 @@ public abstract class Projectile {
     protected Worms tireur;
     protected long launchTime;
 
-    public void launch(Weapon lanceur,double pourcentagePuissance){
+    public void launch(Weapon lanceur,double pourcentagePuissance,boolean physicSecurity){
         pourcentagePuissance /= 100;
         //this.x = lanceur.getxCentreRotation();
         //this.y = lanceur.getyCentreRotation();
         this.x = tireur.getX() + tireur.hitBoxLargeur/2;
         this.y = tireur.getY() - tireur.hitBoxHauteur/2;
-        double angle = 2;
+        double angle = 0;//2
         if(lanceur.getOrientationWorms()==0){
             angle = 180 - lanceur.getLastAngle();
         }
@@ -46,13 +46,13 @@ public abstract class Projectile {
         angle = (angle/180.0)*Math.PI;
         //double forceX = normeLaunchForce * Math.cos(angle);
         //double forceY = normeLaunchForce * Math.sin(angle);
-        physic = new MoteurPhysique(terrain,blockSize,hitBoxHauteur,hitBoxLargeur,blocIntraversables,1.0,1.0,1.0/3.0,1.0/3.0,masse,x,y);
+        physic = new MoteurPhysique(terrain,blockSize,hitBoxHauteur,hitBoxLargeur,blocIntraversables,1.0,1.0,1.0/3.0,1.0/3.0,masse,x,y,physicSecurity);
         Force forceGravite = new Force(0,g/200);
         //launchForce = new Force(forceX,forceY);
         physic.addForce(forceGravite);
         //physic.addForce(launchForce);
-        physic.set_vitesse_x((int)( pourcentagePuissance * normeVitesse* Math.cos(angle)));
-        physic.set_vitesse_y((int)( pourcentagePuissance * normeVitesse* Math.sin(angle)));
+        physic.setVitesse_x(pourcentagePuissance * normeVitesse* Math.cos(angle));
+        physic.setVitesse_y(pourcentagePuissance * normeVitesse* Math.sin(angle));
         specialInit(pourcentagePuissance);
         launchTime = System.currentTimeMillis();
     }
@@ -177,6 +177,8 @@ public abstract class Projectile {
     public abstract void specialPhysic(int delta,Worms[] joueurs);
 
     public abstract void specialInit(double pourcentagePuissance);
+
+    public abstract void specialLaunch(Weapon lanceur,double pourcentagePuissance);
 
     public boolean isAlive() {
         return alive;

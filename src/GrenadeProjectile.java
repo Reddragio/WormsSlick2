@@ -10,7 +10,7 @@ public class GrenadeProjectile extends Projectile{
         bruitExplosion = new Sound("music/Grenade.ogg");
         bruitFail = new Sound("music/failSound.ogg");
         alive = true;
-        normeVitesse = 1600;
+        normeVitesse = 1600*0.0025;
         hitBoxHauteur = 20;
         hitBoxLargeur = 20;
         masse = 0.01;
@@ -43,5 +43,9 @@ public class GrenadeProjectile extends Projectile{
     public void specialPhysic(int delta,Worms[] joueurs){}
 
     public void specialInit(double pourcentagePuissance){}
+
+    public void specialLaunch(Weapon lanceur,double pourcentagePuissance){
+        launch(lanceur,pourcentagePuissance,true);
+    }
 
 }

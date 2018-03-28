@@ -71,7 +71,7 @@ public class Worms {
         isMoving = false;
         this.x = x;
         this.y = y;
-        physic = new MoteurPhysique(terrain,blockSize,hitBoxHauteur,hitBoxLargeur,blocIntraversables,1.0/12.5,1.0/20.0,1.0/20.0,1.0/12.5,masse,x,y);
+        physic = new MoteurPhysique(terrain,blockSize,hitBoxHauteur,hitBoxLargeur,blocIntraversables,1.0/12.5,1.0/20.0,1.0/20.0,1.0/12.5,masse,x,y,true);
         Force forceGravite = new Force(0,g/200);
         physic.addForce(forceGravite);
         orientation = 1;

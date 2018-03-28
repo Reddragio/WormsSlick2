@@ -17,8 +17,8 @@ public class Rocket extends Projectile {
         bruitTir = new Sound("music/bazooka_tir_2.ogg");
         bruitFail = new Sound("music/failSound.ogg");
         alive = true;
-        normeVitesse = 2000;
-        normePropulsion = (g/200.0);
+        normeVitesse = (1.0/2.0)*2000*0.0025;
+        normePropulsion = (3.0/4.0)*(g/200.0);
         hitBoxHauteur = 5;
         hitBoxLargeur = 5;
         masse = 0.01;
@@ -81,6 +81,10 @@ public class Rocket extends Projectile {
         }
         normePropulsion*= pourcentagePuissance/100.0;
         bruitTir.play();
+    }
+
+    public void specialLaunch(Weapon lanceur,double pourcentagePuissance){
+        launch(lanceur,pourcentagePuissance,false);
     }
 
 }

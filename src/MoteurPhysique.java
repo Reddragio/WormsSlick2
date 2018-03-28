@@ -25,11 +25,12 @@ public class MoteurPhysique {
     protected int hitBoxLargeur;
     protected int blocIntraversables[];
     protected boolean speedLimitation;
+    protected boolean physicSecurity;
 
     //Special rocket
     protected boolean contactDetectedThisTime;
 
-    public MoteurPhysique(int terrain[][], int blockSize, int hitBoxHauteur,int hitBoxLargeur,int blocIntraversables[],double coeffReflectionVerticaleX,double coeffReflectionVerticaleY,double coeffReflectionHorizontaleX,double coeffReflectionHorizontaleY,double masse, int xPixel, int yPixel){
+    public MoteurPhysique(int terrain[][], int blockSize, int hitBoxHauteur,int hitBoxLargeur,int blocIntraversables[],double coeffReflectionVerticaleX,double coeffReflectionVerticaleY,double coeffReflectionHorizontaleX,double coeffReflectionHorizontaleY,double masse, int xPixel, int yPixel,boolean physicSecurity){
         this.terrain = terrain;
         this.blockSize = blockSize;
         this.hitBoxHauteur = hitBoxHauteur;
@@ -46,6 +47,7 @@ public class MoteurPhysique {
         this.coeffReflectionVerticaleY = coeffReflectionVerticaleY;
         this.coeffReflectionHorizontaleX = coeffReflectionHorizontaleX;
         this.coeffReflectionHorizontaleY = coeffReflectionHorizontaleY;
+        this.physicSecurity = physicSecurity;
 
         //Special rocket
         contactDetectedThisTime = false;
@@ -83,8 +85,10 @@ public class MoteurPhysique {
         int xPixel = convertRealToPixel(newx);
         int yPixel = convertRealToPixel(newy);
         speedLimitation = false;
-        xPixel = limiteSpeed(xPixelOld,xPixel);
-        yPixel = limiteSpeed(yPixelOld,yPixel);
+        if(physicSecurity){
+            xPixel = limiteSpeed(xPixelOld,xPixel);
+            yPixel = limiteSpeed(yPixelOld,yPixel);
+        }
 
         ArrayList<Block> BlockEnContact = getContactBlock(xPixel,yPixel);
 

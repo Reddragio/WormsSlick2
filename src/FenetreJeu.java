@@ -306,7 +306,7 @@ public class FenetreJeu extends BasicGame{
                              pourcentagePuissanceTir = 100;
                          }
 
-                         projectileActuel.launch(wor.getArmeActuelle(),pourcentagePuissanceTir);
+                         projectileActuel.specialLaunch(wor.getArmeActuelle(),pourcentagePuissanceTir);
                          timerExplosionProjectile = 0;
                          phaseProjectile = true;
                      }

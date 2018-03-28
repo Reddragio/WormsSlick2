@@ -49,6 +49,7 @@ public class FenetreJeu extends BasicGame{
     protected GestionTerrain monde; //permet de connaitre le terrain tel qu'il a été généré (avant les explosions)
     protected GestionTours gestionTours;
     protected Teleporteur drawTeleporteur;
+    protected Image mouseCursor;
 
     //Explosion
     protected Animation aExplosion;
@@ -161,6 +162,7 @@ public class FenetreJeu extends BasicGame{
         enterRelache = false;
 
         phaseInventaire = false;
+        mouseCursor = new Image("images/mouseCursor3.png");
 
         //SpriteSheet explosion
 
@@ -186,6 +188,7 @@ public class FenetreJeu extends BasicGame{
         drawTeleporteur = new Teleporteur(42);
 
         this.container = container;
+        container.setMouseGrabbed(true);
     }
 
     public void render(GameContainer container, Graphics g) throws SlickException {
@@ -263,24 +266,26 @@ public class FenetreJeu extends BasicGame{
             projectileActuel.draw(g);
         }
 
-        if(phaseTeleporteur){
-            int xSouris = input.getMouseX();
-            int ySouris = input.getMouseY();
-            if(0<=xSouris && xSouris < largeur - 20 && 40 <= ySouris && ySouris < hauteur &&(((gestionTours.getActualWorms()).physic.getContactBlock(xSouris,ySouris)).isEmpty())){
-                drawTeleporteur.drawTeleporteur(xSouris,ySouris);
-            }
-            else{
-                drawTeleporteur.drawTeleporteurRed(xSouris,ySouris);
-            }
-
-        }
-
         if(visualiserExplosion){
             g.setColor(Color.red);
             g.drawOval((float)(input.getMouseX()-rayonExplosion),(float)(input.getMouseY()-rayonExplosion),(float)(2*rayonExplosion),(float)(2*rayonExplosion));
         }
 
         sea.draw(0,monde.getNiveauEau()*blockSize);
+
+        int xSouris = input.getMouseX();
+        int ySouris = input.getMouseY();
+        if(phaseTeleporteur){
+            if(0<=xSouris && xSouris < largeur - 20 && 40 <= ySouris && ySouris < hauteur &&(((gestionTours.getActualWorms()).physic.getContactBlock(xSouris,ySouris)).isEmpty())){
+                drawTeleporteur.drawTeleporteur(xSouris,ySouris);
+            }
+            else{
+                drawTeleporteur.drawTeleporteurRed(xSouris,ySouris);
+            }
+        }
+        else if(phaseInventaire || cheatMode){
+            mouseCursor.draw(xSouris-10,ySouris);
+        }
 
         gestionTours.printTime();
         gestionTours.printMessage(lastDelta);
@@ -580,7 +585,6 @@ public class FenetreJeu extends BasicGame{
                         if(wor.interactInventaire(input)){
                             if(wor.getArmeActuelle() instanceof Teleporteur){
                                 phaseTeleporteur = true;
-                                container.setMouseGrabbed(true);
                             }
                             else{
                                 wor.setAimingState(true);
@@ -592,12 +596,11 @@ public class FenetreJeu extends BasicGame{
                 }
             }
             else if(phaseTeleporteur){
-                if(0<=x && x < largeur && 0<= y && y < hauteur && (((gestionTours.getActualWorms()).physic.getContactBlock(x,y)).isEmpty())){
+                if(0<=x && x < largeur - 20 && 40 <= y && y < hauteur && (((gestionTours.getActualWorms()).physic.getContactBlock(x,y)).isEmpty())){
                     (gestionTours.getActualWorms()).set_x(x);
                     (gestionTours.getActualWorms()).set_y(y);
                     drawTeleporteur.playSound();
                     phaseTeleporteur = false;
-                    container.setMouseGrabbed(false);
                     gestionTours.setPhase(3);
                 }
             }

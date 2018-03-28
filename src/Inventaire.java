@@ -81,7 +81,7 @@ public class Inventaire {
         int i=0,j=0,k=0,l=0;
         while(((i+1)+j*largeur)<=armesWorms.length){
             if(armesWorms[i+j*largeur].getNombrePossede()>=1){
-                if(x+offsetX+k*tailleCase<=input.getMouseX() && input.getMouseX() <= x+offsetX+(k+1)*tailleCase && y+offsetY+l*tailleCase <= input.getMouseY() && input.getMouseY() <= y+offsetY+(l+1)*tailleCase){
+                if(x+offsetX+k*tailleCase<=input.getMouseX() && input.getMouseX() <= x+offsetX+(k+1)*tailleCase && y+offsetY+l*(tailleCase-10) <= input.getMouseY() && input.getMouseY() <= y+offsetY+(l+1)*(tailleCase-10)){
                     worms.setWeapon(armesWorms[i+j*largeur]);
                     armesWorms[i+j*largeur].decreasePossede();
                     armeChoisie = true;

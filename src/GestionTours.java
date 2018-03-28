@@ -155,7 +155,6 @@ public class GestionTours {
                     actualWorms.setaDejaJoue(true);
                     mainFenetre.setPhaseInventaire(false);
                     mainFenetre.setPhaseTeleporteur(false);
-                    mainFenetre.container.setMouseGrabbed(false);
                     enTrainDeJouer = false;
                 }
             }

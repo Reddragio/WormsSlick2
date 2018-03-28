@@ -664,17 +664,22 @@ public class FenetreJeu extends BasicGame{
         for(int j=0;j<3;j++){
             for(int k=0;k<=3;k+=3){
                 int xs;
+                int ys;
                 antiBug = 0;
                 actualI = i;
                 do{
                     xs=(int) (actualI*spawnArea-Math.random()*spawnArea);
+                    ys=45;
                     antiBug++;
                     System.out.println("antiBug="+antiBug);
                     if(antiBug>=25){
                         actualI = (int)(Math.random()*joueurs.length)+1;
                     }
-                }while(eauVerticale(xs));
-                int ys=45;
+                    while(!((joueurs[j+k].physic.getContactBlock(xs,ys)).isEmpty())){
+                        ys++;
+                    }
+                }while(eauVerticale(xs,ys));
+
                 while((joueurs[j+k].physic.getContactBlock(xs,ys)).isEmpty()){
                     ys++;
                 }
@@ -686,14 +691,14 @@ public class FenetreJeu extends BasicGame{
 
     }
 
-    public boolean eauVerticale(int xw){
+    public boolean eauVerticale(int xw,int yw){
         //Permet de savoir si de l'eau se trouve directement en dessous de l'abscisse x en argument
-        int yw = 2; //Ne pas mettre 0 ou la fonction bug à cause de la limite invisible en haut de la map
-        while(terrain[yw][xw/blockSize]==0){
-            yw++;
+        //int yw = 2; //Ne pas mettre 0 ou la fonction bug à cause de la limite invisible en haut de la map
+        while(terrain[yw/blockSize][xw/blockSize]==0){
+            yw+=blockSize;
         }
-        System.out.println("eauVerticale="+terrain[yw][xw/blockSize]);
-        return terrain[yw][xw/blockSize]==2;
+        System.out.println("eauVerticale="+terrain[yw/blockSize][xw/blockSize]);
+        return terrain[yw/blockSize][xw/blockSize]==2;
     }
 
     public void setPhaseInventaire(boolean phaseInventaire) {

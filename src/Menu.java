@@ -182,7 +182,7 @@ public class Menu extends JFrame implements ActionListener {
         //Maps
         ArrayList<Map> maps = new ArrayList<Map>();
         maps.add(new Map("Montagnes célestes","images/Mountain_Background.png","images/big_ground_FullHD.png","images/map1.bmp","images/previsuMap1.png"));
-        //maps.add(new Map("Test eau","images/Mountain_Background.png","images/big_ground_FullHD.png","images/map2.bmp","images/previsuTest.png"));
+        //maps.add(new Map("Test eau","images/Mountain_Background.png","images/big_ground_FullHD.png","images/gruyere.bmp","images/previsuTest.png"));
         maps.add(new Map("Chateau Fort","images/Mountain_Background.png","images/big_ground_FullHD2.png","images/map3.bmp","images/previsuChateau.png"));
         maps.add(new Map("London","images/Mountain_Background.png","images/London.png","images/London.bmp","images/previsuChateau.png"));
 

@@ -183,9 +183,9 @@ public class Menu extends JFrame implements ActionListener {
         ArrayList<Map> maps = new ArrayList<Map>();
         maps.add(new Map("Montagnes célestes","images/Mountain_Background.png","images/big_ground_FullHD.png","images/map1.bmp","images/previsuMap1.png","images/sea_dark_large.png",40));
         //maps.add(new Map("Test eau","images/Mountain_Background.png","images/big_ground_FullHD.png","images/gruyere.bmp","images/previsuTest.png"));
-        maps.add(new Map("Chateau Fort","images/Mountain_Background.png","images/big_ground_FullHD2.png","images/map3.bmp","images/previsuChateau.png","images/sea_dark_large.png",40));
+        maps.add(new Map("Chateau Fort","images/zelda_background.jpg","images/big_ground_FullHD2.png","images/map3.bmp","images/previsuChateau_new.png","images/sea_dark_large.png",40));
         maps.add(new Map("London","images/london_background.jpg","images/London.png","images/London.bmp","images/previsuLondon.png","images/sea_dark_large_sepia.png",40));
-        maps.add(new Map("Naval","images/Mountain_Background.png","images/Maps/Naval.png","images/Maps/Naval.bmp","images/previsuChateau.png","images/sea_dark_large.png",40));
+        maps.add(new Map("Naval","images/pirate_background.jpg","images/Maps/Naval.png","images/Maps/Naval.bmp","images/previsuNaval.png","images/sea_verydark_large.png",40));
         maps.add(new Map("New York","images/Mountain_Background.png","images/Maps/NY.png","images/Maps/NY.bmp","images/previsuChateau.png","images/sea_dark_large.png",0));
         maps.add(new Map("Petrol","images/Mountain_Background.png","images/Maps/Petrol.png","images/Maps/Petrol.bmp","images/previsuChateau.png","images/sea_dark_large.png",20));
 
@@ -314,6 +314,9 @@ public class Menu extends JFrame implements ActionListener {
         app.setDisplayMode(blocLargeur*tailleBloc, blocHauteur*tailleBloc, true); // Mode fenêtré
         app.setVSync(false);
         app.setTargetFrameRate(120);
+
+
+
         app.start();
     }
 

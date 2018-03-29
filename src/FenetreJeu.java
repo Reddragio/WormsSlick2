@@ -71,10 +71,13 @@ public class FenetreJeu extends BasicGame{
     protected String adresseArrierePlan;
     protected String adresseGround;
     protected String adresseMap;
+    protected String adresseEau;
     protected int screenHeight;
     protected int screenWidth;
     protected double drawScaleX;
     protected double drawScaleY;
+    protected int xMonde;
+    protected int yMonde;
 
     public FenetreJeu(int s,int x,int y, String[][] tab,Map carte,int screenWidth,int screenHeight) throws SlickException, IOException {
         super("Worms Fighter Z - Slick Version");
@@ -84,13 +87,17 @@ public class FenetreJeu extends BasicGame{
         this.screenHeight = screenHeight;
         drawScaleX = screenWidth/1920.0;
         drawScaleY = screenHeight/1080.0;
+        xMonde = x;
+        yMonde = y;
 
         //Parametrage du décor
         adresseArrierePlan = carte.getAdresseArrierePlan();
         adresseGround = carte.getAdresseGround();
         adresseMap = carte.getAdresseMap();
+        adresseEau = carte.getAdresseEau();
 
         monde=new GestionTerrain();
+        monde.setHauteurEau(y,carte.getHauteurEau());
 
         /*monde.genererTerrain(x,y,1);
         monde.genererFaille();
@@ -153,7 +160,7 @@ public class FenetreJeu extends BasicGame{
 
         sky = new BigImage(adresseArrierePlan);
         big_ground = new BigImage(adresseGround);
-        sea = new BigImage("images/sea_dark_large.png");
+        sea = new BigImage(adresseEau);//"images/sea_dark_large.png"
 
         battlePlayList = new Music[4];
         battlePlayList[0] = new Music("music/battle1.ogg");
@@ -191,7 +198,11 @@ public class FenetreJeu extends BasicGame{
         experimentalVisee = false;
         cheatMode = false;
 
-        spawnWorm();
+        try {
+            spawnWorm();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         phaseTeleporteur = false;
         drawTeleporteur = new Teleporteur(42);
 
@@ -529,6 +540,7 @@ public class FenetreJeu extends BasicGame{
             }
             else{
                 gestionTours.showMessage("Cheat Mode desactivé !",2000,org.newdawn.slick.Color.magenta);
+                visualiserExplosion = false;
             }
         }
         /*else if(Input.KEY_V == key){
@@ -700,7 +712,7 @@ public class FenetreJeu extends BasicGame{
         return Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
     }
 
-    public void spawnWorm(){
+    public void spawnWorm() throws IOException {
         int spawnArea=largeur/(joueurs.length+1);
         int i=1;
         int antiBug, actualI;
@@ -734,6 +746,14 @@ public class FenetreJeu extends BasicGame{
             }
         }
 
+        monde.genererTerrain(xMonde,yMonde,adresseMap,drawScaleX,drawScaleY);
+        monde.generateLimite(xMonde,yMonde);
+        int[][] terrainBis=monde.getTerrainInitial();
+        for(int k=0;k<terrainBis.length;k++){
+            for(int j=0;j<terrainBis[0].length;j++){
+                terrain[k][j] = terrainBis[k][j];
+            }
+        }
     }
 
     public boolean eauVerticale(int xw,int yw){

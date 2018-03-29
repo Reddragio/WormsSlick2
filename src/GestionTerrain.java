@@ -65,7 +65,6 @@ public class GestionTerrain {
         terrainInitial=t;
         plusBas=pointLePlusBas();
         plusHaut=pointLePlusHaut();
-        niveauEau = y-40;
     }
 
     public void genererTerrain(int x, int y, String adresse,double drawScaleX,double drawScaleY) throws IOException {
@@ -90,7 +89,10 @@ public class GestionTerrain {
         terrainInitial = t;
         plusBas=pointLePlusBas();
         plusHaut=pointLePlusHaut();
-        niveauEau = y-40;
+    }
+
+    public void setHauteurEau(int y,int hauteurEau){
+        niveauEau = y-hauteurEau;
     }
 
     public int[] pointLePlusBas(){

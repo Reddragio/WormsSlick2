@@ -186,7 +186,7 @@ public class Menu extends JFrame implements ActionListener {
         maps.add(new Map("Chateau Fort","images/Mountain_Background.png","images/big_ground_FullHD2.png","images/map3.bmp","images/previsuChateau.png","images/sea_dark_large.png",40));
         maps.add(new Map("London","images/london_background.jpg","images/London.png","images/London.bmp","images/previsuLondon.png","images/sea_dark_large_sepia.png",40));
         maps.add(new Map("Naval","images/Mountain_Background.png","images/Maps/Naval.png","images/Maps/Naval.bmp","images/previsuChateau.png","images/sea_dark_large.png",40));
-        maps.add(new Map("New York","images/Mountain_Background.png","images/Maps/NY.png","images/Maps/NY.bmp","images/previsuChateau.png","images/sea_dark_large.png",30));
+        maps.add(new Map("New York","images/Mountain_Background.png","images/Maps/NY.png","images/Maps/NY.bmp","images/previsuChateau.png","images/sea_dark_large.png",0));
         maps.add(new Map("Petrol","images/Mountain_Background.png","images/Maps/Petrol.png","images/Maps/Petrol.bmp","images/previsuChateau.png","images/sea_dark_large.png",20));
 
         //Choix map
@@ -311,7 +311,7 @@ public class Menu extends JFrame implements ActionListener {
         int blocLargeur = (int)(width/tailleBloc); // imperativement des multiples de 10, pour que le dessin des textures se fasse sans bug
         int blocHauteur = (int)(height/tailleBloc);
         AppGameContainer app = new AppGameContainer(new FenetreJeu(tailleBloc,blocLargeur,blocHauteur,tab,(Map)choixMap.getSelectedItem(),(int)width,(int)height));
-        app.setDisplayMode(blocLargeur*tailleBloc, blocHauteur*tailleBloc, false); // Mode fenêtré
+        app.setDisplayMode(blocLargeur*tailleBloc, blocHauteur*tailleBloc, true); // Mode fenêtré
         app.setVSync(false);
         app.setTargetFrameRate(120);
         app.start();

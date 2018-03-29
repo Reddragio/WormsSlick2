@@ -68,23 +68,29 @@ public class GestionTerrain {
         niveauEau = y-40;
     }
 
-    public void genererTerrain(int x, int y, String adresse) throws IOException {
+    public void genererTerrain(int x, int y, String adresse,double drawScaleX,double drawScaleY) throws IOException {
         int[][] t = new int[y][x];
         BufferedImage image = ImageIO.read(new File(adresse));
 
-        for (int xPixel = 0; xPixel < image.getWidth(); xPixel++) //*
-        {
-            for (int yPixel = 0; yPixel < image.getHeight(); yPixel++) //*
+        for(double antibugOffset=0;antibugOffset<=0.25;antibugOffset+=0.25){
+            for (int xPixel = 0; xPixel < image.getWidth(); xPixel++) //*
             {
-                int color = image.getRGB(xPixel,yPixel); //*
-                if (color== Color.BLACK.getRGB()) {
-                    t[yPixel][xPixel] = 1;
-                } else {
-                    t[yPixel][xPixel] = 0; // ?
+                for (int yPixel = 0; yPixel < image.getHeight(); yPixel++) //*
+                {
+                    int color = image.getRGB(xPixel,yPixel); //*
+                    if (color== Color.BLACK.getRGB()) {
+                        t[(int)(yPixel*drawScaleY+antibugOffset)][(int)(xPixel*drawScaleX+antibugOffset)] = 1;
+                    } else {
+                        t[(int)(yPixel*drawScaleY+antibugOffset)][(int)(xPixel*drawScaleX+antibugOffset)] = 0;
+                    }
                 }
             }
         }
+
         terrainInitial = t;
+        plusBas=pointLePlusBas();
+        plusHaut=pointLePlusHaut();
+        niveauEau = y-40;
     }
 
     public int[] pointLePlusBas(){

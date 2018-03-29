@@ -307,8 +307,8 @@ public class Menu extends JFrame implements ActionListener {
         double height = screenSize.getHeight();
         int blocLargeur = (int)(width/tailleBloc); // imperativement des multiples de 10, pour que le dessin des textures se fasse sans bug
         int blocHauteur = (int)(height/tailleBloc);
-        AppGameContainer app = new AppGameContainer(new FenetreJeu(tailleBloc,blocLargeur,blocHauteur,tab,(Map)choixMap.getSelectedItem()));
-        app.setDisplayMode(blocLargeur*tailleBloc, blocHauteur*tailleBloc, true); // Mode fenêtré
+        AppGameContainer app = new AppGameContainer(new FenetreJeu(tailleBloc,blocLargeur,blocHauteur,tab,(Map)choixMap.getSelectedItem(),(int)width,(int)height));
+        app.setDisplayMode(blocLargeur*tailleBloc, blocHauteur*tailleBloc, false); // Mode fenêtré
         app.setVSync(false);
         app.setTargetFrameRate(120);
         app.start();

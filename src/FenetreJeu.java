@@ -71,11 +71,19 @@ public class FenetreJeu extends BasicGame{
     protected String adresseArrierePlan;
     protected String adresseGround;
     protected String adresseMap;
+    protected int screenHeight;
+    protected int screenWidth;
+    protected double drawScaleX;
+    protected double drawScaleY;
 
-    public FenetreJeu(int s,int x,int y, String[][] tab,Map carte) throws SlickException, IOException {
+    public FenetreJeu(int s,int x,int y, String[][] tab,Map carte,int screenWidth,int screenHeight) throws SlickException, IOException {
         super("Worms Fighter Z - Slick Version");
         blockSize=s;
         tabNomCoul = tab;
+        this.screenWidth = screenWidth;
+        this.screenHeight = screenHeight;
+        drawScaleX = screenWidth/1920.0;
+        drawScaleY = screenHeight/1080.0;
 
         //Parametrage du décor
         adresseArrierePlan = carte.getAdresseArrierePlan();
@@ -83,12 +91,12 @@ public class FenetreJeu extends BasicGame{
         adresseMap = carte.getAdresseMap();
 
         monde=new GestionTerrain();
-        monde.genererTerrain(x,y,1);
+
+        /*monde.genererTerrain(x,y,1);
         monde.genererFaille();
-        monde.genererIles();
+        monde.genererIles();*/
 
-        monde.genererTerrain(x,y,adresseMap);
-
+        monde.genererTerrain(x,y,adresseMap,drawScaleX,drawScaleY);
         monde.generateSea();
         monde.generateLimite(x,y);
         terrain=monde.getTerrainInitial();
@@ -145,7 +153,7 @@ public class FenetreJeu extends BasicGame{
 
         sky = new BigImage(adresseArrierePlan);
         big_ground = new BigImage(adresseGround);
-        sea = new BigImage("images/sea_dark.png");
+        sea = new BigImage("images/sea_dark_large.png");
 
         battlePlayList = new Music[4];
         battlePlayList[0] = new Music("music/battle1.ogg");
@@ -197,7 +205,7 @@ public class FenetreJeu extends BasicGame{
 		
         changementPrint[0] = false;
 
-        sky.draw(0,0);
+        sky.draw(0,0,(float)drawScaleX);
 
         int iFirst = 0,jFirst = 0,iLast = 0,jLast = 0;
         boolean first = true;
@@ -213,7 +221,7 @@ public class FenetreJeu extends BasicGame{
                     jLast = j;
                 }
                 if((terrain[i][j]!=1 || j == largeurBlock-1)&&!first){
-                    big_ground.draw(jFirst*blockSize,iFirst*blockSize,(jLast+1)*blockSize,(iLast+1)*blockSize,jFirst*blockSize,iFirst*blockSize,(jLast+1)*blockSize,(iLast+1)*blockSize);
+                    big_ground.draw(jFirst*blockSize,iFirst*blockSize,(jLast+1)*blockSize,(iLast+1)*blockSize,jFirst*blockSize*(float)(1/drawScaleX),iFirst*blockSize*(float)(1/drawScaleY),(jLast+1)*blockSize*(float)(1/drawScaleX),(iLast+1)*blockSize*(float)(1/drawScaleY));
                     first = true;
                 }
             }
@@ -710,10 +718,12 @@ public class FenetreJeu extends BasicGame{
                     if(antiBug>=25){
                         actualI = (int)(Math.random()*joueurs.length)+1;
                     }
-                    while(!((joueurs[j+k].physic.getContactBlock(xs,ys)).isEmpty())&&ys<hauteur-joueurs[j+k].getHitBoxHauteur()){
+                    while(!((joueurs[j+k].physic.getContactBlock(xs,ys)).isEmpty())&& ys<hauteur-joueurs[j+k].getHitBoxHauteur()){
                         ys++;
                     }
-                }while(ys == hauteur || eauVerticale(xs,ys));
+                    //System.out.println("xs"+xs);
+                    //System.out.println("ys"+ys);
+                }while(ys == hauteur-joueurs[j+k].getHitBoxHauteur() || eauVerticale(xs,ys));
 
                 while((joueurs[j+k].physic.getContactBlock(xs,ys)).isEmpty()){
                     ys++;

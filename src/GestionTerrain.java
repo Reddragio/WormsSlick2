@@ -320,11 +320,20 @@ public class GestionTerrain {
                 if(i==y-1){
                     terrainInitial[i-1][j] = 3;
                 }
+                else if(i==0){
+                    terrainInitial[i+1][j] = 3;
+                }
             }
         }
         for(int j=0;j<x;j+=x-1){
             for(int i=0;i<y;i++){
                 terrainInitial[i][j] = 3;
+                if(j==x-1){
+                    terrainInitial[i][j-1] = 3;
+                }
+                else if(j==0){
+                    terrainInitial[i][j+1] = 3;
+                }
             }
         }
     }

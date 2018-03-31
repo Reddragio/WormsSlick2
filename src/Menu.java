@@ -38,6 +38,7 @@ public class Menu extends JFrame implements ActionListener {
     protected Music themeWorms;
 
     public Menu() throws SlickException {
+        //Initialisation de la fenetre
         this.setTitle("Menu Worms");
         this.setLayout(null);
         this.setResizable(false);
@@ -45,7 +46,7 @@ public class Menu extends JFrame implements ActionListener {
         this.setLocation(180,100);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //Police
+        //Ajout d'une police personnalisé issue du jeu Worms
         try {
             //create the font to use. Specify the size!
             police = Font.createFont(Font.TRUETYPE_FONT, new File("fonts/WormsFont.ttf")).deriveFont(12f);
@@ -67,26 +68,29 @@ public class Menu extends JFrame implements ActionListener {
         JLabel Main = new JLabel();
         Main.setBounds(0,0,500,800);
         Main.setLayout(null);
-        //Main.setIcon(new ImageIcon("./images/backgroundMenu.png"));
+
+        //Mise en place d'un background pour le main panem
         Main.setIcon(new ImageIcon("images/Mountain_Background.png"));
 
         //NomWorms
         ArrayList<String> tab = nomWorm(6);
 
-        //Logo
+        //Logo du jeu Worms
         ImageIcon LogoW = new ImageIcon("./images/logo.png");
         JLabel logo = new JLabel(LogoW);
         logo.setBounds(50,50,396,112);
         Main.add(logo);
 
-        //BoutonJouer
-        ImageIcon BoutonJouerPresse = new ImageIcon("./images/Jouer.png");
-        ImageIcon BoutonJouer = new ImageIcon("./images/Jouer2.png");
+        //Bouton Jouer
+        ImageIcon BoutonJouerPresse = new ImageIcon("./images/Jouer.png"); //Image du bouton si il est pressé
+        ImageIcon BoutonJouer = new ImageIcon("./images/Jouer2.png"); //Image du bouton de base
         Jouer = new JButton(BoutonJouer);
-        Jouer.setRolloverIcon(BoutonJouerPresse);
+        Jouer.setRolloverIcon(BoutonJouerPresse); // Animation quand on passe la souris sur le bouton
         Jouer.setBounds(50,650,400,100);
+        //On enleve les bordures et le fond du bouton pour un meilleur rendu
         Jouer.setBorderPainted(false);
         Jouer.setContentAreaFilled(false);
+        //Ecouteur
         Jouer.addActionListener(this);
         Main.add(Jouer);
 
@@ -118,7 +122,7 @@ public class Menu extends JFrame implements ActionListener {
         Nom13.setFont(police);
 
 
-        //System.out.println(tab);
+        //Ensemble de textfield à compléter pour choisir le noms des worms de l'équipe 1
         textChoixNom11 = new JTextField(tab.get(0));
         textChoixNom11.setBounds(100,230,100,30);
         textChoixNom12 = new JTextField(tab.get(1));
@@ -129,19 +133,19 @@ public class Menu extends JFrame implements ActionListener {
         textChoixNom12.setFont(police);
         textChoixNom13.setFont(police);
 
-
-
+        //Menu déroulant permettant le choix de la couleur
         couleurWorms1 = new JComboBox(colorWormsList.toArray());
-        couleurWorms1.setSelectedIndex(0);
+        couleurWorms1.setSelectedIndex(0); //De base le menu est sur le premier element de colorWormsList
         couleurWorms1.addActionListener(this);
         couleurWorms1.setBounds(60,550,90,40);
         couleurWorms1.setFont(police);
 
+        //Previsulaisation de l'apprence du worms (couleur du bandeau)
         photo1 = new JLabel();
         photo1.setBounds(60,350,80,160);
 
         //Pour l'équipe 2 worms
-
+        //Le principe est le même que pour l'équipe 1
         JLabel Worms2 = new JLabel();
         Worms2.setText("Equipe 2 :");
         Worms2.setBounds(280,180,120,40);
@@ -179,7 +183,7 @@ public class Menu extends JFrame implements ActionListener {
         photo2 = new JLabel();
         photo2.setBounds(340,350,80,160);
 
-        //Maps
+        //Listes contenant tout les terrains jouables
         ArrayList<Map> maps = new ArrayList<Map>();
         maps.add(new Map("Montagnes célestes","images/Mountain_Background.png","images/big_ground_FullHD.png","images/map1.bmp","images/previsuMap1.png","images/sea_dark_large.png",40));
         //maps.add(new Map("Test eau","images/Mountain_Background.png","images/big_ground_FullHD.png","images/gruyere.bmp","images/previsuTest.png"));
@@ -189,7 +193,7 @@ public class Menu extends JFrame implements ActionListener {
         maps.add(new Map("New York","images/Mountain_Background.png","images/Maps/NY.png","images/Maps/NY.bmp","images/previsuChateau.png","images/sea_dark_large.png",0));
         maps.add(new Map("Petrol","images/Mountain_Background.png","images/Maps/Petrol.png","images/Maps/Petrol.bmp","images/previsuChateau.png","images/sea_dark_large.png",20));
 
-        //Choix map
+        //Choix de la map/terrain via un menu déroulant
         choixMap = new JComboBox(maps.toArray());
         choixMap.setSelectedIndex(0);
         choixMap.addActionListener(this);
@@ -204,10 +208,12 @@ public class Menu extends JFrame implements ActionListener {
         titreMap.setFont(FatPolice);
         Main.add(titreMap);
 
+        //Previsualisation du terrain
         previsuMap = new JLabel();
         previsuMap.setBounds(500,50,1000,550);
         Main.add(previsuMap);
 
+        //Initialisation previsualisation des terrains
         updatePrevisu((Map)choixMap.getSelectedItem());
 
         //Initialisation des images des worms
@@ -293,27 +299,32 @@ public class Menu extends JFrame implements ActionListener {
 
         }
         if(seulementUneFois &&(e.getSource() == couleurWorms1 || e.getSource() == couleurWorms2)){
+            //Mise à jour pour le choix de la couleur du worms
             updateLabel(colorWormsList,couleurWorms1,couleurWorms2);
         }
 
         if(e.getSource() == choixMap){
+            //Change le terrain en fonction de ce que l'utilisateur choisit
             Map newMap = (Map)choixMap.getSelectedItem();
+            //Change la previsualisation en fonction de la carte choisie
             updatePrevisu(newMap);
         }
 
     }
 
     public void launchGame(String[][] tab) throws SlickException, IOException {
+        //Sert à lancer le jeu
         int tailleBloc = 5;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double width = screenSize.getWidth();
         double height = screenSize.getHeight();
         int blocLargeur = (int)(width/tailleBloc); // imperativement des multiples de 10, pour que le dessin des textures se fasse sans bug
         int blocHauteur = (int)(height/tailleBloc);
+        //Lancement de FenetreJeu
         AppGameContainer app = new AppGameContainer(new FenetreJeu(tailleBloc,blocLargeur,blocHauteur,tab,(Map)choixMap.getSelectedItem(),(int)width,(int)height));
-        app.setDisplayMode(blocLargeur*tailleBloc, blocHauteur*tailleBloc, true); // Mode fenêtré
+        app.setDisplayMode(blocLargeur*tailleBloc, blocHauteur*tailleBloc, true); // Mode plein ecran
         app.setVSync(false);
-        app.setTargetFrameRate(120);
+        app.setTargetFrameRate(120); //120 images par seconde en théorie
 
 
 
@@ -321,19 +332,25 @@ public class Menu extends JFrame implements ActionListener {
     }
 
     public static void main (String[] args) throws SlickException {
+        //Le main
         Menu menu = new Menu();
     }
 
     public void updateLabel(ArrayList<String> tab, JComboBox worms1, JComboBox worms2) {
+
+        //On recupére les indices des couleurs selectionnées
         int i = worms1.getSelectedIndex();
         int j = worms2.getSelectedIndex();
 
+        //On empeche que les deux joueurs selectionnent la même couleurs
         if (i==j){
             j+= 1;
             if(j > tab.size()-1){
                 j = 0;
             }
         }
+
+        //On actualise l'image du Worms de chaque equipe pour que celle ci soit en adequation avec a couleur choisie
         String Couleur1 = tab.get(i);
         String Couleur2 = tab.get(j);
 
@@ -347,10 +364,12 @@ public class Menu extends JFrame implements ActionListener {
     }
 
     public void updatePrevisu(Map newMap){
+        //Mise a jour de l'image du terrain en fonction du choix de l'utilisateur
         previsuMap.setIcon(new ImageIcon(newMap.getAdressePrevisualisation()));
     }
 
     public ArrayList<String> nomWorm( int nb){
+        //Permet de choisir 6 noms de Worms différents de manière aléatoire parmis le tableau Noms
         String[] Noms = {"Alberto", "Rex", "Wormito", "Fredo", "Gilbert", "Michel", "xXKevinXx","Ivan Touskivol","Chibroux","ElVerDeLaVega","Carlos","Jean-Marie","Jacky-Michel","Chibrette","Blaise P","Freud","Jean-Eude","Roméo","Pedro","Juan","Vladimir","Trump","Margaux","Wormy","Nadine","Géraldine","Krustufle","Marguerite"};
         ArrayList<String> tab= new ArrayList<String>();
         int i =0;

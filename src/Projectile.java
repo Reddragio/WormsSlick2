@@ -1,6 +1,8 @@
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
 public abstract class Projectile {
+    protected final static Sound bruitFail_src = createSound("music/failSound.ogg");
     protected org.newdawn.slick.Image pictureLeft;
     protected org.newdawn.slick.Image pictureRight;
     protected Sound bruitFail;
@@ -190,6 +192,24 @@ public abstract class Projectile {
 
     public int gety() {
         return y;
+    }
+
+    protected static Sound createSound(final String adresse) {
+        try {
+            return new Sound(adresse);
+        } catch (SlickException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    protected static org.newdawn.slick.Image createImage(final String adresse) {
+        try {
+            return new org.newdawn.slick.Image(adresse);
+        } catch (SlickException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

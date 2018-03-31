@@ -1,3 +1,5 @@
+import org.newdawn.slick.SlickException;
+
 import java.util.ArrayList;
 
 public class MoteurPhysique {
@@ -274,6 +276,10 @@ public class MoteurPhysique {
         //vitesse_y = 0;
     }
 
+    public void drawHitBox(org.newdawn.slick.Graphics g) throws SlickException{
+        g.drawRect(convertRealToPixel(x),convertRealToPixel(y)-hitBoxHauteur,hitBoxLargeur,hitBoxHauteur);
+    }
+
     public void set_vitesse_x(int xVitessePixel){
         vitesse_x = convertPixelToReal(xVitessePixel);
     }
@@ -290,6 +296,10 @@ public class MoteurPhysique {
         return vitesse_y;
     }
 
+    public double getAcceleration_x(){return acceleration_x;}
+
+    public double getAcceleration_y(){return acceleration_y;}
+
     public double getX() {
         return x;
     }
@@ -298,7 +308,16 @@ public class MoteurPhysique {
         return y;
     }
 
+    public double getXpixel() {
+        return convertRealToPixel(x);
+    }
+
+    public double getYpixel() {
+        return convertRealToPixel(y);
+    }
+
     public boolean contactDetected(){
         return contactDetectedThisTime;
     }
+
 }

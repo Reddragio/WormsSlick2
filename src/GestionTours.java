@@ -26,6 +26,7 @@ public class GestionTours {
     protected String couleurEquipe2;
     protected FenetreJeu mainFenetre;
     protected TrueTypeFont font2;
+    protected TrueTypeFont font3;
     protected int indexTeam1;
     protected int indexTeam2;
     protected int nombreJoueursEnVieTeam1;
@@ -39,6 +40,10 @@ public class GestionTours {
     protected boolean theEnd;
     protected int hauteur;
     protected int largeur;
+
+    protected long accumulateurData;
+    protected long lastData;
+    protected double[][] dataMemory;
 
     public GestionTours(Worms[] joueurs,FenetreJeu mainFenetre,int largeur,int hauteur) throws SlickException {
         //Initialisation
@@ -76,16 +81,24 @@ public class GestionTours {
         dico.put("Blanc", org.newdawn.slick.Color.white);
         dico.put("Vert", org.newdawn.slick.Color.green);
 
-        //Init police nom et vie
+        //Init police nom,vie et data
         try {
             InputStream inputStream	= ResourceLoader.getResourceAsStream("./fonts/WormsFont.ttf");
             Font police = Font.createFont(Font.TRUETYPE_FONT, inputStream);
             police = police.deriveFont(36f); // set font size
             font2 = new TrueTypeFont(police, false);
-
+            //police = police.deriveFont(12f);
+            //font3 = new TrueTypeFont(police, false);
+            Font awtFont = new Font("Arial", Font.BOLD, 12);
+            font3 = new TrueTypeFont(awtFont, false);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        //Affichage des données
+        accumulateurData = 0;
+        lastData = 0;
+        dataMemory = new double[6][8];
     }
 
     public void updateLogic(int delta) throws SlickException {
@@ -240,6 +253,47 @@ public class GestionTours {
             messageAffiche = "Un projet de fin d'année réalisé par Jack, Toto, Max et Paulo";
             couleurMessage = org.newdawn.slick.Color.red;
             font2.drawString(largeur/2 - (messageAffiche.length()/2)*20,hauteur/4,messageAffiche,couleurMessage);
+        }
+    }
+
+    public void printData(int delta){
+        accumulateurData+=delta;
+        int hauteurLigne = 14;
+
+        if(accumulateurData-lastData>= 100 || lastData == 0){
+            lastData = accumulateurData;
+            for(int i=0;i<joueurs.length;i++){
+                font3.drawString( (i+1)*largeur/8,hauteurLigne,joueurs[i].getName(),dico.get(joueurs[i].getCouleur()));
+                font3.drawString( (i+1)*largeur/8,2*hauteurLigne,"X= "+(int)joueurs[i].physic.getXpixel()+"px",dico.get(joueurs[i].getCouleur()));
+                font3.drawString( (i+1)*largeur/8,3*hauteurLigne,"Y= "+(int)joueurs[i].physic.getYpixel()+"px",dico.get(joueurs[i].getCouleur()));
+                font3.drawString( (i+1)*largeur/8,4*hauteurLigne,"X= "+joueurs[i].physic.getX()+"m",dico.get(joueurs[i].getCouleur()));
+                font3.drawString( (i+1)*largeur/8,5*hauteurLigne,"Y= "+joueurs[i].physic.getY()+"m",dico.get(joueurs[i].getCouleur()));
+                font3.drawString( (i+1)*largeur/8,6*hauteurLigne,"Vitesse X= "+joueurs[i].physic.getVitesse_x()+"m/s",dico.get(joueurs[i].getCouleur()));
+                font3.drawString( (i+1)*largeur/8,7*hauteurLigne,"Vitesse Y= "+joueurs[i].physic.getVitesse_y()+"m/s",dico.get(joueurs[i].getCouleur()));
+                font3.drawString( (i+1)*largeur/8,8*hauteurLigne,"Acceleration X= "+joueurs[i].physic.getAcceleration_x()+"m/s²",dico.get(joueurs[i].getCouleur()));
+                font3.drawString( (i+1)*largeur/8,9*hauteurLigne,"Acceleration Y= "+joueurs[i].physic.getAcceleration_y()+"m/s²",dico.get(joueurs[i].getCouleur()));
+                dataMemory[i][0] = joueurs[i].physic.getXpixel();
+                dataMemory[i][1] = joueurs[i].physic.getYpixel();
+                dataMemory[i][2] = joueurs[i].physic.getX();
+                dataMemory[i][3] = joueurs[i].physic.getY();
+                dataMemory[i][4] = joueurs[i].physic.getVitesse_x();
+                dataMemory[i][5] = joueurs[i].physic.getVitesse_y();
+                dataMemory[i][6] = joueurs[i].physic.getAcceleration_x();
+                dataMemory[i][7] = joueurs[i].physic.getAcceleration_y();
+            }
+        }
+        else{
+            for(int i=0;i<joueurs.length;i++){
+                font3.drawString( (i+1)*largeur/8,hauteurLigne,joueurs[i].getName(),dico.get(joueurs[i].getCouleur()));
+                font3.drawString( (i+1)*largeur/8,2*hauteurLigne,"X= "+(int)dataMemory[i][0]+"px",dico.get(joueurs[i].getCouleur()));
+                font3.drawString( (i+1)*largeur/8,3*hauteurLigne,"Y= "+(int)dataMemory[i][1]+"px",dico.get(joueurs[i].getCouleur()));
+                font3.drawString( (i+1)*largeur/8,4*hauteurLigne,"X= "+dataMemory[i][2]+"m",dico.get(joueurs[i].getCouleur()));
+                font3.drawString( (i+1)*largeur/8,5*hauteurLigne,"Y= "+dataMemory[i][3]+"m",dico.get(joueurs[i].getCouleur()));
+                font3.drawString( (i+1)*largeur/8,6*hauteurLigne,"Vitesse X= "+dataMemory[i][4]+"m/s",dico.get(joueurs[i].getCouleur()));
+                font3.drawString( (i+1)*largeur/8,7*hauteurLigne,"Vitesse Y= "+dataMemory[i][5]+"m/s",dico.get(joueurs[i].getCouleur()));
+                font3.drawString( (i+1)*largeur/8,8*hauteurLigne,"Acceleration X= "+dataMemory[i][6]+"m/s²",dico.get(joueurs[i].getCouleur()));
+                font3.drawString( (i+1)*largeur/8,9*hauteurLigne,"Acceleration Y= "+dataMemory[i][7]+"m/s²",dico.get(joueurs[i].getCouleur()));
+            }
         }
     }
 }

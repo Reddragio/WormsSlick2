@@ -2,6 +2,10 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
 public class Rocket extends Projectile {
+    protected final static org.newdawn.slick.Image pictureLeft_src = createImage("images/rocket_left.png");
+    protected final static org.newdawn.slick.Image pictureRight_src = createImage("images/rocket_right.png");
+    protected final static Sound bruitExplosion_src = createSound("music/rocket_explosion.ogg");
+    protected final static Sound bruitTir_src = createSound("music/bazooka_tir_2.ogg");
     protected Sound bruitExplosion;
     protected Sound bruitTir;
     protected double normePropulsion;
@@ -11,11 +15,11 @@ public class Rocket extends Projectile {
     protected boolean wormsTouche;
 
     public Rocket(int terrain[][], int blockSize,Worms tireur) throws SlickException {
-        pictureLeft = new org.newdawn.slick.Image("images/rocket_left.png");
-        pictureRight = new org.newdawn.slick.Image("images/rocket_right.png");
-        bruitExplosion = new Sound("music/rocket_explosion.ogg");
-        bruitTir = new Sound("music/bazooka_tir_2.ogg");
-        bruitFail = new Sound("music/failSound.ogg");
+        pictureLeft = pictureLeft_src;
+        pictureRight = pictureRight_src;
+        bruitExplosion = bruitExplosion_src;
+        bruitTir =  bruitTir_src;
+        bruitFail = bruitFail_src;
         alive = true;
         normeVitesse = (1.0/2.0)*2000*0.0025;
         normePropulsion = (3.0/4.0)*(g/200.0);

@@ -307,23 +307,6 @@ public class FenetreJeu extends BasicGame{
             wor.printPerteVie(lastDelta);
         }
 
-        for(Worms wor: joueurs){
-            if(wor.getAimingState()){
-                //Affichage de la visée
-                wor.drawVisee();
-                if(phaseChoixPuissance && timerChoixPuissance<= chronoChoixPuissance){
-                    //Affichage du cone de puissance
-                    wor.armeActuelle.drawConePuissance((((double)timerChoixPuissance)/((double)chronoChoixPuissance))*100.0);
-                }
-            }
-            if(wor.isPlaying()){
-                if(phaseInventaire){
-                    //Affichage de l'inventaire
-                    wor.drawInventaire(input);
-                }
-            }
-        }
-
         //Affichage du projectile (durant la phase de tir)
         g.setColor(Color.red);
         if(phaseProjectile){
@@ -331,12 +314,6 @@ public class FenetreJeu extends BasicGame{
             if(cheatMode){
                 projectileActuel.physic.drawHitBox(g);
             }
-        }
-
-        //Affichage du rayon de l'explosion par un cercle rouge (dans le "cheat mode")
-        if(visualiserExplosion){
-            g.setColor(Color.red);
-            g.drawOval((float)(input.getMouseX()-rayonExplosion),(float)(input.getMouseY()-rayonExplosion),(float)(2*rayonExplosion),(float)(2*rayonExplosion));
         }
 
         //Affichage de la mer
@@ -371,6 +348,29 @@ public class FenetreJeu extends BasicGame{
                     }
                 }
             }
+        }
+
+        for(Worms wor: joueurs){
+            if(wor.getAimingState()){
+                //Affichage de la visée
+                wor.drawVisee();
+                if(phaseChoixPuissance && timerChoixPuissance<= chronoChoixPuissance){
+                    //Affichage du cone de puissance
+                    wor.armeActuelle.drawConePuissance((((double)timerChoixPuissance)/((double)chronoChoixPuissance))*100.0);
+                }
+            }
+            if(wor.isPlaying()){
+                if(phaseInventaire){
+                    //Affichage de l'inventaire
+                    wor.drawInventaire(input);
+                }
+            }
+        }
+
+        //Affichage du rayon de l'explosion par un cercle rouge (dans le "cheat mode")
+        if(visualiserExplosion){
+            g.setColor(Color.red);
+            g.drawOval((float)(input.getMouseX()-rayonExplosion),(float)(input.getMouseY()-rayonExplosion),(float)(2*rayonExplosion),(float)(2*rayonExplosion));
         }
 
         //Affichage du curseur de la souris:

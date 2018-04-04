@@ -3,6 +3,9 @@ import org.newdawn.slick.*;
 public class Grenade extends Weapon {
 
     public Grenade(int nombre) throws SlickException {
+        //Constructeur propre à la grenade
+        //Permet de la dessiner avec des images lui correspondant
+
         this.pictureLeft = new org.newdawn.slick.Image("images/grenade_essai_left_mini.png");
         this.pictureRight = new org.newdawn.slick.Image("images/grenade_essai_right_mini.png");
         this.viseur = new org.newdawn.slick.Image("images/croix_visee_mini.png");
@@ -20,6 +23,8 @@ public class Grenade extends Weapon {
     }
 
     public Projectile generateProjectile(int terrain[][],int blockSize,Worms tireur) throws SlickException {
+        //Au moment du lancement, permet d'obtenir la grenadeProjectile associée à la grenade
+
         return new GrenadeProjectile(terrain,blockSize,tireur);
     }
 

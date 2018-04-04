@@ -2,6 +2,9 @@ import org.newdawn.slick.*;
 
 public class Bazooka extends Weapon {
     public Bazooka(int nombre) throws SlickException {
+        //Constructeur propre au bazooka
+        //Permet de le dessiner avec des images lui correspondant
+
         this.pictureLeft = new org.newdawn.slick.Image("images/bazooka_mini_left.png");
         this.pictureRight = new org.newdawn.slick.Image("images/bazooka_mini_right.png");
         this.viseur = new org.newdawn.slick.Image("images/croix_visee_mini.png");
@@ -19,6 +22,8 @@ public class Bazooka extends Weapon {
     }
 
     public Projectile generateProjectile(int terrain[][],int blockSize,Worms tireur) throws SlickException {
+        //Au moment du lancement, permet d'obtenir la rocket associée au bazooka
+
         return new Rocket(terrain,blockSize,tireur);
     }
 }

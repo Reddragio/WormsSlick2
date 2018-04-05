@@ -391,6 +391,8 @@ public class FenetreJeu extends BasicGame{
             mouseCursor.draw(xSouris-10,ySouris);
         }
 
+        //Affichage d'un cercle pour indiquer le Worms qui va jouer
+        gestionTours.printCercle(g,lastDelta);
         //Affichage du timer en haut à droite de la fenêtre
         gestionTours.printTime();
         //Affichage des messages rythmant la partie (ex: "tour de bidule", "machin est mort", etc...)

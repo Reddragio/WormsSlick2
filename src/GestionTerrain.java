@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.IOException;
 
 public class GestionTerrain {
+    //Classe qui assurait auparavant la génération aléatoire du terrain
+    //Aujourd'hui, seule le constructeur prenant en argument une bitmap de la physique de la map est utilisé dans le jeu
+
     private int[][] terrainInitial; //Le terrain tel qu'il est après la génération
     int[] plusBas;
     int[] plusHaut;

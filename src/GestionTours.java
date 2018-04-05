@@ -8,45 +8,59 @@ import java.io.InputStream;
 import java.util.HashMap;
 
 public class GestionTours {
-    protected org.newdawn.slick.Image chrono;
-    protected BigImage endScreen;
-    protected final static double tempsDeplacement = 30000;
-    protected final static double tempsVisee = 20000;
-    protected final static double tempsVisualiserExplosion = 1800;
-    protected int phase;
-    protected boolean tourEquipe;
-    protected Worms[] joueurs;
-    protected Worms actualWorms;
-    protected int nombreJoueurs;
-    protected int nombreJoueursDevantJouer;
-    protected int nombreJoueursEnVie;
+    protected org.newdawn.slick.Image chrono;//Image du chronomètre affiché en haut à droite
+    protected BigImage endScreen;//Image d'arrière plan affichée lorsque la partie est finie
+    protected final static double tempsDeplacement = 30000;//Durée en ms de la phase de déplacement
+    protected final static double tempsVisee = 20000;//Durée en ms de la phase inventaire+visée
+    protected final static double tempsVisualiserExplosion = 1800;//Temps laissé pour admirer l'explosion du projectile et ses conséquences
+    protected int phase;//Entier indiquant le numero de la phase en cours
+    protected boolean tourEquipe;//Tour de l'équipe 1 si True, tour de l'équipe 2 sinon
+    protected Worms[] joueurs;//pointeur vers le tableau contenant tous les Worms
+    protected Worms actualWorms;//pointeur vers le Worms jouant actuellement
+    protected int nombreJoueurs;//Nombre de joueurs, en l'occurence 6 dans la version actuelle du jeu
+    protected int nombreJoueursEnVie;//Nombre de joueurs encore en vie
     protected long timer;
-    protected boolean enTrainDeJouer;
-    protected String couleurEquipe1;
-    protected String couleurEquipe2;
-    protected FenetreJeu mainFenetre;
-    protected TrueTypeFont font2;
-    protected TrueTypeFont font3;
-    protected int indexTeam1;
-    protected int indexTeam2;
-    protected int nombreJoueursEnVieTeam1;
-    protected int nombreJoueursEnVieTeam2;
-    protected long timerMessage;
-    protected long tempsMessage;
-    protected String messageAffiche;
-    protected boolean printingMessage;
-    protected org.newdawn.slick.Color couleurMessage;
-    protected HashMap<String, org.newdawn.slick.Color> dico;
-    protected boolean theEnd;
-    protected int hauteur;
-    protected int largeur;
+    protected boolean enTrainDeJouer;//Indique si un Worms est en train de jouer ou non
+    protected String couleurEquipe1;//Couleur de l'équipe 1, au format String
+    protected String couleurEquipe2;//Couleur de l'équipe 2, au format String
+    protected FenetreJeu mainFenetre;//Pointeur vers la fenetre de jeu principal
+    protected TrueTypeFont font2;//Police utilisée pour les messages d'annonce
+    protected TrueTypeFont font3;//Police utilisée pour l'affichage des stats
+    protected int indexTeam1;//Index du joueur devant actuellement joué dans l'équipe 1
+    protected int indexTeam2;//Index du joueur devant actuellement joué dans l'équipe 2
+    protected int nombreJoueursEnVieTeam1;//Nombre de joueurs en vie dans l'équipe 1
+    protected int nombreJoueursEnVieTeam2;//Nombre de joueurs en vie dans l'équipe 2
+    protected long timerMessage;//Timer servant à temporiser l'affichage des messages à l'écran
+    protected long tempsMessage;//Temps durant lequel le message doit rester à l'écran
+    protected String messageAffiche;//Message affiché à l'écran
+    protected boolean printingMessage;//Indique si un message doit être affiché ou non
+    protected org.newdawn.slick.Color couleurMessage;//Couleur d'affichage du message
+    protected HashMap<String, org.newdawn.slick.Color> dico;//Dictionnaire permettant de faire la correspondance entre couleur sous forme
+                                                            //de String et couleur sous forme d'objet Color
+    protected boolean theEnd;//Boolean indiquant si la partie est finie ou non
+    protected int hauteur;//Hauteur de la fenêtre du jeu
+    protected int largeur;//Largeur de la fenêtre du jeu
 
-    protected long accumulateurData;
-    protected long lastData;
-    protected double[][] dataMemory;
+    //Affichage cercle pour indiquer le Worms qui va jouer
+    protected final static long tempsCercle = 1000;//Temps d'affichage du cercle
+    protected final static int epaisseurCercle = 4;//Epaisseur du cercle
+    protected final static int rayonCercle = 300;//Rayon du cercle (pixelsà
+    protected final static int minRayonCercle = 25;//Plus petit rayon du cercle à afficher
+    protected long timerCercle;//Timer servant à temporiser l'affichage du cercle
+    protected boolean drawCercle;//Indique si le cercle doit être dessiné ou non
+    protected int xCentre;//Coordonnée x du centre du cercle
+    protected int yCentre;//Coordonnée y du centre du cercle
+    protected int rayon;//rayon actuel du cercle
+
+    //Les variables suivantes servant à l'affichage des données (positions,vitesses, etc) du Worms dans le CheatMode
+    //On utilise un tableau pour les sauvegarder afin de pouvoir uniquement actualiser les données tous les 100ms
+    //Cela évite d'avoir un effet de scintillement à l'écran, en plus d'avoir une difficulté à lire les données
+    protected long accumulateurData;//Permet de temporiser l'affichage des stats à l'écran
+    protected long lastData;//Permet de retenir le dernier instant où ont été sauvegardés les données du Worms
+    protected double[][] dataMemory;//Garde en mémoire les données du Worms jusqu'au prochain rafraichissement
 
     public GestionTours(Worms[] joueurs,FenetreJeu mainFenetre,int largeur,int hauteur) throws SlickException {
-        //Initialisation
+        //Initialisation de la gestion des tours
         chrono = new org.newdawn.slick.Image("images/mini_chrono.png");
         endScreen = new BigImage("images/endScreen.jpg");
         this.joueurs = joueurs;
@@ -57,13 +71,13 @@ public class GestionTours {
         couleurEquipe1 = joueurs[0].getCouleur();
         couleurEquipe2 = joueurs[3].getCouleur();
         enTrainDeJouer = false;
-        tourEquipe = true;
-        phase = 0;
+        tourEquipe = true;//L'équipe 1 commence
+        phase = 0;//Le premiers Worms commence par sa phase de deplacement
         timer = 0;
         this.mainFenetre = mainFenetre;
         indexTeam1 = 0;
         indexTeam2 = 3;
-        this.largeur = largeur;
+        this.largeur = largeur;//On récupère la taille de la fenêtre de jeu
         this.hauteur = hauteur;
 
         theEnd = false;
@@ -73,6 +87,7 @@ public class GestionTours {
         messageAffiche = "";
         printingMessage = false;
         couleurMessage = org.newdawn.slick.Color.black;
+
         //Création du dictionnaire des couleurs
         dico = new HashMap<String, org.newdawn.slick.Color>();
         dico.put("Rouge", org.newdawn.slick.Color.red);
@@ -95,26 +110,38 @@ public class GestionTours {
             e.printStackTrace();
         }
 
-        //Affichage des données
+        //Affichage du cercle pour désigner le Worms devant jouer
+        drawCercle = false;
+        timerCercle = 0;
+
+        //Affichage des données dans le "cheat mode"
         accumulateurData = 0;
         lastData = 0;
         dataMemory = new double[6][8];
     }
 
     public void updateLogic(int delta) throws SlickException {
+        //Fonction appellée à chaque frame permettant de temporiser et d'assurer le jeu tour par tour
+
         if((nombreJoueursEnVieTeam1==0 || nombreJoueursEnVieTeam2==0)&&!theEnd){
+            //Si l'une des deux équipes n'a plus aucun Worms, cela signifie que la partie est finine
             theEnd = true;
         }
 
         if(!theEnd){
+            //Tant que la partie n'est pas finie
             if(!enTrainDeJouer){
+                //Si aucun Worms ne joue
+                //Alors on regarde c'est à qui de jouer grâce à tourEquipe et aux indexs de chaque équipe
                 if(tourEquipe){
                     while(!joueurs[indexTeam1].isAlive()){
+                        //On ne fait jouer que les Worms encore vivant
                         indexTeam1++;
                         if(indexTeam1==3){
                             indexTeam1=0;
                         }
                     }
+                    //On enregistre le Worms qui va jouer:
                     actualWorms = joueurs[indexTeam1];
                     indexTeam1++;
                     if(indexTeam1==3){
@@ -123,11 +150,13 @@ public class GestionTours {
                 }
                 else{
                     while(!joueurs[indexTeam2].isAlive()){
+                        //On ne fait jouer que les Worms encore vivant
                         indexTeam2++;
                         if(indexTeam2==6){
                             indexTeam2=3;
                         }
                     }
+                    //On enregistre le Worms qui va jouer:
                     actualWorms = joueurs[indexTeam2];
                     indexTeam2++;
                     if(indexTeam2==6){
@@ -135,33 +164,44 @@ public class GestionTours {
                     }
                 }
 
+                //On indique qu'un Worms a été trouvé et qu'il va jouer
                 enTrainDeJouer = true;
-                tourEquipe = !tourEquipe;
-                phase = 0;
+                tourEquipe = !tourEquipe;//Au prochain tour, c'est l'autre équipe qui jouera
+                phase = 0;//Le Worms commence par la phase de déplacement
                 timer = 0;
-                actualWorms.setPlaying(true);
-                actualWorms.setMovingState(true);
+                actualWorms.setPlaying(true);//On indique que le Worms actuel est en train de jouer
+                actualWorms.setMovingState(true);//Et de bouger
+                beginCercle();//On indique visuellement par un cercle le Worms qui va jouer
+                //On affiche également un message:
                 showMessage("Tour de l'équipe "+actualWorms.getCouleur()+" ! "+actualWorms.getName()+" passe à l'attaque !",2500,dico.get(actualWorms.getCouleur()));
             }
             else{
                 if(phase==0){
+                    //Phase de deplacement
                     timer+=delta;
                     if(timer>=tempsDeplacement){
                         phase = 4;
                     }
                 } else if (phase == 1) {
+                    //Phase menu+visée
                     timer+=delta;
                     if(timer>=tempsVisee){
                         phase = 4;
                     }
                 }
+                //La phase 2 n'a pas de code
+                //Elle correspond au tir actuellement en cours
+                //(la grenade ou la rocket est actuellement en train de se deplacer à l'écran)
+
                 else if(phase==3){
+                    //La phase 3 correspond à la visualisation de l'explosion
                     timer+=delta;
                     if(timer>=tempsVisualiserExplosion){
                         phase = 4;
                     }
                 }
                 else if(phase==4){
+                    //La phase 4 correspond à la fin de tour
                     actualWorms.setPlaying(false);
                     actualWorms.setMovingState(false);
                     actualWorms.setAimingState(false);
@@ -176,15 +216,21 @@ public class GestionTours {
     }
 
     public void setPhase(int phaseT){
+        //Permet de définir la phase de jeu
         phase = phaseT;
         timer = 0;
     }
 
     public Worms getActualWorms() {
+        //Retourne le Worms actuellement en train de jouer
         return actualWorms;
     }
 
     public void nouvelleMort(Worms wor){
+        //Permet d'indiquer à GestionTours qu'un Worms est mort
+        //Cela lui permet de réagir en conséquence, en affichant un message
+        //voir même en déclanchant la fin de parties
+
         nombreJoueursEnVie--;
         if(wor.getCouleur()==couleurEquipe1){
             nombreJoueursEnVieTeam1--;
@@ -199,6 +245,8 @@ public class GestionTours {
     }
 
     public void printTime(){
+        //Affiche le temps restant pour la phase actuelle en haut à droite de l'écran
+
         if(phase==0){
             font2.drawString(largeur-70,25,String.valueOf((int)((tempsDeplacement-timer)*0.001)), org.newdawn.slick.Color.black);
         }
@@ -215,6 +263,9 @@ public class GestionTours {
     }
 
     public void printMessage(int delta){
+        //Affiche un message personnalisé à l'écran
+        //Permet ainsi d'indique que c'est le tour d'un Worms, qu'un Worms est mort, etc
+
         if(printingMessage){
             font2.drawString( largeur/2 - (messageAffiche.length()/2)*20,hauteur/2-10,messageAffiche,couleurMessage);
             timerMessage+=delta;
@@ -226,6 +277,9 @@ public class GestionTours {
     }
 
     public void showMessage(String message,int duree,org.newdawn.slick.Color couleur){
+        //Permet d'afficher le message en paramètre pendant la durée souhaitée
+        //Fonctionne grâce à la fonction printMessage ci-dessus
+
         messageAffiche = message;
         tempsMessage = duree;
         printingMessage = true;
@@ -234,6 +288,8 @@ public class GestionTours {
     }
 
     public void printEnd(){
+        //Affiche l'écran de fin, une fois la partie finie
+
         if(theEnd){
             endScreen.draw(0,0);
             if(nombreJoueursEnVieTeam1==0){
@@ -256,7 +312,38 @@ public class GestionTours {
         }
     }
 
+    public void printCercle(org.newdawn.slick.Graphics g,int delta){
+        //Affiche le cercle permettant d'indiquer le Worms dont le tour vient de commencer
+
+        if(drawCercle){
+            timerCercle+=delta;
+            xCentre = actualWorms.getX()+actualWorms.getHitBoxLargeur()/2;
+            yCentre = actualWorms.getY()-actualWorms.getHitBoxHauteur()/2;
+            rayon = (int)(rayonCercle*(1.0-timerCercle/(double)tempsCercle));
+            g.setColor(dico.get(actualWorms.getCouleur()));
+            for(int i=1;i<=epaisseurCercle;i++){
+                rayon+=1;
+                g.drawOval(xCentre-rayon,yCentre-rayon,2*rayon,2*rayon);
+            }
+            rayon-=epaisseurCercle;
+            if(rayon < minRayonCercle || timerCercle > tempsCercle){
+                drawCercle = false;
+                timerCercle = 0;
+            }
+        }
+    }
+
+    public void beginCercle(){
+        //Permet de débuter l'affichage du cercle autour du Worms jouant actuellement
+
+        drawCercle = true;
+        timerCercle = 0;
+    }
+
     public void printData(int delta){
+        //Affiche à l'écran les données de position, vitesses, accelerations pour chaque Worms
+        //Cette fonction est utilisée dans le mode développeur (ou "cheat mode")
+
         accumulateurData+=delta;
         int hauteurLigne = 14;
 

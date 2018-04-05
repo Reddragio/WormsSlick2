@@ -2,6 +2,9 @@
  * Created by Maxime on 15/02/2018.
  */
 public class Balle extends Projectile {
+    //Classe inutilisée à l'heure actuelle
+    //Doit permettre à terme la gestion des balles pour les futurs armes à feu
+
     public void deplacer(int xd, int yd) {
 
     }

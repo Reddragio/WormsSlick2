@@ -1,8 +1,11 @@
 import org.newdawn.slick.*;
 
 public class Teleporteur extends Weapon{
-    protected org.newdawn.slick.Image pictureRed;
-    protected Sound bruitTeleportation;
+    //Teleporteur, permettant au jour de se teleporter n'importe où sur la cartes
+
+    protected org.newdawn.slick.Image pictureRed;//Image du teleporteur en rouge, pour indiquer les endroits où on ne peut pas se teleporter
+                                                 //(Là où il y a des blocks notamment, ou trop près du bord du terrain)
+    protected Sound bruitTeleportation;//Bruit de la teleportation
 
     public Teleporteur(int nombre) throws SlickException {
         this.pictureLeft = new org.newdawn.slick.Image("images/viseurTeleporteurMini.png");
@@ -18,14 +21,17 @@ public class Teleporteur extends Weapon{
     }
 
     public void drawTeleporteur(int x,int y){
+        //Dessine le teleporteur à l'écran
         pictureLeft.draw(x-pictureLeft.getWidth()/2,y-pictureLeft.getHeight()/2);
     }
 
     public void drawTeleporteurRed(int x,int y){
+        //Dessine la version rouge du teleporteur à l'écran
         pictureRed.draw(x-pictureRed.getWidth()/2,y-pictureRed.getHeight()/2);
     }
 
     public void playSound(){
+        //Joue le son de la teleportation
         bruitTeleportation.play();
     }
 

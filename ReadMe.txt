@@ -26,7 +26,7 @@ Conseil : Lisez le tutoriel dans le dossier Rendu avant de lancer le jeu!
         - "src" est le dossier principal du projet, il contient toutes les classes necessaires à l'execution du programme.
     --> Fichiers à la racine de l'archive:
         - Le fichier "ReadMe.txt";
-        - L'executable .jar "WormsSlick2.jar" permattant de lancer le programme;
+        - L'executable .jar "WormsSlick2.jar" permettant de lancer le programme;
         - "Launch_windows.bat" qui permet de lancer le jeu sur Windows;
 
 
